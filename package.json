@@ -1,12 +1,14 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "jrb-gold-shine",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "dev:8081": "vite --config vite.config.8081.ts",
+    "dev:8082": "vite --config vite.config.8082.ts",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -50,7 +52,6 @@
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
-    "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.61.1",
     "react-resizable-panels": "^2.1.9",
     "react-router-dom": "^6.30.1",

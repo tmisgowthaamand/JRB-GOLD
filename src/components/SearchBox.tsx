@@ -1,10 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { Search, Eye, Heart, ShoppingCart, X, Star } from "lucide-react";
+import { Search, TrendingUp, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCart } from "@/contexts/CartContext";
 import productBangle from "@/assets/product-bangle.jpg";
 import productCoin from "@/assets/product-coin.jpg";
@@ -45,138 +42,60 @@ const SearchBox = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const { addToCart, toggleFavorite, favorites } = useCart();
-  const searchRef = useRef<HTMLInputElement>(null);
+  const { addToCart } = useCart();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchBoxRef = useRef<HTMLDivElement>(null);
 
-  // Sample products data (in a real app, this would come from an API or context)
+  // Mock product data - in a real app, this would come from an API
   const products: Product[] = [
     {
       id: "1",
-      name: "Elegant Gold Bangle",
-      category: "gold",
-      subcategory: "bangles",
-      purity: "22k",
-      price: 45200,
-      compareAtPrice: 48500,
-      weight: 8.5,
-      makingCharges: 2500,
+      name: "Classic Gold Bangle",
+      category: "Bangles",
+      subcategory: "Traditional",
+      purity: "22K",
+      price: 237625,
+      compareAtPrice: 250000,
+      weight: 15.5,
+      makingCharges: 3000,
       image: productBangle,
-      rating: { avg: 4.8, count: 24 },
-      badges: ["no-wastage", "new"],
-      description: "Exquisite handcrafted gold bangle with traditional motifs",
-      sku: "JRB-GB-001",
+      rating: { avg: 4.5, count: 128 },
+      badges: ["bestseller", "new"],
+      description: "Elegant 22K gold bangle with intricate traditional designs",
+      sku: "GB001"
     },
     {
-      id: "2",
-      name: "Pure Gold Coin - Lakshmi",
-      category: "coins",
-      subcategory: "religious",
-      purity: "24k",
-      price: 7850,
-      weight: 2.0,
-      makingCharges: 150,
+      id: "2", 
+      name: "Gold Coin 10g",
+      category: "Coins",
+      subcategory: "Investment",
+      purity: "24K",
+      price: 65000,
+      weight: 10,
+      makingCharges: 500,
       image: productCoin,
-      rating: { avg: 4.9, count: 156 },
-      badges: ["certified"],
-      description: "24k pure gold coin with Goddess Lakshmi design",
-      sku: "JRB-GC-002",
+      rating: { avg: 4.8, count: 89 },
+      badges: ["investment"],
+      description: "Pure 24K gold coin perfect for investment",
+      sku: "GC010"
     },
     {
       id: "3",
-      name: "Silver Designer Necklace",
-      category: "silver",
-      subcategory: "necklaces",
-      purity: "pure-silver",
-      price: 3200,
-      weight: 25.0,
-      makingCharges: 800,
+      name: "Diamond Necklace Set",
+      category: "Necklaces", 
+      subcategory: "Bridal",
+      purity: "18K",
+      price: 267675,
+      compareAtPrice: 285000,
+      weight: 25.8,
+      makingCharges: 8000,
       image: productNecklace,
-      rating: { avg: 4.7, count: 43 },
-      badges: ["handcrafted"],
-      description: "Contemporary silver necklace with oxidized finish",
-      sku: "JRB-SN-003",
-    },
-    {
-      id: "4",
-      name: "Bridal Gold Ring Set",
-      category: "gold",
-      subcategory: "rings",
-      purity: "22k",
-      price: 32400,
-      compareAtPrice: 35200,
-      weight: 6.2,
-      makingCharges: 1800,
-      image: productBangle,
-      rating: { avg: 4.8, count: 67 },
-      badges: ["no-wastage", "sale"],
-      description: "Complete bridal ring set with matching designs",
-      sku: "JRB-GR-004",
-    },
-    {
-      id: "5",
-      name: "Gold Chain - Rope Design",
-      category: "gold",
-      subcategory: "chains",
-      purity: "22k",
-      price: 52800,
-      weight: 10.5,
-      makingCharges: 3200,
-      image: productNecklace,
-      rating: { avg: 4.9, count: 89 },
-      badges: ["premium"],
-      description: "Classic rope design gold chain for everyday wear",
-      sku: "JRB-GC-005",
-    },
-    {
-      id: "6",
-      name: "Temple Jewelry Earrings",
-      category: "gold",
-      subcategory: "earrings",
-      purity: "22k",
-      price: 28900,
-      weight: 5.4,
-      makingCharges: 1500,
-      image: productCoin,
-      rating: { avg: 4.9, count: 78 },
-      badges: ["traditional", "no-wastage"],
-      description: "Traditional temple jewelry earrings with ruby stones",
-      sku: "JRB-GE-007",
-    },
-  ];
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
-
-  const getBadgeText = (badge: string) => {
-    const badgeMap: { [key: string]: string } = {
-      "no-wastage": "No Wastage",
-      "new": "New",
-      "sale": "Sale",
-      "certified": "Certified",
-      "handcrafted": "Handcrafted",
-      "premium": "Premium",
-      "traditional": "Traditional"
-    };
-    return badgeMap[badge] || badge;
-  };
-
-  const getBadgeVariant = (badge: string) => {
-    switch (badge) {
-      case "sale":
-        return "destructive";
-      case "new":
-        return "default";
-      default:
-        return "secondary";
+      rating: { avg: 4.9, count: 45 },
+      badges: ["premium", "bridal"],
+      description: "Stunning diamond necklace set with matching earrings",
+      sku: "DN001"
     }
-  };
+  ];
 
   // Filter products based on search query
   useEffect(() => {
@@ -185,222 +104,145 @@ const SearchBox = ({
       return;
     }
 
-    const filtered = products.filter(product => {
-      const searchTerms = searchQuery.toLowerCase().split(" ");
-      const searchableText = `
-        ${product.name} 
-        ${product.category} 
-        ${product.subcategory} 
-        ${product.purity} 
-        ${product.description} 
-        ${product.sku}
-        ${product.badges.join(" ")}
-      `.toLowerCase();
+    const filtered = products.filter(product =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.subcategory.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.purity.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-      return searchTerms.every(term => searchableText.includes(term));
-    });
-
-    setFilteredProducts(filtered.slice(0, 6)); // Limit to 6 results
+    setFilteredProducts(filtered);
   }, [searchQuery]);
 
-  // Show trending products when search is empty and showTrending is true
-  const showTrendingProducts = showTrending && searchQuery.trim() === "" && trendingProducts.length > 0;
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
 
-  const handleProductClick = (product: Product) => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setIsOpen(value.length > 0 || showTrending);
+  };
+
+  const handleInputFocus = () => {
+    setIsOpen(searchQuery.length > 0 || showTrending);
+  };
+
+  const handleProductClick = (product: Product | {id: string; name: string; category: string; price: number; image: string}) => {
+    setIsOpen(false);
+    setSearchQuery("");
     if (onProductSelect) {
-      onProductSelect(product);
+      onProductSelect(product as Product);
     }
-    setIsOpen(false);
-    setSearchQuery("");
-  };
-
-  const clearSearch = () => {
-    setSearchQuery("");
-    setIsOpen(false);
-    searchRef.current?.focus();
-  };
-
-  const handleViewProduct = (product: Product) => {
-    setSelectedProduct(product);
-    setIsProductModalOpen(true);
-    setIsOpen(false); // Close search dropdown
-  };
-
-  const handleAddToCart = (product: Product) => {
-    addToCart(product);
-  };
-
-  const handleToggleFavorite = (productId: string) => {
-    const product = products.find(p => p.id === productId);
-    toggleFavorite(productId, product?.name);
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} ref={searchBoxRef}>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
         <Input
-          ref={searchRef}
+          ref={searchInputRef}
+          type="text"
           placeholder={placeholder}
           value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setIsOpen(e.target.value.length > 0);
-          }}
-          onFocus={() => {
-            if (searchQuery.length > 0 && filteredProducts.length > 0) {
-              setIsOpen(true);
-            }
-          }}
-          onBlur={() => {
-            // Delay closing to allow clicking on results
-            setTimeout(() => setIsOpen(false), 200);
-          }}
-          className="pl-10 pr-10"
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          className="pl-10 pr-10 h-12 text-base bg-white/90 backdrop-blur-sm border-2 border-yellow-200 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 focus:bg-white transition-all duration-200 shadow-lg hover:shadow-xl"
         />
         {searchQuery && (
           <Button
             variant="ghost"
-            size="icon"
-            className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6"
-            onClick={clearSearch}
+            size="sm"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-yellow-100"
+            onClick={() => {
+              setSearchQuery("");
+              setIsOpen(false);
+              searchInputRef.current?.focus();
+            }}
           >
-            <X className="h-3 w-3" />
+            <X className="h-4 w-4 text-muted-foreground" />
           </Button>
         )}
       </div>
       
       {/* Search Results Dropdown */}
-      {isOpen && (showTrendingProducts || filteredProducts.length > 0) && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border border-border rounded-md shadow-lg max-h-96 overflow-y-auto">
-          <div className="p-2">
-            <div className="text-xs text-muted-foreground mb-2 px-2">
-              {showTrendingProducts ? 'Trending Products' : `${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''} found`}
-            </div>
-            <div className="space-y-1">
-              {showTrendingProducts ? (
-                trendingProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="p-2 hover:bg-gray-50 cursor-pointer flex items-center"
-                    onClick={() => handleProductClick(product as any)}
-                  >
-                    <div className="h-10 w-10 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden">
-                      {product.image && (
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="h-full w-full object-cover"
-                        />
-                      )}
+      {isOpen && (filteredProducts.length > 0 || (showTrending && trendingProducts && trendingProducts.length > 0)) && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-md border-2 border-yellow-200 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-200">
+          {filteredProducts.length > 0 ? (
+            <>
+              <div className="px-4 py-3 text-sm font-semibold text-yellow-800 bg-yellow-50/80 border-b border-yellow-200">
+                <Search className="inline h-4 w-4 mr-2" />
+                Search Results
+              </div>
+              {filteredProducts.map((product, index) => (
+                <div
+                  key={product.id}
+                  className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 ${
+                    index === 0 
+                      ? 'bg-yellow-50 border-l-4 border-l-yellow-400 shadow-sm' 
+                      : 'hover:bg-yellow-50/50 hover:border-l-4 hover:border-l-yellow-300'
+                  }`}
+                  onClick={() => handleProductClick(product)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-12 rounded-lg object-cover shadow-sm border border-gray-200"
+                    />
+                    <div className="flex-1">
+                      <div className="font-semibold text-sm text-gray-900">{product.name}</div>
+                      <div className="text-xs text-yellow-600 font-medium">{product.category}</div>
                     </div>
-                    <div className="ml-3">
-                      <div className="text-sm font-medium text-gray-900">
-                        {product.name}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {product.category}
-                      </div>
-                    </div>
-                    <div className="ml-auto text-sm font-medium">
+                    <div className="text-sm font-bold text-yellow-700 bg-yellow-100 px-2 py-1 rounded-md">
                       ₹{product.price.toLocaleString()}
                     </div>
                   </div>
-                ))
-              ) : (
-                filteredProducts.map((product) => (
-                  <div key={product.id}>
-                    <Card 
-                      className="cursor-pointer hover:bg-accent/50 transition-colors border-0 shadow-none"
-                      onClick={() => handleProductClick(product)}
-                    >
-                      <CardContent className="p-3">
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0">
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              className="w-16 h-16 object-cover rounded-md"
-                            />
-                          </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between mb-1">
-                              <h4 className="font-medium text-sm text-foreground truncate">
-                                {product.name}
-                              </h4>
-                              <div className="flex items-center ml-2">
-                                <Star className="h-3 w-3 text-gold fill-gold" />
-                                <span className="text-xs text-muted-foreground ml-1">
-                                  {product.rating.avg}
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <p className="text-xs text-muted-foreground mb-2">
-                              {product.purity} • {product.weight}g • SKU: {product.sku}
-                            </p>
-                            
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-2">
-                                <span className="font-semibold text-sm text-foreground">
-                                  {formatPrice(product.price)}
-                                </span>
-                                {product.compareAtPrice && (
-                                  <span className="text-xs text-muted-foreground line-through">
-                                    {formatPrice(product.compareAtPrice)}
-                                  </span>
-                                )}
-                              </div>
-                              
-                              <div className="flex items-center space-x-1">
-                                <Button 
-                                  size="sm" 
-                                  variant="ghost" 
-                                  className="h-6 px-2"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleViewProduct(product);
-                                  }}
-                                >
-                                  <Eye className="h-3 w-3" />
-                                </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="ghost" 
-                                  className="h-6 px-2"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleAddToCart(product);
-                                  }}
-                                >
-                                  <ShoppingCart className="h-3 w-3" />
-                                </Button>
-                              </div>
-                            </div>
-                            
-                            {product.badges.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mt-2">
-                                {product.badges.slice(0, 2).map((badge) => (
-                                  <Badge
-                                    key={badge}
-                                    variant={getBadgeVariant(badge)}
-                                    className="text-xs px-1 py-0"
-                                  >
-                                    {getBadgeText(badge)}
-                                  </Badge>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                </div>
+              ))}
+            </>
+          ) : showTrending && trendingProducts && trendingProducts.length > 0 ? (
+            <>
+              <div className="px-4 py-3 text-sm font-semibold text-yellow-800 bg-yellow-50/80 border-b border-yellow-200">
+                <TrendingUp className="inline h-4 w-4 mr-2" />
+                Trending Products
+              </div>
+              {trendingProducts.map((product, index) => (
+                <div
+                  key={product.id}
+                  className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 ${
+                    index === 0 
+                      ? 'bg-yellow-50 border-l-4 border-l-yellow-400 shadow-sm' 
+                      : 'hover:bg-yellow-50/50 hover:border-l-4 hover:border-l-yellow-300'
+                  }`}
+                  onClick={() => handleProductClick(product)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-12 rounded-lg object-cover shadow-sm border border-gray-200"
+                    />
+                    <div className="flex-1">
+                      <div className="font-semibold text-sm text-gray-900">{product.name}</div>
+                      <div className="text-xs text-yellow-600 font-medium">{product.category}</div>
+                    </div>
+                    <div className="text-sm font-bold text-yellow-700 bg-yellow-100 px-2 py-1 rounded-md">
+                      ₹{product.price.toLocaleString()}
+                    </div>
                   </div>
-                ))
-              )}
-            </div>
-          </div>
+                </div>
+              ))}
+            </>
+          ) : null}
         </div>
       )}
       
@@ -412,159 +254,6 @@ const SearchBox = ({
           </div>
         </div>
       )}
-
-      {/* Product Detail Modal */}
-      <Dialog open={isProductModalOpen} onOpenChange={setIsProductModalOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          {selectedProduct && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-2xl font-playfair text-foreground">
-                  {selectedProduct.name}
-                </DialogTitle>
-              </DialogHeader>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                {/* Product Image */}
-                <div className="space-y-4">
-                  <div className="relative overflow-hidden rounded-lg">
-                    <img
-                      src={selectedProduct.image}
-                      alt={selectedProduct.name}
-                      className="w-full h-96 object-cover"
-                    />
-                    {selectedProduct.badges && selectedProduct.badges.length > 0 && (
-                      <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-                        {selectedProduct.badges.map((badge) => (
-                          <Badge
-                            key={badge}
-                            variant={getBadgeVariant(badge)}
-                            className="text-xs"
-                          >
-                            {getBadgeText(badge)}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Product Details */}
-                <div className="space-y-6">
-                  {/* Rating */}
-                  <div className="flex items-center space-x-2">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < Math.floor(selectedProduct.rating.avg)
-                              ? "text-gold fill-gold"
-                              : "text-muted-foreground"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-muted-foreground">
-                      {selectedProduct.rating.avg} ({selectedProduct.rating.count} reviews)
-                    </span>
-                  </div>
-
-                  {/* Price */}
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-3xl font-bold text-foreground">
-                        {formatPrice(selectedProduct.price)}
-                      </span>
-                      {selectedProduct.compareAtPrice && (
-                        <span className="text-lg text-muted-foreground line-through">
-                          {formatPrice(selectedProduct.compareAtPrice)}
-                        </span>
-                      )}
-                    </div>
-                    {selectedProduct.compareAtPrice && (
-                      <div className="text-sm text-green-600">
-                        You save {formatPrice(selectedProduct.compareAtPrice - selectedProduct.price)}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="font-medium text-muted-foreground">Purity:</span>
-                        <span className="ml-2 text-foreground">{selectedProduct.purity}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-muted-foreground">Weight:</span>
-                        <span className="ml-2 text-foreground">{selectedProduct.weight}g</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-muted-foreground">Category:</span>
-                        <span className="ml-2 text-foreground capitalize">{selectedProduct.category}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-muted-foreground">SKU:</span>
-                        <span className="ml-2 text-foreground">{selectedProduct.sku}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="text-sm">
-                      <span className="font-medium text-muted-foreground">Making Charges:</span>
-                      <span className="ml-2 text-foreground">{formatPrice(selectedProduct.makingCharges)}</span>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-2">Description</h4>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {selectedProduct.description}
-                    </p>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex space-x-3 pt-4">
-                    <Button 
-                      className="flex-1" 
-                      variant="hero"
-                      onClick={() => handleAddToCart(selectedProduct)}
-                    >
-                      <ShoppingCart className="h-4 w-4 mr-2" />
-                      Add to Cart
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="icon"
-                      onClick={() => handleToggleFavorite(selectedProduct.id)}
-                      className={favorites.includes(selectedProduct.id) ? "bg-red-50 text-red-500 border-red-200" : ""}
-                    >
-                      <Heart className={`h-4 w-4 ${favorites.includes(selectedProduct.id) ? "fill-red-500" : ""}`} />
-                    </Button>
-                  </div>
-
-                  {/* Additional Info */}
-                  <div className="border-t pt-4 space-y-2 text-xs text-muted-foreground">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-gold rounded-full mr-2" />
-                      Certified Hallmark Gold
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-gold rounded-full mr-2" />
-                      30-Day Return Policy
-                    </div>
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-gold rounded-full mr-2" />
-                      Free Shipping & Insurance
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

@@ -23,8 +23,8 @@ const FeaturedProducts = () => {
       id: "1",
       name: "Gold Bangle",
       category: "22k",
-      price: 45200,
-      compareAtPrice: 48500,
+      price: 82543,
+      compareAtPrice: 85000,
       weight: 8.5,
       image: productBangle,
       rating: { avg: 4.8, count: 24 },
@@ -34,7 +34,7 @@ const FeaturedProducts = () => {
       id: "2",
       name: "Gold Coin",
       category: "24k",
-      price: 7850,
+      price: 20734,
       weight: 2.0,
       image: productCoin,
       rating: { avg: 4.9, count: 156 },
@@ -173,7 +173,7 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {products.slice(0, 8).map((product) => (
             <Card key={product.id} className="card-luxury group cursor-pointer">
               <CardContent className="p-0">
@@ -182,7 +182,7 @@ const FeaturedProducts = () => {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   
                   {/* Badges */}
@@ -234,9 +234,9 @@ const FeaturedProducts = () => {
                 </div>
 
                 {/* Product Info */}
-                <div className="p-6">
-                  <div className="mb-2">
-                    <h3 className="font-semibold text-foreground group-hover:text-gold transition-colors">
+                <div className="p-3 sm:p-4 lg:p-5">
+                  <div className="mb-3">
+                    <h3 className="font-semibold text-sm sm:text-base lg:text-lg text-foreground group-hover:text-gold transition-colors line-clamp-2">
                       {product.name}
                     </h3>
                     <p className="text-sm text-muted-foreground">{product.category}</p>
@@ -249,7 +249,7 @@ const FeaturedProducts = () => {
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-3 w-3 ${
+                            className={`h-4 w-4 ${
                               i < Math.floor(product.rating.avg)
                                 ? "text-gold fill-gold"
                                 : "text-muted-foreground"
@@ -257,54 +257,59 @@ const FeaturedProducts = () => {
                           />
                         ))}
                       </div>
-                      <span className="text-xs text-muted-foreground ml-1">
-                        ({product.rating.count})
+                      <span className="text-sm text-muted-foreground ml-2">
+                        {product.rating.avg} ({product.rating.count})
                       </span>
                     </div>
                   )}
 
                   {/* Price */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-bold text-foreground">
-                        {formatPrice(product.price)}
+                  <div className="flex flex-col space-y-1 mb-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-lg sm:text-xl font-bold text-foreground">
+                        ₹{product.price.toLocaleString()}
                       </span>
                       {product.compareAtPrice && (
                         <span className="text-sm text-muted-foreground line-through">
-                          {formatPrice(product.compareAtPrice)}
+                          ₹{product.compareAtPrice.toLocaleString()}
                         </span>
                       )}
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {product.weight}g
-                    </span>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground">
+                      <span>Weight: {product.weight}g</span>
+                      {product.compareAtPrice && (
+                        <span className="text-green-600 font-medium">
+                          Save ₹{(product.compareAtPrice - product.price).toLocaleString()}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Quantity Selector */}
-                  <div className="flex items-center justify-center space-x-2 mb-3">
+                  <div className="flex items-center justify-center space-x-3 mb-4">
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => updateQuantity(product.id, getQuantity(product.id) - 1)}
                       disabled={getQuantity(product.id) <= 1}
-                      className="h-8 w-8 p-0"
+                      className="h-9 w-9 p-0"
                     >
-                      <Minus className="h-3 w-3" />
+                      <Minus className="h-4 w-4" />
                     </Button>
-                    <span className="w-8 text-center font-medium">{getQuantity(product.id)}</span>
+                    <span className="w-10 text-center font-semibold text-lg">{getQuantity(product.id)}</span>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => updateQuantity(product.id, getQuantity(product.id) + 1)}
-                      className="h-8 w-8 p-0"
+                      className="h-9 w-9 p-0"
                     >
-                      <Plus className="h-3 w-3" />
+                      <Plus className="h-4 w-4" />
                     </Button>
                   </div>
 
                   {/* Add to Cart Button */}
                   <Button 
-                    className="w-full" 
+                    className="w-full py-2 sm:py-3 text-xs sm:text-sm font-medium" 
                     variant="outline-gold"
                     onClick={() => handleAddToCart(product)}
                   >

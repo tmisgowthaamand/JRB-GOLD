@@ -47,6 +47,7 @@ type CartContextType = {
   orders: Order[];
   addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
   toggleFavorite: (productId: string, productName?: string) => void;
   clearCart: () => void;
   getOrder: (orderId: string) => Order | undefined;
@@ -98,6 +99,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const updateQuantity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    
+    setCart(prev => {
+      const updatedCart = prev.map(item => 
+        item.id === productId 
+          ? { ...item, quantity }
+          : item
+      );
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
   const toggleFavorite = (productId: string, productName?: string) => {
     setFavorites(prev => {
       const newFavorites = prev.includes(productId)
@@ -114,7 +132,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const getOrder = (orderId: string): Order | undefined => {
-    return orders.find(order => order.id === orderId);
+    // First check user-specific orders
+    const userEmail = localStorage.getItem('userEmail');
+    if (userEmail) {
+      const userOrdersKey = `orders_${userEmail}`;
+      const userOrders = JSON.parse(localStorage.getItem(userOrdersKey) || '[]');
+      const userOrder = userOrders.find((order: Order) => order.id === orderId);
+      if (userOrder) return userOrder;
+    }
+    
+    // Fallback to all orders
+    const allOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+    return allOrders.find((order: Order) => order.id === orderId);
   };
 
   return (
@@ -125,6 +154,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         orders,
         addToCart,
         removeFromCart,
+        updateQuantity,
         toggleFavorite,
         clearCart,
         getOrder,

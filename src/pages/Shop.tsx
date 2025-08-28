@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import productBangle from "@/assets/product-bangle.jpg";
 import productCoin from "@/assets/product-coin.jpg";
 import productNecklace from "@/assets/product-necklace.jpg";
+import silverBraceletSet from "@/assets/silver-bracelet-set.jpg";
 import { useParams } from 'react-router-dom';
 
 interface ShopProps {
@@ -26,8 +27,8 @@ const Shop: React.FC<ShopProps> = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>(category || '');
   const [sortBy, setSortBy] = useState('newest');
-  const [priceRange, setPriceRange] = useState([1000, 100000]);
-  const [weightRange, setWeightRange] = useState([1, 50]);
+  const [priceRange, setPriceRange] = useState([500, 150000]);
+  const [weightRange, setWeightRange] = useState([1, 100]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const { addToCart, toggleFavorite, favorites } = useCart();
@@ -47,8 +48,8 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "bangles",
       purity: "22k",
-      price: 45200,
-      compareAtPrice: 48500,
+      price: 82543,
+      compareAtPrice: 85000,
       weight: 8.5,
       makingCharges: 2500,
       image: productBangle,
@@ -63,7 +64,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "coins",
       subcategory: "religious",
       purity: "24k",
-      price: 7850,
+      price: 20734,
       weight: 2.0,
       makingCharges: 150,
       image: productCoin,
@@ -78,7 +79,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "necklaces",
       purity: "pure-silver",
-      price: 3200,
+      price: 4050,
       weight: 25.0,
       makingCharges: 800,
       image: productNecklace,
@@ -97,7 +98,7 @@ const Shop: React.FC<ShopProps> = () => {
       compareAtPrice: 35200,
       weight: 6.2,
       makingCharges: 1800,
-      image: productBangle,
+      image: "/gold ring set.jpg",
       rating: { avg: 4.8, count: 67 },
       badges: ["no-wastage", "sale"],
       description: "Complete bridal ring set with matching designs",
@@ -109,10 +110,10 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "chains",
       purity: "22k",
-      price: 52800,
+      price: 101953,
       weight: 10.5,
       makingCharges: 3200,
-      image: productNecklace,
+      image: "/Gold Chain - Rope Design.jpg",
       rating: { avg: 4.9, count: 89 },
       badges: ["premium"],
       description: "Classic rope design gold chain for everyday wear",
@@ -124,10 +125,10 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "bracelets",
       purity: "pure-silver",
-      price: 2800,
+      price: 2940,
       weight: 18.0,
       makingCharges: 600,
-      image: productBangle,
+      image: "/happy-face-emoji-WEgCCSiOQqM-unsplash.jpg",
       rating: { avg: 4.6, count: 32 },
       badges: ["handcrafted"],
       description: "Set of 3 matching silver bracelets with charms",
@@ -154,7 +155,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "anklets",
       purity: "pure-silver",
-      price: 4500,
+      price: 5060,
       weight: 32.0,
       makingCharges: 900,
       image: productNecklace,
@@ -240,7 +241,11 @@ const Shop: React.FC<ShopProps> = () => {
       description: `Weight: ${product.weight}g each • Total: ₹${(product.price * quantity).toLocaleString()}`,
       duration: 3000,
     });
-    // Don't reset quantity to 1 to allow adding more of the same product
+    // Reset quantity to 1 after adding to cart
+    setQuantities(prev => ({
+      ...prev,
+      [product.id]: 1
+    }));
   };
 
   const handleToggleFavorite = (productId: string) => {
@@ -370,6 +375,93 @@ const Shop: React.FC<ShopProps> = () => {
           <div className="divider-gold mt-4 max-w-24" />
         </div>
 
+        {/* Featured Collection */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-playfair text-foreground mb-6">Featured Collection</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Gold Chain - Rope Design */}
+            <Card className="card-luxury group cursor-pointer">
+              <CardContent className="p-0">
+                <div className="relative overflow-hidden rounded-t-lg aspect-square">
+                  <img
+                    src="/Gold Chain - Rope Design.jpg"
+                    alt="Gold Chain - Rope Design"
+                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <Badge variant="secondary" className="absolute top-3 left-3 text-xs">
+                    Premium
+                  </Badge>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-foreground mb-2">Gold Chain - Rope Design</h3>
+                  <p className="text-sm text-muted-foreground mb-2">22k • 10.5g</p>
+                  <div className="flex items-center justify-between">
+                    <div className="text-lg font-bold text-gold">₹1,01,953</div>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+                      4.9 (89)
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Silver Bracelet Set */}
+            <Card className="card-luxury group cursor-pointer">
+              <CardContent className="p-0">
+                <div className="relative overflow-hidden rounded-t-lg aspect-square">
+                  <img
+                    src="/happy-face-emoji-WEgCCSiOQqM-unsplash.jpg"
+                    alt="Silver Bracelet Set"
+                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <Badge variant="outline" className="absolute top-3 left-3 text-xs">
+                    Handcrafted
+                  </Badge>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-foreground mb-2">Silver Bracelet Set</h3>
+                  <p className="text-sm text-muted-foreground mb-2">Pure Silver • 18.0g</p>
+                  <div className="flex items-center justify-between">
+                    <div className="text-lg font-bold text-gold">₹2,940</div>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+                      4.6 (32)
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Silver Designer Necklace */}
+            <Card className="card-luxury group cursor-pointer">
+              <CardContent className="p-0">
+                <div className="relative overflow-hidden rounded-t-lg aspect-square">
+                  <img
+                    src={productNecklace}
+                    alt="Silver Designer Necklace"
+                    className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <Badge variant="outline" className="absolute top-3 left-3 text-xs">
+                    Handcrafted
+                  </Badge>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-foreground mb-2">Silver Designer Necklace</h3>
+                  <p className="text-sm text-muted-foreground mb-2">Pure Silver • 25.0g</p>
+                  <div className="flex items-center justify-between">
+                    <div className="text-lg font-bold text-gold">₹4,050</div>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
+                      4.7 (43)
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
         <div className="flex gap-8">
           {/* Desktop Filters Sidebar */}
           <div className="hidden lg:block w-80 flex-shrink-0">
@@ -481,8 +573,8 @@ const Shop: React.FC<ShopProps> = () => {
 
             {/* Products Grid/List */}
             <div className={viewMode === 'grid' 
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              : "space-y-6"
+              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8"
+              : "space-y-4 sm:space-y-6"
             }>
               {sortedProducts.map((product) => (
                 <Card key={product.id} className={`card-luxury group cursor-pointer ${viewMode === 'grid' ? 'flex flex-col h-full' : ''}`}>
@@ -490,11 +582,11 @@ const Shop: React.FC<ShopProps> = () => {
                     {viewMode === 'grid' ? (
                       // Grid View
                       <>
-                        <div className="relative overflow-hidden rounded-t-lg">
+                        <div className="relative overflow-hidden rounded-t-lg aspect-square">
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                           />
                           
                           {product.badges && product.badges.length > 0 && (
@@ -542,17 +634,17 @@ const Shop: React.FC<ShopProps> = () => {
                           </div>
                         </div>
 
-                        <div className="p-6 flex flex-col h-full">
+                        <div className="p-3 sm:p-4 flex flex-col h-full">
                           <div className="flex-1">
-                            <div className="mb-3">
-                              <h3 className="font-semibold text-foreground group-hover:text-gold transition-colors line-clamp-2">
+                            <div className="mb-2">
+                              <h3 className="font-semibold text-xs sm:text-sm text-foreground group-hover:text-gold transition-colors line-clamp-2">
                                 {product.name}
                               </h3>
-                              <p className="text-sm text-muted-foreground">{product.purity}</p>
+                              <p className="text-xs text-muted-foreground">{product.purity}</p>
                             </div>
 
                             {product.rating && (
-                              <div className="flex items-center mb-3">
+                              <div className="flex items-center mb-2">
                                 <div className="flex">
                                   {[...Array(5)].map((_, i) => (
                                     <Star
@@ -571,57 +663,57 @@ const Shop: React.FC<ShopProps> = () => {
                               </div>
                             )}
 
-                            <div className="mb-4">
-                              <div className="flex items-baseline justify-between mb-1">
-                                <div className="flex items-center space-x-2">
-                                  <span className="text-lg font-bold text-foreground">
-                                    {formatPrice(product.price)}
+                            <div className="mb-3">
+                              <div className="flex flex-col space-y-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm sm:text-base font-bold text-foreground">
+                                    ₹{product.price.toLocaleString()}
                                   </span>
                                   {product.compareAtPrice && (
-                                    <span className="text-sm text-muted-foreground line-through">
-                                      {formatPrice(product.compareAtPrice)}
+                                    <span className="text-xs text-muted-foreground line-through">
+                                      ₹{product.compareAtPrice.toLocaleString()}
                                     </span>
                                   )}
                                 </div>
                               </div>
-                              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                                <span>Weight: {product.weight}g</span>
+                              <div className="flex items-center justify-between text-xs text-muted-foreground mt-1">
+                                <span>{product.weight}g</span>
                                 {product.makingCharges && (
-                                  <span>Making: {formatPrice(product.makingCharges)}</span>
+                                  <span>+₹{product.makingCharges.toLocaleString()}</span>
                                 )}
                               </div>
                             </div>
                           </div>
 
                           {/* Quantity Selector */}
-                          <div className="flex items-center justify-center space-x-2 mt-3">
+                          <div className="flex items-center justify-center space-x-2 mb-2">
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => updateQuantity(product.id, getQuantity(product.id) - 1)}
                               disabled={getQuantity(product.id) <= 1}
-                              className="h-8 w-8 p-0"
+                              className="h-7 w-7 p-0"
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
-                            <span className="w-8 text-center font-medium">{getQuantity(product.id)}</span>
+                            <span className="w-6 text-center text-sm font-medium">{getQuantity(product.id)}</span>
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => updateQuantity(product.id, getQuantity(product.id) + 1)}
-                              className="h-8 w-8 p-0"
+                              className="h-7 w-7 p-0"
                             >
                               <Plus className="h-3 w-3" />
                             </Button>
                           </div>
 
                           <Button 
-                            className="w-full mt-2" 
+                            className="w-full text-xs py-1.5 sm:py-2" 
                             variant="outline-gold"
                             onClick={() => handleAddToCart(product)}
                           >
-                            <ShoppingCart className="h-4 w-4 mr-2" />
-                            Add {getQuantity(product.id)} to Cart
+                            <ShoppingCart className="h-3 w-3 mr-1" />
+                            Add To Cart
                           </Button>
                         </div>
                       </>
@@ -629,11 +721,11 @@ const Shop: React.FC<ShopProps> = () => {
                       // List View
                       <div className="flex gap-6 h-full">
                         <div className="flex-shrink-0">
-                          <div className="relative overflow-hidden rounded-lg">
+                          <div className="relative overflow-hidden rounded-lg aspect-square w-32 sm:w-36 md:w-40">
                             <img
                               src={product.image}
                               alt={product.name}
-                              className="w-40 h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                              className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
                             />
                             {product.badges && product.badges.length > 0 && (
                               <div className="absolute top-2 left-2 flex flex-wrap gap-1">

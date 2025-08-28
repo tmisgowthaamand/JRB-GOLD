@@ -98,7 +98,7 @@ export default function OrderDetail() {
                 <div key={index} className="flex items-start">
                   <div className="flex-shrink-0 h-16 w-16 rounded-md overflow-hidden">
                     <img
-                      src={item.product.image || '/placeholder.svg'}
+                      src={item.product.image || '/logo1.png'}
                       alt={item.product.name}
                       className="h-full w-full object-cover"
                     />

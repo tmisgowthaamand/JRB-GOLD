@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,9 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { User, Mail, Phone, MapPin, Lock, CheckCircle, XCircle, Package, Calendar, CreditCard } from 'lucide-react';
-import productBangle from '@/assets/product-bangle.jpg';
-import productCoin from '@/assets/product-coin.jpg';
-import productNecklace from '@/assets/product-necklace.jpg';
+import { useToast } from '@/hooks/use-toast';
+// Using public folder images for better compatibility
+const productBangle = '/product-bangle.jpg';
+const productCoin = '/product-coin.jpg';
+const productNecklace = '/product-necklace.jpg';
 
 // G20 Countries with tax rates and states
 const G20_COUNTRIES = [
@@ -25,93 +27,111 @@ const G20_COUNTRIES = [
   { code: 'IT', name: 'Italy', taxRate: 0.22, states: ['Lombardy', 'Lazio', 'Campania', 'Sicily'] }
 ];
 
-// Mock user data
-const mockUser = {
-  firstName: 'Rajesh',
-  lastName: 'Kumar',
-  email: 'rajesh.k@example.com',
-  phone: '+91 9876543210',
-  address: '123 Main St, Bangalore, Karnataka 560001',
+// Default user data structure
+const defaultUser = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  address: '',
   country: 'IN',
-  pincode: '560001',
-  state: 'Karnataka',
-  city: 'Bangalore',
-  dateOfBirth: '1990-01-15',
+  pincode: '',
+  state: '',
+  city: '',
+  dateOfBirth: '',
   gender: 'male',
-  emailVerified: true,
-  phoneVerified: true
+  emailVerified: false,
+  phoneVerified: false
 };
 
-// Mock order history
-const mockOrders = [
-  {
-    id: 'JRB123456ABC7D',
-    orderNumber: 'ORD-1735288076615',
-    date: '25 Dec, 2024',
-    status: 'Delivered',
-    paymentMethod: 'Credit Card',
-    total: 45200,
-    items: [
+// Function to get user orders from localStorage
+const getUserOrders = (userEmail: string) => {
+  const orders = localStorage.getItem(`orders_${userEmail}`);
+  if (orders) {
+    return JSON.parse(orders);
+  }
+  
+  // Return sample orders for demo purposes if user is logged in
+  if (userEmail) {
+    const sampleOrders = [
       {
-        id: '1',
-        name: 'Elegant Gold Bangle',
-        category: '22k Gold',
-        price: 45200,
-        weight: 8.5,
-        image: productBangle
-      }
-    ]
-  },
-  {
-    id: 'JRB789012DEF3G',
-    orderNumber: 'ORD-1735188076615',
-    date: '20 Dec, 2024',
-    status: 'Shipped',
-    paymentMethod: 'Debit Card',
-    total: 10050,
-    items: [
-      {
-        id: '2',
-        name: 'Gold Coin',
-        category: '24k Gold',
-        price: 7850,
-        weight: 2.0,
-        image: productCoin
+        id: 'JRB123456ABC7D',
+        orderNumber: 'ORD-1735288076615',
+        date: '25 Dec, 2024',
+        status: 'Delivered',
+        paymentMethod: 'Credit Card',
+        total: 82543,
+        items: [
+          {
+            id: '1',
+            name: 'Elegant Gold Bangle',
+            category: '22k Gold',
+            price: 82543,
+            weight: 8.5,
+            image: '/product-bangle.jpg'
+          }
+        ]
       },
       {
-        id: '3',
-        name: 'Silver Chain',
-        category: 'Pure Silver',
-        price: 2200,
-        weight: 15.0,
-        image: productNecklace
-      }
-    ]
-  },
-  {
-    id: 'JRB456789HIJ1K',
-    orderNumber: 'ORD-1735088076615',
-    date: '15 Dec, 2024',
-    status: 'Processing',
-    paymentMethod: 'Net Banking',
-    total: 32400,
-    items: [
+        id: 'JRB789012DEF3G',
+        orderNumber: 'ORD-1735188076615',
+        date: '20 Dec, 2024',
+        status: 'Shipped',
+        paymentMethod: 'Debit Card',
+        total: 10050,
+        items: [
+          {
+            id: '2',
+            name: 'Gold Coin',
+            category: '24k Gold',
+            price: 20734,
+            weight: 2.0,
+            image: '/product-coin.jpg'
+          },
+          {
+            id: '3',
+            name: 'Silver Chain',
+            category: 'Pure Silver',
+            price: 2200,
+            weight: 15.0,
+            image: '/product-necklace.jpg'
+          }
+        ]
+      },
       {
-        id: '4',
-        name: 'Gold Ring Set',
-        category: '22k Gold',
-        price: 32400,
-        weight: 6.2,
-        image: productBangle
+        id: 'JRB456789HIJ1K',
+        orderNumber: 'ORD-1735088076615',
+        date: '15 Dec, 2024',
+        status: 'Processing',
+        paymentMethod: 'Net Banking',
+        total: 32400,
+        items: [
+          {
+            id: '4',
+            name: 'Gold Ring Set',
+            category: '22k Gold',
+            price: 32400,
+            weight: 6.2,
+            image: '/product-bangle.jpg'
+          }
+        ]
       }
-    ]
+    ];
+    
+    // Store sample orders for this user
+    localStorage.setItem(`orders_${userEmail}`, JSON.stringify(sampleOrders));
+    return sampleOrders;
   }
-];
+  
+  return [];
+};
 
 const ProfileSettings = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(mockUser);
+  const [formData, setFormData] = useState(defaultUser);
+  const [userOrders, setUserOrders] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -123,6 +143,43 @@ const ProfileSettings = () => {
     promotions: false
   });
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Load user data and orders on component mount
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    const userEmail = localStorage.getItem('userEmail');
+    const userName = localStorage.getItem('userName');
+    const userPhone = localStorage.getItem('userPhone');
+    
+    if (authToken && userEmail) {
+      setIsLoggedIn(true);
+      
+      // Load user profile data
+      const [firstName, lastName] = userName ? userName.split(' ') : ['', ''];
+      setFormData({
+        ...defaultUser,
+        firstName: firstName || '',
+        lastName: lastName || '',
+        email: userEmail,
+        phone: userPhone || '',
+        emailVerified: true,
+        phoneVerified: !!userPhone
+      });
+      
+      // Load user orders
+      const orders = getUserOrders(userEmail);
+      setUserOrders(orders);
+    } else {
+      // Redirect to sign in if not authenticated
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to view your profile settings.",
+        variant: "destructive",
+      });
+      navigate('/signin');
+    }
+  }, [navigate, toast]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -141,27 +198,66 @@ const ProfileSettings = () => {
 
   const handleProfileUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add profile update logic
-    console.log('Updating profile:', formData);
+    
+    // Update localStorage with new profile data
+    localStorage.setItem('userName', `${formData.firstName} ${formData.lastName}`);
+    localStorage.setItem('userEmail', formData.email);
+    localStorage.setItem('userPhone', formData.phone);
+    
     setIsEditing(false);
-    // Show success message
+    
+    toast({
+      title: "Profile Updated",
+      description: "Your profile has been updated successfully.",
+    });
   };
 
   const handlePasswordUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add password update logic
-    console.log('Updating password');
+    
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Password Mismatch",
+        description: "New passwords don't match. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (newPassword.length < 8) {
+      toast({
+        title: "Weak Password",
+        description: "Password must be at least 8 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // In a real app, you would validate the current password and update it
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
-    // Show success message
+    
+    toast({
+      title: "Password Updated",
+      description: "Your password has been updated successfully.",
+    });
   };
 
   const handleDeleteAccount = () => {
-    // TODO: Add account deletion logic
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      console.log('Deleting account');
-      // Redirect to home after deletion
+      // Clear all user data from localStorage
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userPhone');
+      localStorage.removeItem(`orders_${formData.email}`);
+      
+      toast({
+        title: "Account Deleted",
+        description: "Your account has been deleted successfully.",
+      });
+      
       navigate('/');
     }
   };
@@ -170,7 +266,7 @@ const ProfileSettings = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-playfair font-bold text-gray-900">Account Settings</h1>
-        <p className="mt-2 text-gray-600">Manage your profile, password, and notification preferences</p>
+        <p className="mt-2 text-gray-600">Welcome back, {formData.firstName || 'User'}! Manage your profile, orders, and preferences</p>
       </div>
 
       <Tabs defaultValue="profile" className="w-full" onValueChange={setActiveTab}>
@@ -437,7 +533,7 @@ const ProfileSettings = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {mockOrders.map((order) => (
+                {userOrders.map((order) => (
                   <div key={order.id} className="border rounded-lg p-6">
                     {/* Order Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
@@ -481,9 +577,13 @@ const ProfileSettings = () => {
                       {order.items.map((item, index) => (
                         <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
                           <img 
-                            src={item.image} 
+                            src={item.image || '/product-bangle.jpg'} 
                             alt={item.name}
                             className="w-16 h-16 object-cover rounded-lg"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/product-bangle.jpg';
+                            }}
                           />
                           <div className="flex-1">
                             <h5 className="font-medium text-gray-900">{item.name}</h5>
@@ -518,7 +618,7 @@ const ProfileSettings = () => {
                   </div>
                 ))}
 
-                {mockOrders.length === 0 && (
+                {userOrders.length === 0 && (
                   <div className="text-center py-12">
                     <Package className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>

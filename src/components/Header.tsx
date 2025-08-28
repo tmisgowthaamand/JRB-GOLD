@@ -1,20 +1,27 @@
 import { useState, useEffect } from "react";
-import { User, Heart, ShoppingCart, Menu, LogOut, Package, Settings } from "lucide-react";
+import { Search, User, Heart, ShoppingCart, Menu, X, LogIn, UserPlus, LogOut, Package, Settings, RefreshCw } from "lucide-react";
+import productBangle from "@/assets/product-bangle.jpg";
+import productCoin from "@/assets/product-coin.jpg";
+import productNecklace from "@/assets/product-necklace.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import SearchBox from "@/components/SearchBox";
 import { useCart } from "@/contexts/CartContext";
 import { useNavigate } from "react-router-dom";
+import { useGoldRates } from "@/hooks/useGoldRates";
 
 const Header = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInitials, setUserInitials] = useState('');
   const { cart, favorites } = useCart();
   const navigate = useNavigate();
+  const { gold22k, silver, isLoading, error } = useGoldRates();
 
   // Check if user is logged in (in a real app, this would come from your auth context)
   useEffect(() => {
@@ -59,6 +66,17 @@ const Header = () => {
     { name: "Contact", href: "/contact" },
   ];
 
+  const trendingProducts = [
+    { id: '1', name: 'Gold Bangles', category: 'Bangles', price: 15999, image: productBangle },
+    { id: '2', name: 'Diamond Rings', category: 'Rings', price: 45999, image: productCoin },
+    { id: '3', name: 'Temple Jewelry', category: 'Necklaces', price: 32499, image: productNecklace },
+    { id: '4', name: 'Antique Necklaces', category: 'Necklaces', price: 28999, image: productBangle },
+  ];
+
+  const handleProductSelect = (product: any) => {
+    // Navigate to product detail page
+    navigate(`/product/${product.id}`);
+  };
 
   const handleAccountClick = () => {
     setIsAccountMenuOpen(!isAccountMenuOpen);
@@ -77,13 +95,30 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-      {/* Top Bar - Gold Rate Ticker */}
+      {/* Top Bar - Live Gold Rate Ticker */}
       <div className="bg-gradient-gold text-charcoal py-2 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-sm font-medium">
-            Today's Gold Rate (22k): ₹5,847/g*{' '}
-            <span className="text-xs opacity-75">*Indicative—visit store for exact rate</span>
-          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium flex items-center gap-1">
+                {isLoading ? (
+                  <RefreshCw className="h-3 w-3 animate-spin" />
+                ) : (
+                  <>₹{gold22k.toLocaleString()}/g Gold (22K)</>
+                )}
+              </span>
+              <span className="text-sm font-medium flex items-center gap-1">
+                {isLoading ? (
+                  <RefreshCw className="h-3 w-3 animate-spin" />
+                ) : (
+                  <>₹{silver.toLocaleString()}/g Silver</>
+                )}
+              </span>
+            </div>
+            <span className="text-xs opacity-75">
+              {error ? '*Indicative rates' : '*Live rates'}—visit store for exact rate
+            </span>
+          </div>
         </div>
       </div>
 
@@ -92,13 +127,13 @@ const Header = () => {
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center h-full">
-              <a href="/" className="flex items-center space-x-3 h-full py-3">
+              <a href="/" className="flex items-center space-x-2 sm:space-x-3 h-full py-3">
                 <img 
-                  src="/logo.jpeg" 
+                  src="/logo1.png?v=1" 
                   alt="JRB Gold Logo" 
-                  className="w-10 h-10 object-contain rounded-md shadow-sm"
+                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain brightness-110 contrast-110"
                 />
-                <span className="font-playfair text-2xl font-bold text-foreground leading-none">
+                <span className="font-playfair text-xl sm:text-2xl md:text-3xl font-extrabold text-yellow-600 leading-none drop-shadow-sm">
                   JRB Gold
                 </span>
               </a>
@@ -119,8 +154,22 @@ const Header = () => {
 
             {/* Utilities */}
             <div className="flex items-center space-x-3">
+              {/* Search */}
+              <div className="hidden sm:block relative w-48 md:w-56 lg:w-64">
+                <SearchBox 
+                  onProductSelect={handleProductSelect}
+                  placeholder="Search jewelry..."
+                  className="w-full"
+                  trendingProducts={trendingProducts}
+                  showTrending={true}
+                />
+              </div>
 
-              <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="icon" className="sm:hidden h-8 w-8">
+                <Search className="h-4 w-4" />
+              </Button>
+
+              <div className="flex items-center space-x-1 sm:space-x-2">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -185,11 +234,29 @@ title="View Favorites"
                 ) : (
                   <div className="flex space-x-2">
                     <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => navigate('/signin')}
+                      className="hidden sm:flex items-center"
+                    >
+                      <LogIn className="h-4 w-4 mr-1" />
+                      <span>Sign In</span>
+                    </Button>
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      onClick={() => navigate('/signup')}
+                      className="hidden sm:flex items-center"
+                    >
+                      <UserPlus className="h-4 w-4 mr-1" />
+                      <span>Sign Up</span>
+                    </Button>
+                    <Button 
                       variant="ghost" 
                       size="icon" 
                       className="sm:hidden"
+                      onClick={() => navigate('/signin')}
                       title="Account"
-                      disabled
                     >
                       <User className="h-5 w-5" />
                     </Button>
@@ -205,6 +272,13 @@ title="View Favorites"
                   </SheetTrigger>
                   <SheetContent side="left" className="w-[300px] sm:w-[400px]">
                     <div className="flex flex-col space-y-4 py-4">
+                      {/* Mobile Search */}
+                      <SearchBox 
+                        onProductSelect={handleProductSelect}
+                        placeholder="Search jewelry..."
+                        className="w-full"
+                      />
+
                       {/* Mobile Navigation */}
                       <nav className="flex flex-col space-y-2">
                         {navigationLinks.map((link) => (
@@ -222,7 +296,70 @@ title="View Favorites"
                           </Button>
                         ))}
                         
-                        {/* Mobile Menu Buttons */}
+                        {/* Mobile Auth Buttons */}
+                        {isLoggedIn ? (
+                          <>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start"
+                              onClick={() => {
+                                navigate('/account/orders');
+                                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                              }}
+                            >
+                              <Package className="mr-2 h-4 w-4" />
+                              My Orders
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start"
+                              onClick={() => {
+                                navigate('/account/settings');
+                                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                              }}
+                            >
+                              <Settings className="mr-2 h-4 w-4" />
+                              Account Settings
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start text-red-600 hover:text-red-700"
+                              onClick={handleLogout}
+                            >
+                              <LogOut className="mr-2 h-4 w-4" />
+                              Sign Out
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-start"
+                              onClick={() => {
+                                navigate('/signin');
+                                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                              }}
+                            >
+                              <LogIn className="mr-2 h-4 w-4" />
+                              Sign In
+                            </Button>
+                            <Button
+                              variant="outline"
+                              className="w-full justify-start"
+                              onClick={() => {
+                                navigate('/signup');
+                                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                              }}
+                            >
+                              <UserPlus className="mr-2 h-4 w-4" />
+                              Create Account
+                            </Button>
+                          </>
+                        )}
+                      </nav>
+
+                      {/* Mobile Cart and Wishlist */}
+                      <div className="flex flex-col space-y-2 pt-4 border-t border-border">
                         <Button variant="outline" className="justify-start" onClick={handleWishlistClick}>
                           <Heart className="h-4 w-4 mr-2" />
                           Wishlist ({favorites.length})
@@ -231,7 +368,7 @@ title="View Favorites"
                           <ShoppingCart className="h-4 w-4 mr-2" />
                           Cart ({cart.length})
                         </Button>
-                      </nav>
+                      </div>
                     </div>
                   </SheetContent>
                 </Sheet>

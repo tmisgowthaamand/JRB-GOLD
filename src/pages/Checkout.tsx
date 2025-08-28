@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreditCard, Banknote, CheckCircle, Package, Calendar } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useCart } from "@/contexts/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import productBangle from "@/assets/product-bangle.jpg";
+import productCoin from "@/assets/product-coin.jpg";
+import productNecklace from "@/assets/product-necklace.jpg";
 
 // G20 Countries with tax rates and states
 const G20_COUNTRIES = [
@@ -88,7 +91,7 @@ export default function Checkout() {
   const [showOrderConfirmation, setShowOrderConfirmation] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+  const subtotal = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
   const tax = subtotal * taxRate;
   const shipping = 0; // Free shipping for G20 countries
   const total = subtotal + tax + shipping;
@@ -121,6 +124,26 @@ export default function Checkout() {
       return;
     }
     
+    // Get form data
+    const formData = new FormData(e.target as HTMLFormElement);
+    const firstName = formData.get('firstName') as string;
+    const lastName = formData.get('lastName') as string;
+    const email = formData.get('email') as string;
+    const phone = formData.get('phone') as string;
+    const address = formData.get('address') as string;
+    const city = formData.get('city') as string;
+    const zip = formData.get('zip') as string;
+    
+    // Check if user is authenticated
+    const authToken = localStorage.getItem('authToken');
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!authToken || !userEmail) {
+      alert('Please sign in to complete your order');
+      navigate('/signin');
+      return;
+    }
+    
     // Generate order details
     const orderId = generateOrderId();
     const orderNumber = `ORD-${Date.now()}`;
@@ -133,18 +156,64 @@ export default function Checkout() {
     const order = {
       id: orderId,
       orderNumber: orderNumber,
-      date: orderDate,
-      items: cart,
+      items: cart.map(item => {
+        // Map product images based on product ID or name
+        let productImage = item.image;
+        if (!productImage || productImage === '/logo1.png' || productImage.includes('blob:')) {
+          if (item.name?.toLowerCase().includes('bangle')) {
+            productImage = '/product-bangle.jpg';
+          } else if (item.name?.toLowerCase().includes('coin')) {
+            productImage = '/product-coin.jpg';
+          } else if (item.name?.toLowerCase().includes('necklace') || item.name?.toLowerCase().includes('chain')) {
+            productImage = '/product-necklace.jpg';
+          } else {
+            productImage = '/product-bangle.jpg'; // Default fallback
+          }
+        }
+        
+        return {
+          ...item,
+          image: productImage,
+          category: item.category || 'Jewelry',
+          weight: item.weight || 10
+        };
+      }),
       subtotal: subtotal,
       tax: tax,
+      shipping: 0,
       total: total,
+      status: 'Processing',
       paymentMethod: paymentMethod === 'credit' ? 'Credit Card' : paymentMethod === 'debit' ? 'Debit Card' : 'Net Banking',
-      status: 'Confirmed'
+      paymentStatus: 'completed',
+      createdAt: orderDate,
+      customerEmail: userEmail,
+      shippingAddress: {
+        fullName: `${firstName} ${lastName}`,
+        address: address,
+        city: city,
+        state: selectedState,
+        postalCode: zip,
+        country: G20_COUNTRIES.find(c => c.code === selectedCountry)?.name || '',
+        email: email,
+        phone: phone
+      }
     };
     
-    setOrderDetails(order);
-    setShowOrderConfirmation(true);
+    // Save order to user-specific localStorage key
+    const userOrdersKey = `orders_${userEmail}`;
+    const existingOrders = JSON.parse(localStorage.getItem(userOrdersKey) || '[]');
+    existingOrders.push(order);
+    localStorage.setItem(userOrdersKey, JSON.stringify(existingOrders));
+    
+    // Also save to general orders for order lookup
+    const allOrders = JSON.parse(localStorage.getItem('allOrders') || '[]');
+    allOrders.push(order);
+    localStorage.setItem('allOrders', JSON.stringify(allOrders));
+    
     clearCart();
+    
+    // Redirect to order details page
+    navigate(`/order/${orderId}`);
   };
 
   if (cart.length === 0) {
@@ -175,13 +244,13 @@ export default function Checkout() {
                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
                       First Name
                     </label>
-                    <Input id="firstName" required />
+                    <Input id="firstName" name="firstName" required />
                   </div>
                   <div>
                     <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
                       Last Name
                     </label>
-                    <Input id="lastName" required />
+                    <Input id="lastName" name="lastName" required />
                   </div>
                 </div>
                 
@@ -189,7 +258,14 @@ export default function Checkout() {
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                     Email
                   </label>
-                  <Input id="email" type="email" required />
+                  <Input id="email" name="email" type="email" required />
+                </div>
+                
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone Number <span className="text-red-500">*</span>
+                  </label>
+                  <Input id="phone" name="phone" type="tel" required />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,7 +314,7 @@ export default function Checkout() {
                   <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
                     Street Address <span className="text-red-500">*</span>
                   </label>
-                  <Input id="address" required />
+                  <Input id="address" name="address" required />
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -246,13 +322,13 @@ export default function Checkout() {
                     <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
                       City <span className="text-red-500">*</span>
                     </label>
-                    <Input id="city" required />
+                    <Input id="city" name="city" required />
                   </div>
                   <div>
                     <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-1">
                       ZIP/Postal Code <span className="text-red-500">*</span>
                     </label>
-                    <Input id="zip" required />
+                    <Input id="zip" name="zip" required />
                   </div>
                 </div>
                 
@@ -367,15 +443,42 @@ export default function Checkout() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow p-6 sticky top-6">
               <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+              
+              {/* Cart Items */}
+              <div className="space-y-3 mb-4 border-b border-gray-200 pb-4">
+                {cart.map((item) => (
+                  <div key={item.id} className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h4 className="text-sm font-medium text-gray-900">{item.name}</h4>
+                      {item.quantity && item.quantity > 1 ? (
+                        <p className="text-xs text-gray-500">
+                          {item.quantity} × ₹{item.price?.toLocaleString()} each
+                        </p>
+                      ) : (
+                        <p className="text-xs text-gray-500">₹{item.price?.toLocaleString()}</p>
+                      )}
+                      {item.weight && (
+                        <p className="text-xs text-gray-500">
+                          {item.weight}g {item.quantity && item.quantity > 1 ? 'each' : ''}
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-sm font-medium text-gray-900">
+                      ₹{((item.price || 0) * (item.quantity || 1)).toLocaleString()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span>Subtotal ({cart.length} items)</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>Subtotal ({cart.reduce((sum, item) => sum + (item.quantity || 1), 0)} items)</span>
+                  <span>₹{subtotal.toLocaleString()}</span>
                 </div>
                 {selectedCountry && (
                   <div className="flex justify-between text-sm text-gray-600">
-                    <span>Tax ({taxRate * 100}%)</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>Tax ({(taxRate * 100).toFixed(0)}%)</span>
+                    <span>₹{tax.toLocaleString()}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
@@ -385,11 +488,11 @@ export default function Checkout() {
                 <div className="border-t border-gray-200 pt-3 mt-3">
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>₹{total.toLocaleString()}</span>
                   </div>
                   {selectedCountry && (
                     <div className="text-sm text-gray-500 mt-1">
-                      Includes ${tax.toFixed(2)} in taxes for {G20_COUNTRIES.find(c => c.code === selectedCountry)?.name}
+                      Includes ₹{tax.toLocaleString()} in taxes for {G20_COUNTRIES.find(c => c.code === selectedCountry)?.name}
                     </div>
                   )}
                 </div>
@@ -440,7 +543,7 @@ export default function Checkout() {
               <div>
                 <h3 className="font-semibold mb-3 flex items-center">
                   <Package className="h-5 w-5 mr-2" />
-                  Ordered Items ({orderDetails.items.length})
+                  Ordered Items ({orderDetails.items.reduce((sum: number, item: any) => sum + (item.quantity || 1), 0)} items)
                 </h3>
                 <div className="space-y-3 max-h-60 overflow-y-auto">
                   {orderDetails.items.map((item: any, index: number) => (
@@ -452,11 +555,16 @@ export default function Checkout() {
                       />
                       <div className="flex-1">
                         <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-600">
-                          {item.category} • {item.weight}g
-                        </p>
+                        <div className="text-sm text-gray-600">
+                          {item.quantity && item.quantity > 1 ? (
+                            <p>Quantity: {item.quantity} × ₹{item.price?.toLocaleString()} each</p>
+                          ) : (
+                            <p>₹{item.price?.toLocaleString()}</p>
+                          )}
+                          <p>{item.category} • {item.weight}g {item.quantity && item.quantity > 1 ? 'each' : ''}</p>
+                        </div>
                       </div>
-                      <p className="font-semibold">₹{item.price?.toLocaleString()}</p>
+                      <p className="font-semibold">₹{((item.price || 0) * (item.quantity || 1)).toLocaleString()}</p>
                     </div>
                   ))}
                 </div>

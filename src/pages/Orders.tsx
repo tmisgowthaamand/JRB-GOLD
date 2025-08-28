@@ -88,7 +88,7 @@ export default function Orders() {
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-16 w-16 rounded-md overflow-hidden">
                           <img
-                            src={item.product.image || '/placeholder.svg'}
+                            src={item.product.image || '/logo1.png'}
                             alt={item.product.name}
                             className="h-full w-full object-cover"
                           />

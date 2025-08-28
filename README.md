@@ -1,18 +1,14 @@
-# Welcome to your Lovable project
+# JRB Gold Private Limited - Premium Gold & Silver Jewelry
 
-## Project info
+## Project Overview
 
-**URL**: https://lovable.dev/projects/c75de34d-0707-4e00-a2be-dbd50650d339
+**Company**: JRB Gold Private Limited  
+**Website**: https://www.jrbgold.co.in  
+**Description**: Trusted Gold & Silver — Fair Prices, Fine Craft. Low making charges, no wastage, certified hallmark jewelry.
 
-## How can I edit this code?
+## How to edit this code?
 
 There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/c75de34d-0707-4e00-a2be-dbd50650d339) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
@@ -62,12 +58,21 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/c75de34d-0707-4e00-a2be-dbd50650d339) and click on Share -> Publish.
+You can deploy this React application using various hosting platforms:
 
-## Can I connect a custom domain to my Lovable project?
+- **Vercel**: Connect your GitHub repository for automatic deployments
+- **Netlify**: Drag and drop build folder or connect via Git
+- **GitHub Pages**: Use GitHub Actions for automated deployment
+- **Firebase Hosting**: Deploy using Firebase CLI
 
-Yes, you can!
+## Tech Stack
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+This project is built with modern web technologies:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and optimized builds
+- **UI Components**: Shadcn UI (built on Radix UI primitives)
+- **Styling**: Tailwind CSS for utility-first styling
+- **State Management**: React Context API
+- **Icons**: Lucide React
+- **Package Manager**: npm

@@ -345,6 +345,26 @@ const About = () => {
     'Responsible Jewelry Council Certified',
   ];
 
+  const team = [
+    {
+      name: 'Jagdish R. Bajaj',
+      position: 'Founder & Chairman',
+      experience: '40+ years',
+      description: 'Visionary leader who established JRB Gold with a commitment to quality and customer trust.',
+    },
+    {
+      name: 'Rakesh J. Bajaj',
+      position: 'Managing Director',
+      experience: '25+ years',
+      description: 'Driving innovation and digital transformation while maintaining traditional values.',
+    },
+    {
+      name: 'Bharti R. Bajaj',
+      position: 'Creative Director',
+      experience: '20+ years',
+      description: 'Leading jewelry design and ensuring every piece reflects contemporary elegance.',
+    },
+  ];
 
   const testimonialHighlights = [
     {
@@ -592,7 +612,47 @@ const About = () => {
           </div>
         </section>
 
-{/* Customer Testimonials */}
+        {/* Leadership Team */}
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-display font-playfair text-foreground mb-4">
+                Leadership Team
+              </h2>
+              <p className="text-lg text-muted-foreground">
+                Experienced leaders driving our vision forward
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {team.map((member, index) => (
+                <Card key={index} className="card-luxury text-center">
+                  <CardContent className="p-8">
+                    <div className="w-24 h-24 bg-gradient-gold rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Users className="h-12 w-12 text-charcoal" />
+                    </div>
+                    
+                    <h3 className="text-xl font-semibold text-foreground mb-1">
+                      {member.name}
+                    </h3>
+                    <div className="text-gold font-medium mb-2">
+                      {member.position}
+                    </div>
+                    <Badge variant="secondary" className="mb-4">
+                      {member.experience}
+                    </Badge>
+                    
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {member.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Customer Testimonials */}
         <section className="py-16 bg-ink text-ivory">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">

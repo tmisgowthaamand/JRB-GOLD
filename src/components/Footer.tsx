@@ -1,36 +1,35 @@
 import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PolicyLinks } from "./PolicyLinks";
 
 const Footer = () => {
   const companyLinks = [
-    { name: "About Us", href: "/about" },
+    { name: "About Us", href: "/about#about" },
     { name: "Our Story", href: "/about#story" },
     { name: "Craftsmanship", href: "/about#craft" },
-    { name: "Contact Us", href: "/contact" },
+    { name: "Contact Info", href: "/about#contact-info" },
   ];
 
   const shopLinks = [
     { name: "Gold Jewelry", href: "/shop?category=gold" },
     { name: "Silver Collection", href: "/shop?category=silver" },
     { name: "Coins", href: "/shop?category=coins" },
-    { name: "New Arrivals", href: "/shop?category=new" },
+    { name: "Gift Cards", href: "/gift-cards" },
   ];
 
   const serviceLinks = [
-    { name: "Gold Exchange", href: "/services" },
-    { name: "Jewelry Repair", href: "/services#repair" },
+    { name: "Exchange Old Gold", href: "/services#exchange" },
+    { name: "Re-Pledge Transfer", href: "/services#repledge" },
     { name: "Gold Savings Scheme", href: "/schemes" },
-    { name: "Custom Design", href: "/services#custom" },
+    { name: "Appraiser Training", href: "/training" },
   ];
 
   const helpLinks = [
     { name: "Contact Us", href: "/contact" },
-    { name: "FAQs", href: "/about#faq" },
-    { name: "Shipping Policy", href: "/shipping-policy" },
-    { name: "Privacy Policy", href: "/privacy-policy" },
-    { name: "Terms & Conditions", href: "/terms-conditions" },
-    { name: "Cancellation & Refund", href: "/cancellation-refund" },
+    { name: "Size Guide", href: "/size-guide" },
+    { name: "Care Instructions", href: "/care" },
+    { name: "Track Order", href: "/track" },
   ];
 
   return (
@@ -41,7 +40,7 @@ const Footer = () => {
           <div className="text-center">
             <h3 className="text-2xl font-playfair font-bold mb-4">Subscribe to Our Newsletter</h3>
             <p className="mb-6 max-w-2xl mx-auto">Stay updated with our latest collections, exclusive offers, and jewelry care tips</p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-sm sm:max-w-md mx-auto">
               <Input 
                 type="email" 
                 placeholder="Enter your email" 
@@ -58,7 +57,7 @@ const Footer = () => {
       {/* Main Footer */}
       <div className="border-t border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {/* Company Column */}
             <div>
               <a href="/about#about" className="hover:no-underline">
@@ -146,7 +145,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="border-t border-ivory/20 mt-12 pt-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start">
                 <Phone className="h-5 w-5 text-yellow-500 mr-3" />
                 <div>
@@ -180,48 +179,33 @@ const Footer = () => {
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center space-x-6 mt-8">
-            <a 
-              href="https://www.facebook.com/jrbgold" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-ivory/80 hover:text-yellow-500 transition-colors"
-              aria-label="Facebook"
-            >
-              <Facebook className="h-6 w-6" />
-            </a>
-            <a 
-              href="https://www.instagram.com/jrbgold" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-ivory/80 hover:text-yellow-500 transition-colors"
-              aria-label="Instagram"
-            >
+          <div className="flex justify-center space-x-4 sm:space-x-6 mt-6 sm:mt-8">
+            <a href="#" className="text-ivory/80 hover:text-yellow-500 transition-colors">
+              <span className="sr-only">Instagram</span>
               <Instagram className="h-6 w-6" />
             </a>
-            <a 
-              href="https://wa.me/918220421317" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-ivory/80 hover:text-yellow-500 transition-colors"
-              aria-label="WhatsApp"
-            >
+            <a href="#" className="text-ivory/80 hover:text-yellow-500 transition-colors">
+              <span className="sr-only">Facebook</span>
+              <Facebook className="h-6 w-6" />
+            </a>
+            <a href="#" className="text-ivory/80 hover:text-yellow-500 transition-colors">
+              <span className="sr-only">WhatsApp</span>
               <MessageCircle className="h-6 w-6" />
             </a>
           </div>
 
-          {/* Help Links */}
+          {/* Policy Links - Enhanced Section */}
           <div className="border-t border-ivory/20 mt-8 pt-8">
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-ivory/80">
-              {helpLinks.map((link) => (
-                <a 
-                  key={link.name}
-                  href={link.href}
-                  className="hover:text-yellow-500 transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
+            <div className="text-center mb-6">
+              <h4 className="text-lg font-playfair font-semibold text-yellow-500 mb-2">
+                Legal & Policies
+              </h4>
+              <p className="text-ivory/70 text-sm max-w-2xl mx-auto">
+                Your trust matters to us. Review our policies for complete transparency.
+              </p>
+            </div>
+            <div className="flex flex-wrap justify-center items-center">
+              <PolicyLinks />
             </div>
           </div>
 

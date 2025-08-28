@@ -1,13 +1,15 @@
-import { ChevronLeft, ChevronRight, Shield, Award, TrendingUp, CheckCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Shield, Award, TrendingUp, CheckCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { useState, useEffect } from "react";
+import { useGoldRates } from "@/hooks/useGoldRates";
 import heroImage from "@/assets/hero-jewelry.jpg";
 import craftsmanshipImage from "@/assets/craftsmanship.jpg";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const { gold22k, silver, isLoading, error, lastUpdated } = useGoldRates();
 
   const slides = [
     {
@@ -141,6 +143,53 @@ const Hero = () => {
               onClick={() => goToSlide(index)}
             />
           ))}
+        </div>
+      </div>
+
+      {/* Live Gold Rates Bar */}
+      <div className="bg-gradient-to-r from-amber-600 to-yellow-500 text-white py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                <span className="font-semibold text-lg">Today's Rates:</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-center">
+                  <div className="flex items-center gap-2">
+                    {isLoading ? (
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="font-bold text-xl">₹{gold22k.toLocaleString()}/g</span>
+                    )}
+                  </div>
+                  <div className="text-xs opacity-90">Gold (22K)</div>
+                </div>
+                <div className="h-8 w-px bg-white/30"></div>
+                <div className="text-center">
+                  <div className="flex items-center gap-2">
+                    {isLoading ? (
+                      <RefreshCw className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="font-bold text-xl">₹{silver.toLocaleString()}/g</span>
+                    )}
+                  </div>
+                  <div className="text-xs opacity-90">Silver</div>
+                </div>
+              </div>
+            </div>
+            <div className="text-xs opacity-75 flex items-center gap-2">
+              {error ? (
+                <span className="text-red-200">*Using indicative rates</span>
+              ) : (
+                <>
+                  <span>*Live rates - Last updated: {new Date(lastUpdated).toLocaleTimeString()}</span>
+                </>
+              )}
+              <span>| Visit store for exact rates</span>
+            </div>
+          </div>
         </div>
       </div>
 

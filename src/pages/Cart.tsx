@@ -1,13 +1,13 @@
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
-import { Trash2, ShoppingBag } from "lucide-react";
+import { Trash2, ShoppingBag, Plus, Minus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, updateQuantity } = useCart();
   const navigate = useNavigate();
 
-  const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+  const total = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 1)), 0);
 
   if (cart.length === 0) {
     return (
@@ -35,7 +35,7 @@ export default function Cart() {
                   <div key={item.id} className="flex items-center py-4 border-b border-gray-100">
                     <div className="flex-shrink-0 h-20 w-20 rounded-md overflow-hidden">
                       <img
-                        src={item.image || '/placeholder.svg'}
+                        src={item.image || '/logo1.png'}
                         alt={item.name}
                         className="h-full w-full object-cover object-center"
                       />
@@ -43,18 +43,44 @@ export default function Cart() {
                     <div className="ml-4 flex-1">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <h3>{item.name}</h3>
-                        <p className="ml-4">₹{item.price?.toLocaleString()}</p>
+                        <p className="ml-4">₹{((item.price || 0) * (item.quantity || 1)).toLocaleString()}</p>
                       </div>
-                      {item.weight && (
-                        <p className="mt-1 text-sm text-gray-500">
-                          Weight: {item.weight}g
-                        </p>
-                      )}
-                      {item.category && (
-                        <p className="text-sm text-gray-500">
-                          Category: {item.category}
-                        </p>
-                      )}
+                      <div className="mt-1 text-sm text-gray-500 space-y-1">
+                        {item.quantity && item.quantity > 1 && (
+                          <p>Quantity: {item.quantity} × ₹{item.price?.toLocaleString()} each</p>
+                        )}
+                        {item.weight && (
+                          <p>Weight: {item.weight}g {item.quantity && item.quantity > 1 ? 'each' : ''}</p>
+                        )}
+                        {item.category && (
+                          <p>Category: {item.category}</p>
+                        )}
+                      </div>
+                      
+                      {/* Quantity Controls */}
+                      <div className="mt-3 flex items-center space-x-2">
+                        <span className="text-sm text-gray-600">Quantity:</span>
+                        <div className="flex items-center border border-gray-300 rounded-md">
+                          <button
+                            type="button"
+                            onClick={() => updateQuantity(item.id, (item.quantity || 1) - 1)}
+                            className="p-1 hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+                            disabled={(item.quantity || 1) <= 1}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="px-3 py-1 text-sm font-medium min-w-[2rem] text-center">
+                            {item.quantity || 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => updateQuantity(item.id, (item.quantity || 1) + 1)}
+                            className="p-1 hover:bg-gray-100 text-gray-600 hover:text-gray-800"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                     <button
                       type="button"

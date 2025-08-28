@@ -4,69 +4,171 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Package, Clock, CheckCircle, XCircle, RefreshCw, ArrowRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Package, Clock, CheckCircle, XCircle, RefreshCw, ArrowRight, Download } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-// Mock order data
+// Mock order data with current dates
+const getCurrentDate = () => new Date().toISOString().split('T')[0];
+const getDateDaysAgo = (days: number) => {
+  const date = new Date();
+  date.setDate(date.getDate() - days);
+  return date.toISOString().split('T')[0];
+};
+
+// Generate and download invoice PDF
+const downloadInvoice = (order: any) => {
+  // Create invoice content
+  const invoiceContent = `
+JRB GOLD SHINE - INVOICE
+========================
+
+Order ID: ${order.id}
+Date: ${new Date(order.date).toLocaleDateString('en-IN', { 
+  weekday: 'long', 
+  year: 'numeric', 
+  month: 'long', 
+  day: 'numeric' 
+})}
+Status: ${order.status.toUpperCase()}
+Payment Status: ${order.paymentStatus.toUpperCase()}
+
+------------------------
+ITEMS ORDERED:
+------------------------
+${order.items.map((item: any, index: number) => 
+  `${index + 1}. ${item.name}\n   Quantity: ${item.quantity}\n   Price: ₹${item.price.toLocaleString('en-IN')}\n`
+).join('\n')}
+------------------------
+ORDER SUMMARY:
+------------------------
+Subtotal: ₹${order.total.toLocaleString('en-IN')}
+Shipping: Free
+Total: ₹${order.total.toLocaleString('en-IN')}
+
+------------------------
+SHIPPING ADDRESS:
+------------------------
+${order.shippingAddress || 'N/A'}
+
+${order.trackingNumber ? `\nTracking Number: ${order.trackingNumber}` : ''}
+${order.deliveredOn ? `\nDelivered On: ${new Date(order.deliveredOn).toLocaleDateString('en-IN')}` : ''}
+${order.expectedDelivery ? `\nExpected Delivery: ${new Date(order.expectedDelivery).toLocaleDateString('en-IN')}` : ''}
+
+------------------------
+Thank you for shopping with JRB Gold Shine!
+For support, contact us at support@jrbgoldshine.com
+  `;
+
+  // Create and download the file
+  const blob = new Blob([invoiceContent], { type: 'text/plain' });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `JRB-Invoice-${order.id}.txt`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+};
+
+// Cancel order function
+const cancelOrder = (orderId: string, onOrderUpdate: (orderId: string) => void, toast: any) => {
+  // In a real app, this would make an API call to cancel the order
+  // For now, we'll simulate the cancellation
+  
+  // Update the order status in localStorage if it exists
+  try {
+    const allOrders = JSON.parse(localStorage.getItem('allOrders') || '{}');
+    if (allOrders[orderId]) {
+      allOrders[orderId].status = 'cancelled';
+      allOrders[orderId].cancelledOn = new Date().toISOString().split('T')[0];
+      allOrders[orderId].reason = 'Cancelled by customer';
+      allOrders[orderId].paymentStatus = 'refund_pending';
+      localStorage.setItem('allOrders', JSON.stringify(allOrders));
+    }
+  } catch (error) {
+    console.error('Error updating order in localStorage:', error);
+  }
+  
+  // Call the callback to update the UI
+  onOrderUpdate(orderId);
+  
+  // Show success message
+  toast({
+    title: "Order Cancelled",
+    description: `Order ${orderId} has been cancelled successfully. Refund will be processed within 3-5 business days.`,
+    variant: "default",
+  });
+};
+
 const mockOrders = {
   active: [
     {
-      id: 'ORD-2023-4567',
-      date: '2023-11-15',
+      id: 'ORD-2025-4567',
+      date: getCurrentDate(),
       status: 'processing',
       items: [
-        { name: '22K Gold Chain', quantity: 1, price: 45000, image: '/placeholder-item.jpg' },
-        { name: 'Gold Earrings', quantity: 1, price: 28000, image: '/placeholder-item.jpg' },
+        { name: '22K Gold Chain', quantity: 1, price: 267675, image: '/product-necklace.jpg' },
+        { name: 'Gold Earrings', quantity: 1, price: 28000, image: '/product-bangle.jpg' },
       ],
-      total: 73000,
+      total: 295675,
       paymentStatus: 'paid',
       shippingAddress: '123 Main St, Bangalore, Karnataka 560001',
-      expectedDelivery: '2023-11-25'
+      expectedDelivery: getDateDaysAgo(-10)
     },
     {
-      id: 'ORD-2023-4568',
-      date: '2023-11-10',
+      id: 'ORD-2025-4568',
+      date: getDateDaysAgo(3),
       status: 'shipped',
       items: [
-        { name: 'Silver Coin Set', quantity: 2, price: 15000, image: '/placeholder-item.jpg' },
+        { name: 'Silver Coin Set', quantity: 2, price: 15000, image: '/product-coin.jpg' },
       ],
       total: 30000,
       paymentStatus: 'paid',
       shippingAddress: '123 Main St, Bangalore, Karnataka 560001',
       trackingNumber: 'TRK123456789',
-      expectedDelivery: '2023-11-20'
+      expectedDelivery: getDateDaysAgo(-5)
     }
   ],
   completed: [
     {
-      id: 'ORD-2023-1234',
-      date: '2023-10-05',
+      id: 'ORD-2025-1234',
+      date: getDateDaysAgo(15),
       status: 'delivered',
       items: [
-        { name: 'Gold Ring', quantity: 1, price: 25000, image: '/placeholder-item.jpg' },
+        { name: 'Gold Ring', quantity: 1, price: 25000, image: '/product-bangle.jpg' },
       ],
       total: 25000,
       paymentStatus: 'paid',
-      deliveredOn: '2023-10-10'
+      deliveredOn: getDateDaysAgo(10)
     }
   ],
   cancelled: [
     {
-      id: 'ORD-2023-3456',
-      date: '2023-09-20',
+      id: 'ORD-2025-3456',
+      date: getDateDaysAgo(30),
       status: 'cancelled',
       items: [
-        { name: 'Gold Chain', quantity: 1, price: 35000, image: '/placeholder-item.jpg' },
+        { name: 'Gold Chain', quantity: 1, price: 35000, image: '/product-necklace.jpg' },
       ],
       total: 35000,
       paymentStatus: 'refunded',
-      cancelledOn: '2023-09-21',
+      cancelledOn: getDateDaysAgo(29),
       reason: 'Changed my mind'
     }
   ]
 };
 
-const OrderCard = ({ order }: { order: any }) => {
+const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (orderId: string) => void }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const { toast } = useToast();
+  
+  const handleCancelOrder = () => {
+    cancelOrder(order.id, onOrderUpdate, toast);
+    setShowCancelDialog(false);
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -129,7 +231,15 @@ const OrderCard = ({ order }: { order: any }) => {
                   <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
                     <div className="flex items-center">
                       <div className="w-16 h-16 bg-gray-200 rounded mr-4">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        <img 
+                          src={item.image || '/product-bangle.jpg'} 
+                          alt={item.name} 
+                          className="w-full h-full object-cover rounded"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/product-bangle.jpg';
+                          }}
+                        />
                       </div>
                       <div>
                         <p className="font-medium">{item.name}</p>
@@ -213,21 +323,56 @@ const OrderCard = ({ order }: { order: any }) => {
             )}
 
             <div className="flex justify-end space-x-3 pt-2">
-              <Button variant="outline" size="sm">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => downloadInvoice(order)}
+                className="flex items-center gap-2"
+              >
+                <Download className="h-4 w-4" />
                 Download Invoice
               </Button>
               {order.status === 'processing' && (
-                <Button variant="outline" size="sm" className="text-red-600 border-red-200 hover:bg-red-50">
-                  Cancel Order
-                </Button>
+                <>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-red-600 border-red-200 hover:bg-red-50"
+                    onClick={() => setShowCancelDialog(true)}
+                  >
+                    Cancel Order
+                  </Button>
+                  
+                  <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Cancel Order</DialogTitle>
+                        <DialogDescription>
+                          Are you sure you want to cancel order {order.id}? This action cannot be undone.
+                          Your refund will be processed within 3-5 business days.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setShowCancelDialog(false)}>
+                          Keep Order
+                        </Button>
+                        <Button variant="destructive" onClick={handleCancelOrder}>
+                          Yes, Cancel Order
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </>
               )}
               {['delivered', 'cancelled'].includes(order.status) && (
                 <Button variant="outline" size="sm">
                   Buy Again
                 </Button>
               )}
-              <Button size="sm">
-                Need Help? <ArrowRight className="ml-2 h-4 w-4" />
+              <Button size="sm" asChild>
+                <Link to="/help">
+                  Need Help? <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </div>
@@ -258,6 +403,32 @@ const EmptyState = ({ type }: { type: string }) => (
 
 const MyOrders = () => {
   const [activeTab, setActiveTab] = useState('active');
+  const [orders, setOrders] = useState(mockOrders);
+  
+  const handleOrderUpdate = (orderId: string) => {
+    // Move the cancelled order from active to cancelled
+    setOrders(prevOrders => {
+      const updatedOrders = { ...prevOrders };
+      
+      // Find the order in active orders
+      const orderIndex = updatedOrders.active.findIndex(order => order.id === orderId);
+      if (orderIndex !== -1) {
+        const cancelledOrder = { 
+          ...updatedOrders.active[orderIndex],
+          status: 'cancelled',
+          cancelledOn: getCurrentDate(),
+          reason: 'Cancelled by customer',
+          paymentStatus: 'refund_pending'
+        };
+        
+        // Remove from active and add to cancelled
+        updatedOrders.active.splice(orderIndex, 1);
+        updatedOrders.cancelled.unshift(cancelledOrder);
+      }
+      
+      return updatedOrders;
+    });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -276,9 +447,9 @@ const MyOrders = () => {
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-2" />
                 Active Orders
-                {mockOrders.active.length > 0 && (
+                {orders.active.length > 0 && (
                   <span className="ml-2 bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {mockOrders.active.length}
+                    {orders.active.length}
                   </span>
                 )}
               </div>
@@ -290,9 +461,9 @@ const MyOrders = () => {
               <div className="flex items-center">
                 <CheckCircle className="h-4 w-4 mr-2" />
                 Completed
-                {mockOrders.completed.length > 0 && (
+                {orders.completed.length > 0 && (
                   <span className="ml-2 bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {mockOrders.completed.length}
+                    {orders.completed.length}
                   </span>
                 )}
               </div>
@@ -304,9 +475,9 @@ const MyOrders = () => {
               <div className="flex items-center">
                 <XCircle className="h-4 w-4 mr-2" />
                 Cancelled
-                {mockOrders.cancelled.length > 0 && (
+                {orders.cancelled.length > 0 && (
                   <span className="ml-2 bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                    {mockOrders.cancelled.length}
+                    {orders.cancelled.length}
                   </span>
                 )}
               </div>
@@ -315,9 +486,9 @@ const MyOrders = () => {
         </div>
 
         <TabsContent value="active" className="mt-6">
-          {mockOrders.active.length > 0 ? (
-            mockOrders.active.map((order) => (
-              <OrderCard key={order.id} order={order} />
+          {orders.active.length > 0 ? (
+            orders.active.map((order) => (
+              <OrderCard key={order.id} order={order} onOrderUpdate={handleOrderUpdate} />
             ))
           ) : (
             <EmptyState type="active" />
@@ -325,9 +496,9 @@ const MyOrders = () => {
         </TabsContent>
 
         <TabsContent value="completed" className="mt-6">
-          {mockOrders.completed.length > 0 ? (
-            mockOrders.completed.map((order) => (
-              <OrderCard key={order.id} order={order} />
+          {orders.completed.length > 0 ? (
+            orders.completed.map((order) => (
+              <OrderCard key={order.id} order={order} onOrderUpdate={handleOrderUpdate} />
             ))
           ) : (
             <EmptyState type="completed" />
@@ -335,9 +506,9 @@ const MyOrders = () => {
         </TabsContent>
 
         <TabsContent value="cancelled" className="mt-6">
-          {mockOrders.cancelled.length > 0 ? (
-            mockOrders.cancelled.map((order) => (
-              <OrderCard key={order.id} order={order} />
+          {orders.cancelled.length > 0 ? (
+            orders.cancelled.map((order) => (
+              <OrderCard key={order.id} order={order} onOrderUpdate={handleOrderUpdate} />
             ))
           ) : (
             <EmptyState type="cancelled" />
