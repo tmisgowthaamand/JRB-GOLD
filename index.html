@@ -2,22 +2,72 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>JRB Gold Private Limited - Premium Gold & Silver Jewelry</title>
     <meta name="description" content="Trusted Gold & Silver — Fair Prices, Fine Craft. Low making charges, no wastage, certified hallmark jewelry." />
     <meta name="author" content="JRB Gold Private Limited" />
     
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-    <meta property="og:title" content="jrb-gold-shine" />
-    <meta property="og:description" content="Lovable Generated Project" />
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <meta property="og:url" content="https://jrb-gold.vercel.app/" />
+    <meta property="og:title" content="JRB Gold Private Limited" />
+    <meta property="og:description" content="Premium Gold & Silver Jewelry - Trusted Gold & Silver with Fair Prices and Fine Craft" />
+    <meta property="og:image" content="/logo.png" />
 
-    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://jrb-gold.vercel.app/" />
+    <meta property="twitter:title" content="JRB Gold Private Limited" />
+    <meta property="twitter:description" content="Premium Gold & Silver Jewelry - Trusted Gold & Silver with Fair Prices and Fine Craft" />
+    <meta property="twitter:image" content="/logo.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#D4AF37" />
+    <meta name="msapplication-navbutton-color" content="#D4AF37" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#D4AF37" />
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/src/assets/hero-jewelry.jpg" as="image" />
+    
+    <style>
+      /* Loading animation */
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      .loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #D4AF37;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+    </style>
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
   </head>
