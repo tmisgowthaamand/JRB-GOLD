@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, User, Heart, ShoppingCart, Menu, X, LogIn, UserPlus, LogOut, Package, Settings, RefreshCw } from "lucide-react";
+import { Search, User, Heart, ShoppingCart, Menu, X, LogIn, UserPlus, LogOut, Package, Settings, RefreshCw, Phone, Mail } from "lucide-react";
 import productBangle from "@/assets/product-bangle.jpg";
 import productCoin from "@/assets/product-coin.jpg";
 import productNecklace from "@/assets/product-necklace.jpg";
@@ -95,29 +95,15 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-      {/* Top Bar - Live Gold Rate Ticker */}
-      <div className="bg-gradient-gold text-charcoal py-2 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-medium flex items-center gap-1">
-                {isLoading ? (
-                  <RefreshCw className="h-3 w-3 animate-spin" />
-                ) : (
-                  <>₹{gold22k.toLocaleString()}/g Gold (22K)</>
-                )}
-              </span>
-              <span className="text-sm font-medium flex items-center gap-1">
-                {isLoading ? (
-                  <RefreshCw className="h-3 w-3 animate-spin" />
-                ) : (
-                  <>₹{silver.toLocaleString()}/g Silver</>
-                )}
-              </span>
+      {/* Top Bar */}
+      <div className="text-white" style={{background: 'rgb(202, 138, 4)'}}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center py-3 text-sm">
+            <div className="flex items-center space-x-6 font-medium">
+              <span className="tracking-wide">₹9,470/g Gold (22K)</span>
+              <span className="tracking-wide">₹131/g Silver</span>
+              <span className="text-xs opacity-75 ml-2">*Indicative rates—visit store for exact rate</span>
             </div>
-            <span className="text-xs opacity-75">
-              {error ? '*Indicative rates' : '*Live rates'}—visit store for exact rate
-            </span>
           </div>
         </div>
       </div>
@@ -127,14 +113,14 @@ const Header = () => {
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center h-full">
-              <a href="/" className="flex items-center space-x-2 sm:space-x-3 h-full py-3">
+              <a href="/" className="group flex items-center space-x-3 sm:space-x-4 h-full py-2 transition-all duration-300 hover:scale-105">
                 <img 
                   src="/logo1.png?v=1" 
-                  alt="JRB Gold Logo" 
-                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain brightness-110 contrast-110"
+                  alt="JRB Gold Pvt Ltd Logo" 
+                  className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain brightness-110 contrast-110 flex-shrink-0 transition-transform duration-300 group-hover:rotate-3"
                 />
-                <span className="font-playfair text-xl sm:text-2xl md:text-3xl font-extrabold text-yellow-600 leading-none drop-shadow-sm">
-                  JRB Gold
+                <span className="font-playfair text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold leading-none tracking-wide whitespace-nowrap transition-colors duration-300 drop-shadow-lg" style={{color: 'rgb(202, 138, 4)'}}>
+                  JRB GOLD PVt ltd
                 </span>
               </a>
             </div>

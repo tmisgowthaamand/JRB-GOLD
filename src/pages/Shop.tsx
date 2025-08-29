@@ -64,7 +64,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "coins",
       subcategory: "religious",
       purity: "24k",
-      price: 20734,
+      price: 20876,
       weight: 2.0,
       makingCharges: 150,
       image: productCoin,
@@ -82,7 +82,7 @@ const Shop: React.FC<ShopProps> = () => {
       price: 4050,
       weight: 25.0,
       makingCharges: 800,
-      image: productNecklace,
+      image: "/silver necklace.jpg",
       rating: { avg: 4.7, count: 43 },
       badges: ["handcrafted"],
       description: "Contemporary silver necklace with oxidized finish",
@@ -94,7 +94,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "rings",
       purity: "22k",
-      price: 32400,
+      price: 60114,
       compareAtPrice: 35200,
       weight: 6.2,
       makingCharges: 1800,
@@ -110,7 +110,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "chains",
       purity: "22k",
-      price: 98752.5,
+      price: 101235,
       weight: 10.5,
       makingCharges: 3200,
       image: "/Gold Chain - Rope Design.jpg",
@@ -125,8 +125,8 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "bracelets",
       purity: "pure-silver",
-      price: 17587,
-      weight: 130.0,
+      price: 17161,
+      weight: 131.0,
       makingCharges: 2000,
       image: "/Silver Bracelet.jpg",
       rating: { avg: 4.6, count: 32 },
@@ -140,7 +140,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "earrings",
       purity: "22k",
-      price: 28900,
+      price: 52638,
       weight: 5.4,
       makingCharges: 1500,
       image: productCoin,
@@ -158,7 +158,7 @@ const Shop: React.FC<ShopProps> = () => {
       price: 5060,
       weight: 32.0,
       makingCharges: 900,
-      image: productNecklace,
+      image: "/silver necklace.jpg",
       rating: { avg: 4.5, count: 21 },
       badges: ["traditional"],
       description: "Traditional silver anklets with bell charms",
@@ -396,7 +396,7 @@ const Shop: React.FC<ShopProps> = () => {
                   <h3 className="font-semibold text-foreground mb-2">Gold Chain - Rope Design</h3>
                   <p className="text-sm text-muted-foreground mb-2">22k • 10.5g</p>
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold text-gold">₹98,752.5</div>
+                    <div className="text-lg font-bold text-gold">₹1,01,235</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                       4.9 (89)
@@ -421,9 +421,9 @@ const Shop: React.FC<ShopProps> = () => {
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-foreground mb-2">Silver Bracelet Set</h3>
-                  <p className="text-sm text-muted-foreground mb-2">Pure Silver • 130.0g</p>
+                  <p className="text-sm text-muted-foreground mb-2">Pure Silver • 131.0g</p>
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold text-gold">₹17,587</div>
+                    <div className="text-lg font-bold text-gold">₹17,161</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                       4.6 (32)

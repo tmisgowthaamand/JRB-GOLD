@@ -161,7 +161,7 @@ const Hero = () => {
                     {isLoading ? (
                       <RefreshCw className="h-4 w-4 animate-spin" />
                     ) : (
-                      <span className="font-bold text-xl">₹{gold22k.toLocaleString()}/g</span>
+                      <span className="font-bold text-xl">₹9,470/g</span>
                     )}
                   </div>
                   <div className="text-xs opacity-90">Gold (22K)</div>
@@ -172,7 +172,7 @@ const Hero = () => {
                     {isLoading ? (
                       <RefreshCw className="h-4 w-4 animate-spin" />
                     ) : (
-                      <span className="font-bold text-xl">₹{silver.toLocaleString()}/g</span>
+                      <span className="font-bold text-xl">₹131/g</span>
                     )}
                   </div>
                   <div className="text-xs opacity-90">Silver</div>

@@ -10,7 +10,7 @@ export function PolicyLinks() {
 
 Your Privacy, Our Promise of Transparency
 
-At JRB Gold, your trust is our most valuable asset. Since our founding in 2016, we've built our reputation on offering genuine, high-quality gold and silver jewelry at fair prices—with honesty and transparency at the heart of every transaction. Protecting your privacy and safeguarding the information you share with us is an extension of these values.
+At JRB Gold Pvt Limited, your trust is our most valuable asset. Since our founding in 2016, we've built our reputation on offering genuine, high-quality gold and silver jewelry at fair prices—with honesty and transparency at the heart of every transaction. Protecting your privacy and safeguarding the information you share with us is an extension of these values.
 
 This Privacy Policy explains what data we collect, how we use it, how it's protected, and your rights as a valued customer.
 
@@ -78,7 +78,7 @@ Contact Us
 
 If you have questions or concerns about your data, please contact:
 
-JRB Gold
+JRB Gold Pvt Limited
 Address - No: 1539, 1st Floor,
 Soundar Complex, Vellore Road
 Near Anna Arch
@@ -94,13 +94,13 @@ Website: https://www.jrbgold.co.in`
 
 Last Updated: August 2025
 
-Welcome to JRB Gold. By accessing and using our website, store, or services, you agree to comply with and be bound by the following Terms & Conditions. These terms govern all purchases, transactions, and interactions with JRB Gold, whether in-store, online, or via our customer support channels.
+Welcome to JRB Gold Pvt Limited. By accessing and using our website, store, or services, you agree to comply with and be bound by the following Terms & Conditions. These terms govern all purchases, transactions, and interactions with JRB Gold Pvt Limited, whether in-store, online, or via our customer support channels.
 
 If you do not agree with these terms, we kindly ask you to discontinue use of our services.
 
 1. General Use
 
-By engaging with JRB Gold, you confirm that you are at least 18 years of age or acting under the supervision of a legal guardian.
+By engaging with JRB Gold Pvt Limited, you confirm that you are at least 18 years of age or acting under the supervision of a legal guardian.
 
 You agree to use our services only for lawful purposes and in compliance with all applicable regulations.
 
@@ -112,7 +112,7 @@ All product images, descriptions, and weights are provided for reference. Slight
 
 Prices are based on prevailing gold and silver market rates and may change daily without prior notice.
 
-Errors in pricing or descriptions may occasionally occur; JRB Gold reserves the right to correct such errors, cancel affected orders, and issue refunds where applicable.
+Errors in pricing or descriptions may occasionally occur; JRB Gold Pvt Limited reserves the right to correct such errors, cancel affected orders, and issue refunds where applicable.
 
 For bulk or wholesale orders, minimum quantities apply, and final quotations will be provided directly to buyers.
 
@@ -122,7 +122,7 @@ Orders are confirmed only after successful payment or advance (for made-to-order
 
 We accept major credit/debit cards, UPI, net banking, and other secure digital payment methods.
 
-JRB Gold does not store payment information; all transactions are processed via secure third-party gateways.
+JRB Gold Pvt Limited does not store payment information; all transactions are processed via secure third-party gateways.
 
 In case of duplicate charges, errors, or unauthorized transactions, customers must report immediately for resolution.
 
@@ -134,7 +134,7 @@ Estimated delivery timelines will be provided at checkout or during order confir
 
 Tracking details will be shared once the order is dispatched.
 
-JRB Gold is not responsible for delays caused by third-party logistics, customs clearance, or force majeure events.
+JRB Gold Pvt Limited is not responsible for delays caused by third-party logistics, customs clearance, or force majeure events.
 
 5. Custom & Personalized Orders
 
@@ -155,11 +155,11 @@ Violations may result in suspension of service or legal action.
 
 7. Intellectual Property
 
-All content on this website—including logos, jewelry designs, product images, and text—is the intellectual property of JRB Gold. Unauthorized use, reproduction, or distribution is strictly prohibited without written consent.
+All content on this website—including logos, jewelry designs, product images, and text—is the intellectual property of JRB Gold Pvt Limited. Unauthorized use, reproduction, or distribution is strictly prohibited without written consent.
 
 8. Limitation of Liability
 
-JRB Gold shall not be held liable for:
+JRB Gold Pvt Limited shall not be held liable for:
 
 • Indirect or consequential losses arising from product use
 • Minor variations in product appearance or weight
@@ -174,7 +174,7 @@ These Terms & Conditions are governed by the laws of India. Any disputes shall f
 
 For any queries, clarifications, or disputes regarding these Terms & Conditions, please reach out to:
 
-JRB Gold
+JRB Gold Pvt Limited
 Address - No: 1539, 1st Floor,
 Soundar Complex, Vellore Road
 Near Anna Arch
@@ -190,7 +190,7 @@ Website: https://www.jrbgold.co.in`
 
 Secure, Insured, and On-Time Delivery – Every Time
 
-At JRB Gold, we are committed to delivering your jewelry safely, securely, and within the promised timeframe. Whether it's a single ornament or a bulk wholesale consignment, every shipment is handled with utmost care, reflecting our values of transparency and trust.
+At JRB Gold Pvt Limited, we are committed to delivering your jewelry safely, securely, and within the promised timeframe. Whether it's a single ornament or a bulk wholesale consignment, every shipment is handled with utmost care, reflecting our values of transparency and trust.
 
 This Shipping Policy outlines our order processing, delivery timelines, logistics, and support.
 
@@ -256,7 +256,7 @@ Need Help?
 
 For shipping-related queries or support, please contact:
 
-JRB Gold
+JRB Gold Pvt Limited
 Address - No: 1539, 1st Floor,
 Soundar Complex, Vellore Road
 Near Anna Arch
@@ -272,7 +272,7 @@ Website: https://www.jrbgold.co.in`
 
 Fair, Transparent, and Customer-Centric
 
-At JRB Gold, we strive to deliver genuine, high-quality gold and silver jewelry with complete transparency. While we work hard to ensure every order meets your expectations, we recognize that occasional issues may arise. This policy outlines how cancellations, returns, and refunds are handled for retail and wholesale customers.
+At JRB Gold Pvt Limited, we strive to deliver genuine, high-quality gold and silver jewelry with complete transparency. While we work hard to ensure every order meets your expectations, we recognize that occasional issues may arise. This policy outlines how cancellations, returns, and refunds are handled for retail and wholesale customers.
 
 Order Cancellations
 
@@ -330,7 +330,7 @@ Need Assistance?
 
 For support with cancellations, refunds, or return claims, please contact:
 
-JRB Gold
+JRB Gold Pvt Limited
 Address - No: 1539, 1st Floor,
 Soundar Complex, Vellore Road
 Near Anna Arch
@@ -421,7 +421,7 @@ Website: https://www.jrbgold.co.in`
         <button class="back-button" onclick="window.history.back(); if (window.history.length <= 1) { window.location.href = '/'; }">← Back</button>
         <div class="header">
           <img src="/logo1.png" alt="JRB Gold Logo" style="width: 48px; height: 48px; margin: 0 auto 10px; display: block; object-fit: contain;">
-          <div class="logo">JRB Gold Private Limited</div>
+          <div class="logo">JRB Gold Pvt Limited</div>
           <div>Premium Gold & Silver Jewelry</div>
         </div>
         <h1>${policy.title}</h1>

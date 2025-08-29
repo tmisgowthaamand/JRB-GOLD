@@ -1,11 +1,11 @@
-// Application constants for JRB Gold
+// Application constants for JRB Gold Pvt Limited
 
 export const APP_CONFIG = {
-  name: 'JRB Gold Private Limited',
+  name: 'JRB Gold Pvt Limited',
   tagline: 'Premium Gold & Silver Jewelry',
   description: 'Trusted Gold & Silver — Fair Prices, Fine Craft. Low making charges, no wastage, certified hallmark jewelry.',
   version: '1.0.0',
-  author: 'JRB Gold Private Limited'
+  author: 'JRB Gold Pvt Limited'
 };
 
 export const CONTACT_INFO = {
@@ -65,10 +65,13 @@ export const PAYMENT_STATUS = {
 } as const;
 
 export const DEFAULT_GOLD_RATES = {
-  gold22k: 6800,
-  gold24k: 7400,
-  silver: 85
+  "22K": 9470,
+  "24K": 10338,
+  "18K": 7102.5,
+  "14K": 5507.5
 };
+
+export const DEFAULT_SILVER_RATE = 131;
 
 export const API_ENDPOINTS = {
   GOLD_RATES: '/api/gold-rates',

@@ -1,8 +1,8 @@
-# JRB Gold Private Limited - Premium Gold & Silver Jewelry
+# JRB Gold Pvt Limited - Premium Gold & Silver Jewelry
 
 ## Project Overview
 
-**Company**: JRB Gold Private Limited  
+**Company**: JRB Gold Pvt Limited  
 **Website**: https://www.jrbgold.co.in  
 **Description**: Trusted Gold & Silver — Fair Prices, Fine Craft. Low making charges, no wastage, certified hallmark jewelry.
 

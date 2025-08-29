@@ -26,10 +26,10 @@ export const mockProducts: Product[] = [
     name: 'Silver Necklace',
     category: 'Necklaces',
     subcategory: 'Silver',
-    price: 3750, // 25g * ₹130 (Pure Silver) + ₹500 making charges
-    originalPrice: 4000,
-    image: '/product-silver-necklace.jpg',
-    images: ['/product-silver-necklace.jpg'],
+    price: 3775, // 25g * ₹131 (Pure Silver) + ₹500 making charges
+    originalPrice: 4100,
+    image: '/silver necklace.jpg',
+    images: ['/silver necklace.jpg'],
     description: 'Elegant pure silver necklace with contemporary design',
     purity: 'Pure Silver (999)',
     weight: '25g',
@@ -45,7 +45,7 @@ export const mockProducts: Product[] = [
     name: 'Gold Ring Set',
     category: 'Rings',
     subcategory: 'Sets',
-    price: 32400, // 6.2g * ₹9,470 (22K) adjusted for design
+    price: 60114, // 6.2g * ₹9,470 (22K) + ₹1,200 making charges
     originalPrice: 35200,
     image: '/gold ring set.jpg',
     images: ['/gold ring set.jpg'],
@@ -64,7 +64,7 @@ export const mockProducts: Product[] = [
     name: 'Gold Chain',
     category: 'Chains',
     subcategory: 'Traditional',
-    price: 98752.5, // 10.5g * ₹9,470 (22K) premium pricing
+    price: 101235, // 10.5g * ₹9,470 (22K) + ₹1,800 making charges
     originalPrice: 105000,
     image: '/Gold Chain - Rope Design.jpg',
     images: ['/Gold Chain - Rope Design.jpg'],
@@ -83,7 +83,7 @@ export const mockProducts: Product[] = [
     name: 'Gold Coin - Lakshmi',
     category: 'Coins',
     subcategory: 'Religious',
-    price: 20734, // 2g * ₹10,267 (24K) + ₹200 making charges
+    price: 20876, // 2g * ₹10,338 (24K) + ₹200 making charges
     image: '/product-coin.jpg',
     images: ['/product-coin.jpg'],
     description: 'Pure gold coin featuring Goddess Lakshmi design',

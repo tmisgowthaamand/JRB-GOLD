@@ -211,7 +211,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <div className="mt-8 text-center text-ivory/60 text-sm">
-            &copy; {new Date().getFullYear()} JRB Gold. All rights reserved.
+            &copy; {new Date().getFullYear()} JRB Gold Pvt Limited. All rights reserved.
           </div>
         </div>
       </div>
