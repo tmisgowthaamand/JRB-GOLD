@@ -103,7 +103,7 @@ const ProductDetail = () => {
       category: "gold",
       subcategory: "chains",
       purity: "22k",
-      price: 52800,
+      price: 98752.5,
       weight: 10.5,
       makingCharges: 3200,
       image: productNecklace,

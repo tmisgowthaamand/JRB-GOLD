@@ -110,7 +110,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "chains",
       purity: "22k",
-      price: 101953,
+      price: 98752.5,
       weight: 10.5,
       makingCharges: 3200,
       image: "/Gold Chain - Rope Design.jpg",
@@ -125,10 +125,10 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "bracelets",
       purity: "pure-silver",
-      price: 2940,
-      weight: 18.0,
-      makingCharges: 600,
-      image: "/happy-face-emoji-WEgCCSiOQqM-unsplash.jpg",
+      price: 17587,
+      weight: 130.0,
+      makingCharges: 2000,
+      image: "/Silver Bracelet.jpg",
       rating: { avg: 4.6, count: 32 },
       badges: ["handcrafted"],
       description: "Set of 3 matching silver bracelets with charms",
@@ -396,7 +396,7 @@ const Shop: React.FC<ShopProps> = () => {
                   <h3 className="font-semibold text-foreground mb-2">Gold Chain - Rope Design</h3>
                   <p className="text-sm text-muted-foreground mb-2">22k • 10.5g</p>
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold text-gold">₹1,01,953</div>
+                    <div className="text-lg font-bold text-gold">₹98,752.5</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                       4.9 (89)
@@ -411,7 +411,7 @@ const Shop: React.FC<ShopProps> = () => {
               <CardContent className="p-0">
                 <div className="relative overflow-hidden rounded-t-lg aspect-square">
                   <img
-                    src="/happy-face-emoji-WEgCCSiOQqM-unsplash.jpg"
+                    src="/Silver Bracelet.jpg"
                     alt="Silver Bracelet Set"
                     className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                   />
@@ -421,9 +421,9 @@ const Shop: React.FC<ShopProps> = () => {
                 </div>
                 <div className="p-4">
                   <h3 className="font-semibold text-foreground mb-2">Silver Bracelet Set</h3>
-                  <p className="text-sm text-muted-foreground mb-2">Pure Silver • 18.0g</p>
+                  <p className="text-sm text-muted-foreground mb-2">Pure Silver • 130.0g</p>
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold text-gold">₹2,940</div>
+                    <div className="text-lg font-bold text-gold">₹17,587</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                       4.6 (32)
