@@ -21,6 +21,7 @@ import Checkout from './pages/Checkout';
 import ProductDetail from './pages/ProductDetail';
 import OrderDetails from './pages/OrderDetails';
 import Help from './pages/Help';
+import RePledgeTransfer from './pages/services/RePledgeTransfer';
 import { CartProvider } from './contexts/CartContext';
 
 
@@ -65,6 +66,7 @@ function App() {
                 <Route path="/schemes" element={<Schemes />} />
                 <Route path="/consultation" element={<Consultation />} />
                 <Route path="/help" element={<Help />} />
+                <Route path="/services/re-pledge-transfer" element={<RePledgeTransfer />} />
                 
                 {/* Authentication Routes */}
                 <Route path="/signin" element={<SignIn />} />

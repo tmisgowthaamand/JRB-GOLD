@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, User, Heart, ShoppingCart, Menu, X, LogIn, UserPlus, LogOut, Package, Settings, RefreshCw, Phone, Mail } from "lucide-react";
+import { Search, User, Heart, ShoppingCart, Menu, X, LogIn, UserPlus, LogOut, Package, Settings, RefreshCw, Phone, Mail, ChevronDown } from "lucide-react";
 import productBangle from "@/assets/product-bangle.jpg";
 import productCoin from "@/assets/product-coin.jpg";
 import productNecklace from "@/assets/product-necklace.jpg";
@@ -59,11 +59,23 @@ const Header = () => {
   };
 
   const navigationLinks = [
-    { name: "Shop", href: "/shop" },
     { name: "Schemes", href: "/schemes" },
-    { name: "Services", href: "/services" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
+  ];
+
+  const shopCategories = [
+    { name: "Gold Jewelry", href: "/shop?category=gold" },
+    { name: "Silver Collection", href: "/shop?category=silver" },
+    { name: "Coins", href: "/shop?category=coins" },
+    { name: "Gift Cards", href: "/gift-cards" },
+  ];
+
+  const serviceCategories = [
+    { name: "Exchange Old Gold", href: "/services/exchange-old-gold" },
+    { name: "Re-Pledge Transfer", href: "/services/re-pledge-transfer" },
+    { name: "Gold Savings Scheme", href: "/services/gold-savings-scheme" },
+    { name: "Appraiser Training", href: "/services/appraiser-training" },
   ];
 
   const trendingProducts = [
@@ -127,6 +139,44 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
+              {/* Shop Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-foreground hover:text-gold transition-colors duration-200 font-medium p-0 h-auto">
+                    Shop
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  {shopCategories.map((category) => (
+                    <DropdownMenuItem key={category.name} asChild>
+                      <a href={category.href} className="cursor-pointer">
+                        {category.name}
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Services Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-foreground hover:text-gold transition-colors duration-200 font-medium p-0 h-auto">
+                    Services
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56">
+                  {serviceCategories.map((service) => (
+                    <DropdownMenuItem key={service.name} asChild>
+                      <a href={service.href} className="cursor-pointer">
+                        {service.name}
+                      </a>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {navigationLinks.map((link) => (
                 <a
                   key={link.name}
@@ -267,6 +317,42 @@ title="View Favorites"
 
                       {/* Mobile Navigation */}
                       <nav className="flex flex-col space-y-2">
+                        {/* Mobile Shop Categories */}
+                        <div className="space-y-1">
+                          <div className="text-sm font-semibold text-muted-foreground px-3 py-2">Shop</div>
+                          {shopCategories.map((category) => (
+                            <Button
+                              key={category.href}
+                              variant="ghost"
+                              className="w-full justify-start pl-6"
+                              onClick={() => {
+                                navigate(category.href);
+                                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                              }}
+                            >
+                              {category.name}
+                            </Button>
+                          ))}
+                        </div>
+
+                        {/* Mobile Services Categories */}
+                        <div className="space-y-1">
+                          <div className="text-sm font-semibold text-muted-foreground px-3 py-2">Services</div>
+                          {serviceCategories.map((service) => (
+                            <Button
+                              key={service.href}
+                              variant="ghost"
+                              className="w-full justify-start pl-6"
+                              onClick={() => {
+                                navigate(service.href);
+                                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                              }}
+                            >
+                              {service.name}
+                            </Button>
+                          ))}
+                        </div>
+
                         {navigationLinks.map((link) => (
                           <Button
                             key={link.href}
