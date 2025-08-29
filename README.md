@@ -3,7 +3,7 @@
 ## Project Overview
 
 **Company**: JRB Gold Pvt Limited  
-**Website**: https://www.jrbgold.co.in  
+**Website**: https://jrb-gold.vercel.app/
 **Description**: Trusted Gold & Silver — Fair Prices, Fine Craft. Low making charges, no wastage, certified hallmark jewelry.
 
 ## How to edit this code?
