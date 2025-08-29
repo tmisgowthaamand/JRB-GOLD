@@ -21,7 +21,11 @@ import Checkout from './pages/Checkout';
 import ProductDetail from './pages/ProductDetail';
 import OrderDetails from './pages/OrderDetails';
 import Help from './pages/Help';
-import RePledgeTransfer from './pages/services/RePledgeTransfer';
+import RePledgeTransfer from "./pages/services/RePledgeTransfer";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
+import CancellationRefund from "./pages/CancellationRefund";
+import ShippingPolicy from "./pages/ShippingPolicy";
 import { CartProvider } from './contexts/CartContext';
 
 
@@ -67,6 +71,10 @@ function App() {
                 <Route path="/consultation" element={<Consultation />} />
                 <Route path="/help" element={<Help />} />
                 <Route path="/services/re-pledge-transfer" element={<RePledgeTransfer />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/cancellation-refund" element={<CancellationRefund />} />
+            <Route path="/shipping-policy" element={<ShippingPolicy />} />
                 
                 {/* Authentication Routes */}
                 <Route path="/signin" element={<SignIn />} />
