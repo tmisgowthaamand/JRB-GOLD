@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star, Heart, ShoppingCart, Eye, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import LazyImage from "@/components/LazyImage";
+import SkeletonLoader from "@/components/SkeletonLoader";
 import productBangle from "@/assets/product-bangle.jpg";
 import productCoin from "@/assets/product-coin.jpg";
 import productNecklace from "@/assets/product-necklace.jpg";
@@ -13,10 +15,24 @@ import productNecklace from "@/assets/product-necklace.jpg";
 const FeaturedProducts = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const { addToCart, toggleFavorite, favorites } = useCart();
   
   // Quantity state for each product
   const [quantities, setQuantities] = useState<{[key: string]: number}>({});
+
+  // Simulate loading delay for smooth experience
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleImageLoad = (productId: string) => {
+    setLoadedImages(prev => new Set([...prev, productId]));
+  };
 
   const products = [
     {
@@ -173,13 +189,40 @@ const FeaturedProducts = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 lg:gap-8">
-          {products.map((product) => (
-            <Card key={product.id} className="group overflow-hidden border-0 shadow-md hover:shadow-luxury transition-all duration-300 bg-white">
+          {isLoading ? (
+            // Skeleton Loading Cards
+            [...Array(6)].map((_, index) => (
+              <Card key={`skeleton-${index}`} className="overflow-hidden border-0 shadow-md bg-white">
+                <SkeletonLoader variant="image" height="12rem" className="xs:h-56 lg:h-64" />
+                <CardContent className="p-4 xs:p-5 lg:p-6">
+                  <div className="space-y-3">
+                    <SkeletonLoader variant="text" width="80%" />
+                    <SkeletonLoader variant="text" width="60%" />
+                    <div className="flex items-center space-x-2">
+                      <SkeletonLoader variant="text" width="40%" />
+                      <SkeletonLoader variant="text" width="30%" />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <SkeletonLoader variant="button" width="60px" />
+                      <div className="flex space-x-2">
+                        <SkeletonLoader variant="button" width="32px" height="32px" />
+                        <SkeletonLoader variant="button" width="32px" height="32px" />
+                        <SkeletonLoader variant="button" width="60px" />
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            products.map((product, index) => (
+              <Card key={product.id} className={`group overflow-hidden border-0 shadow-md hover:shadow-luxury transition-all duration-300 bg-white animate-scale-in`} style={{ animationDelay: `${index * 0.1}s` }}>
               <div className="relative overflow-hidden">
-                <img
+                <LazyImage
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-48 xs:h-56 lg:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 xs:h-56 lg:h-64 group-hover:scale-105 transition-transform duration-300"
+                  onLoad={() => handleImageLoad(product.id)}
                 />
                 
                 {/* Badges */}
@@ -306,7 +349,8 @@ const FeaturedProducts = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
+            ))
+          )}
         </div>
 
       </div>

@@ -414,8 +414,87 @@ h6 {
   to { opacity: 1; }
 }
 
+@keyframes logoGlow {
+  0% { filter: brightness(110%) contrast(110%) drop-shadow(0 0 5px rgba(202, 138, 4, 0.3)); }
+  100% { filter: brightness(130%) contrast(120%) drop-shadow(0 0 15px rgba(202, 138, 4, 0.6)); }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+  to { 
+    opacity: 0; 
+    transform: translateY(-30px); 
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.8); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.4s ease-in;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out;
+}
+
+.animate-logo-glow {
+  animation: logoGlow 2s ease-in-out infinite alternate;
+}
+
+/* Skeleton Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Loading States */
+.loading-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.loading-scale-in {
+  animation: scaleIn 0.6s ease-out;
 }
 
 /* Utility Classes */

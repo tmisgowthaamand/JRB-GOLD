@@ -1,8 +1,11 @@
+import { useState, useEffect } from 'react';
 import { Toaster as SonarToaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoadingScreen from './components/LoadingScreen';
+import PageTransition from './components/PageTransition';
 import Index from './pages/Index';
 import Shop from './pages/Shop';
 import Cart from './pages/Cart';
@@ -47,14 +50,64 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const queryClient = new QueryClient();
 
 function App() {
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isAppReady, setIsAppReady] = useState(false);
+
+  useEffect(() => {
+    // Preload critical resources
+    const preloadResources = async () => {
+      try {
+        // Preload fonts
+        await document.fonts.ready;
+        
+        // Preload critical images
+        const criticalImages = [
+          '/logo1.png?v=1',
+          '/hero-jewelry.jpg',
+          '/craftsmanship.jpg'
+        ];
+        
+        const imagePromises = criticalImages.map(src => {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = resolve; // Don't fail on image errors
+            img.src = src;
+          });
+        });
+        
+        await Promise.all(imagePromises);
+        
+        // Minimum loading time for smooth experience
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        setIsAppReady(true);
+      } catch (error) {
+        console.warn('Some resources failed to preload:', error);
+        setIsAppReady(true);
+      }
+    };
+
+    preloadResources();
+  }, []);
+
+  const handleLoadingComplete = () => {
+    setIsInitialLoading(false);
+  };
+
+  if (isInitialLoading) {
+    return <LoadingScreen onLoadingComplete={handleLoadingComplete} />;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <CartProvider>
           <SonarToaster />
           <Router>
-            <div className="min-h-screen bg-background">
-              <Routes>
+            <PageTransition>
+              <div className="min-h-screen bg-background animate-fade-in">
+                <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Index />} />
                 <Route path="/shop" element={<Shop />} />
@@ -98,10 +151,11 @@ function App() {
                   } 
                 />
                 
-                {/* 404 Not Found */}
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </div>
+                  {/* 404 Not Found */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </div>
+            </PageTransition>
           </Router>
         </CartProvider>
       </TooltipProvider>

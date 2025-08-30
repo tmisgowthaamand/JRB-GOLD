@@ -4,12 +4,28 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 import { useGoldRates } from "@/hooks/useGoldRates";
+import LazyImage from "@/components/LazyImage";
+import SkeletonLoader from "@/components/SkeletonLoader";
 import heroImage from "@/assets/hero-jewelry.jpg";
 import craftsmanshipImage from "@/assets/craftsmanship.jpg";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set());
+  const [isHeroLoading, setIsHeroLoading] = useState(true);
   const { gold22k, silver, isLoading, error, lastUpdated } = useGoldRates();
+
+  useEffect(() => {
+    // Simulate hero loading
+    const timer = setTimeout(() => {
+      setIsHeroLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleImageLoad = (slideIndex: number) => {
+    setImagesLoaded(prev => new Set([...prev, slideIndex]));
+  };
 
   const slides = [
     {
@@ -73,10 +89,13 @@ const Hero = () => {
           >
             <div className="relative h-full">
               {/* Background Image */}
-              <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: `url(${slide.image})` }}
-              >
+              <div className="absolute inset-0">
+                <LazyImage
+                  src={slide.image}
+                  alt={`Hero slide ${index + 1}`}
+                  className="w-full h-full object-cover"
+                  onLoad={() => handleImageLoad(index)}
+                />
                 <div className="absolute inset-0 bg-charcoal/60" />
               </div>
 
@@ -84,29 +103,41 @@ const Hero = () => {
               <div className="relative h-full flex items-center">
                 <div className="container mx-auto">
                   <div className="max-w-2xl lg:max-w-3xl xl:max-w-4xl">
-                    <div className="animate-fade-in">
-                      <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-playfair font-bold text-ivory mb-3 xs:mb-4 lg:mb-6 leading-tight">
-                        {slide.title}
-                      </h1>
-                      <p className="text-lg xs:text-xl sm:text-2xl lg:text-3xl text-gold font-playfair font-medium mb-4 xs:mb-6 lg:mb-8">
-                        {slide.subtitle}
-                      </p>
-                      <p className="text-sm xs:text-base lg:text-lg text-ivory/90 mb-6 xs:mb-8 leading-relaxed max-w-xl lg:max-w-2xl">
-                        {slide.description}
-                      </p>
-                      <div className="flex flex-col xs:flex-row gap-3 xs:gap-4">
-                        <a href={slide.primaryLink} className="block">
-                          <Button size="lg" className="w-full xs:w-auto bg-gradient-gold hover:shadow-luxury text-charcoal font-semibold px-6 lg:px-8 py-3 lg:py-4 text-sm lg:text-base">
-                            {slide.primaryCTA}
-                          </Button>
-                        </a>
-                        <a href={slide.secondaryLink} className="block">
-                          <Button size="lg" variant="outline" className="w-full xs:w-auto border-2 border-gold text-gold hover:bg-gold/10 px-6 lg:px-8 py-3 lg:py-4 text-sm lg:text-base">
-                            {slide.secondaryCTA}
-                          </Button>
-                        </a>
+                    {isHeroLoading ? (
+                      <div className="space-y-4 xs:space-y-6">
+                        <SkeletonLoader variant="text" height="3rem" width="80%" className="bg-white/20" />
+                        <SkeletonLoader variant="text" height="2rem" width="60%" className="bg-white/15" />
+                        <SkeletonLoader variant="text" lines={2} className="bg-white/10" />
+                        <div className="flex flex-col xs:flex-row gap-3 xs:gap-4">
+                          <SkeletonLoader variant="button" width="150px" className="bg-white/20" />
+                          <SkeletonLoader variant="button" width="150px" className="bg-white/15" />
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="animate-slide-up">
+                        <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-playfair font-bold text-ivory mb-3 xs:mb-4 lg:mb-6 leading-tight animate-fade-in">
+                          {slide.title}
+                        </h1>
+                        <p className="text-lg xs:text-xl sm:text-2xl lg:text-3xl text-gold font-playfair font-medium mb-4 xs:mb-6 lg:mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                          {slide.subtitle}
+                        </p>
+                        <p className="text-sm xs:text-base lg:text-lg text-ivory/90 mb-6 xs:mb-8 leading-relaxed max-w-xl lg:max-w-2xl animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                          {slide.description}
+                        </p>
+                        <div className="flex flex-col xs:flex-row gap-3 xs:gap-4 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                          <a href={slide.primaryLink} className="block">
+                            <Button size="lg" className="w-full xs:w-auto bg-gradient-gold hover:shadow-luxury text-charcoal font-semibold px-6 lg:px-8 py-3 lg:py-4 text-sm lg:text-base transform hover:scale-105 transition-all duration-300">
+                              {slide.primaryCTA}
+                            </Button>
+                          </a>
+                          <a href={slide.secondaryLink} className="block">
+                            <Button size="lg" variant="outline" className="w-full xs:w-auto border-2 border-gold text-gold hover:bg-gold/10 px-6 lg:px-8 py-3 lg:py-4 text-sm lg:text-base transform hover:scale-105 transition-all duration-300">
+                              {slide.secondaryCTA}
+                            </Button>
+                          </a>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
