@@ -10,9 +10,26 @@ export default {
 	],
 	prefix: "",
 	theme: {
+		screens: {
+			'xs': '375px',
+			'sm': '640px',
+			'md': '768px',
+			'lg': '1024px',
+			'xl': '1280px',
+			'2xl': '1440px',
+			'3xl': '1920px',
+		},
 		container: {
 			center: true,
-			padding: '2rem',
+			padding: {
+				DEFAULT: '1rem',
+				xs: '1.25rem',
+				sm: '2rem',
+				md: '2.5rem',
+				lg: '3rem',
+				xl: '4rem',
+				'2xl': '5rem',
+			},
 			screens: {
 				'2xl': '1400px'
 			}

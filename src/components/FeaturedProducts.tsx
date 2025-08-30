@@ -159,132 +159,119 @@ const FeaturedProducts = () => {
   };
 
   return (
-    <section className="py-16 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-display font-playfair text-foreground mb-4">
+    <section className="py-8 xs:py-12 lg:py-16 bg-background">
+      <div className="container mx-auto">
+        <div className="text-center mb-8 xs:mb-10 lg:mb-12">
+          <h2 className="text-2xl xs:text-3xl lg:text-4xl xl:text-5xl font-playfair font-bold text-foreground mb-3 xs:mb-4">
             Featured Collection
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover our handpicked selection of premium jewelry crafted with precision and care
+          <p className="text-sm xs:text-base lg:text-lg text-muted-foreground max-w-xl lg:max-w-2xl mx-auto leading-relaxed">
+            Discover our handpicked selection of premium jewelry crafted with precision and care.
           </p>
-          <div className="divider-gold mt-6 max-w-24 mx-auto" />
         </div>
+        <div className="divider-gold mt-6 max-w-24 mx-auto" />
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          {products.slice(0, 8).map((product) => (
-            <Card key={product.id} className="card-luxury group cursor-pointer">
-              <CardContent className="p-0">
-                {/* Product Image */}
-                <div className="relative overflow-hidden rounded-t-lg">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-72 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  
-                  {/* Badges */}
-                  {product.badges && product.badges.length > 0 && (
-                    <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-                      {product.badges.map((badge) => (
-                        <Badge
-                          key={badge}
-                          variant={getBadgeVariant(badge)}
-                          className="badge-premium text-xs"
-                        >
-                          {getBadgeText(badge)}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Wishlist Button */}
-                  <Button
-                    size="icon"
-                    variant="ghost"
-                    className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm hover:bg-background"
-                    onClick={() => handleToggleFavorite(product.id)}
-                  >
-                    <Heart className={`h-4 w-4 ${favorites.includes(product.id) ? "fill-red-500 text-red-500" : ""}`} />
-                  </Button>
-
-                  {/* Quick Actions */}
-                  <div className="absolute inset-0 bg-charcoal/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
-                        variant="secondary"
-                        onClick={() => handleViewProduct(product)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 lg:gap-8">
+          {products.map((product) => (
+            <Card key={product.id} className="group overflow-hidden border-0 shadow-md hover:shadow-luxury transition-all duration-300 bg-white">
+              <div className="relative overflow-hidden">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-48 xs:h-56 lg:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                
+                {/* Badges */}
+                {product.badges && product.badges.length > 0 && (
+                  <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+                    {product.badges.map((badge) => (
+                      <Badge
+                        key={badge}
+                        variant={getBadgeVariant(badge)}
+                        className="badge-premium text-xs"
                       >
-                        <Eye className="h-4 w-4 mr-1" />
-                        View
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="hero"
-                        onClick={() => handleAddToCart(product)}
-                      >
-                        <ShoppingCart className="h-4 w-4 mr-1" />
-                        Add
-                      </Button>
-                    </div>
+                        {getBadgeText(badge)}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+
+                {/* Wishlist Button */}
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm hover:bg-background"
+                  onClick={() => handleToggleFavorite(product.id)}
+                >
+                  <Heart className={`h-4 w-4 ${favorites.includes(product.id) ? "fill-red-500 text-red-500" : ""}`} />
+                </Button>
+
+                {/* Quick Actions */}
+                <div className="absolute inset-0 bg-charcoal/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="flex space-x-2">
+                    <Button 
+                      size="sm" 
+                      variant="secondary"
+                      onClick={() => handleViewProduct(product)}
+                    >
+                      <Eye className="h-4 w-4 mr-1" />
+                      View
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="hero"
+                      onClick={() => handleAddToCart(product)}
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-1" />
+                      Add
+                    </Button>
                   </div>
                 </div>
+              </div>
 
-                {/* Product Info */}
-                <div className="p-3 sm:p-4 lg:p-5">
-                  <div className="mb-3">
-                    <h3 className="font-semibold text-sm sm:text-base lg:text-lg text-foreground group-hover:text-gold transition-colors line-clamp-2">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">{product.category}</p>
+              {/* Product Info */}
+              <CardContent className="p-4 xs:p-5 lg:p-6">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h3 className="font-semibold text-base xs:text-lg text-foreground mb-1">{product.name}</h3>
+                    <p className="text-xs xs:text-sm text-muted-foreground">{product.category}</p>
                   </div>
 
                   {/* Rating */}
                   {product.rating && (
-                    <div className="flex items-center mb-3">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < Math.floor(product.rating.avg)
-                                ? "text-gold fill-gold"
-                                : "text-muted-foreground"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm text-muted-foreground ml-2">
-                        {product.rating.avg} ({product.rating.count})
-                      </span>
+                    <div className="flex items-center space-x-1">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-3 w-3 xs:h-4 xs:w-4 ${
+                            i < Math.floor(product.rating.avg)
+                              ? "text-yellow-400 fill-current"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
                     </div>
                   )}
+                </div>
 
-                  {/* Price */}
-                  <div className="flex flex-col space-y-1 mb-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg sm:text-xl font-bold text-foreground">
+                {/* Price */}
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <div className="flex items-center space-x-2 mb-1">
+                      <span className="text-lg xs:text-xl lg:text-2xl font-bold text-foreground">
                         ₹{product.price.toLocaleString()}
                       </span>
                       {product.compareAtPrice && (
-                        <span className="text-sm text-muted-foreground line-through">
+                        <span className="text-sm xs:text-base lg:text-lg text-muted-foreground line-through">
                           ₹{product.compareAtPrice.toLocaleString()}
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center justify-between text-sm text-muted-foreground">
-                      <span>Weight: {product.weight}g</span>
-                      {product.compareAtPrice && (
-                        <span className="text-green-600 font-medium">
-                          Save ₹{(product.compareAtPrice - product.price).toLocaleString()}
-                        </span>
-                      )}
-                    </div>
+                    <p className="text-xs xs:text-sm text-muted-foreground">
+                      Weight: {product.weight}g
+                    </p>
                   </div>
-
                   {/* Quantity Selector */}
                   <div className="flex items-center justify-center space-x-3 mb-4">
                     <Button

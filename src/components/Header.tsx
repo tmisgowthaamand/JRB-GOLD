@@ -109,36 +109,36 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       {/* Top Bar */}
       <div className="text-white" style={{background: 'rgb(202, 138, 4)'}}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-center py-3 text-sm">
-            <div className="flex items-center space-x-6 font-medium">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-center py-2 xs:py-3 text-xs xs:text-sm">
+            <div className="flex flex-col xs:flex-row items-center xs:space-x-4 lg:space-x-6 font-medium text-center xs:text-left">
               <span className="tracking-wide">₹9,470/g Gold (22K)</span>
               <span className="tracking-wide">₹131/g Silver</span>
-              <span className="text-xs opacity-75 ml-2">*Indicative rates—visit store for exact rate</span>
+              <span className="text-xs opacity-75 mt-1 xs:mt-0 xs:ml-2">*Indicative rates—visit store for exact rate</span>
             </div>
           </div>
         </div>
       </div>
 
       <div className="border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
+        <div className="container mx-auto">
+          <div className="flex h-14 xs:h-16 lg:h-18 items-center justify-between">
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center h-full">
-              <a href="/" className="group flex items-center space-x-3 sm:space-x-4 h-full py-2 transition-all duration-300 hover:scale-105">
+              <a href="/" className="group flex items-center space-x-2 xs:space-x-3 lg:space-x-4 h-full py-2 transition-all duration-300 hover:scale-105">
                 <img 
                   src="/logo1.png?v=1" 
                   alt="JRB Gold Pvt Ltd Logo" 
-                  className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain brightness-110 contrast-110 flex-shrink-0 transition-transform duration-300 group-hover:rotate-3"
+                  className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain brightness-110 contrast-110 flex-shrink-0 transition-transform duration-300 group-hover:rotate-3"
                 />
-                <span className="font-playfair text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold leading-none tracking-wide whitespace-nowrap transition-colors duration-300 drop-shadow-lg" style={{color: 'rgb(202, 138, 4)'}}>
+                <span className="font-playfair text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold leading-none tracking-wide whitespace-nowrap transition-colors duration-300 drop-shadow-lg" style={{color: 'rgb(202, 138, 4)'}}>
                   JRB GOLD PVt ltd
                 </span>
               </a>
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
               {/* Shop Dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -189,23 +189,23 @@ const Header = () => {
             </nav>
 
             {/* Utilities */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 xs:space-x-3">
               {/* Search */}
-              <div className="hidden sm:block relative w-48 md:w-56 lg:w-64">
+              <div className="hidden md:block relative w-40 lg:w-48 xl:w-56 2xl:w-64">
                 <SearchBox 
                   onProductSelect={handleProductSelect}
                   placeholder="Search jewelry..."
-                  className="w-full"
+                  className="w-full text-sm"
                   trendingProducts={trendingProducts}
                   showTrending={true}
                 />
               </div>
 
-              <Button variant="ghost" size="icon" className="sm:hidden h-8 w-8">
+              <Button variant="ghost" size="icon" className="md:hidden h-8 w-8">
                 <Search className="h-4 w-4" />
               </Button>
 
-              <div className="flex items-center space-x-1 sm:space-x-2">
+              <div className="flex items-center space-x-1 xs:space-x-2">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -268,46 +268,46 @@ title="View Favorites"
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-1 xs:space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
                       onClick={() => navigate('/signin')}
-                      className="hidden sm:flex items-center"
+                      className="hidden md:flex items-center text-xs lg:text-sm px-2 lg:px-3"
                     >
-                      <LogIn className="h-4 w-4 mr-1" />
+                      <LogIn className="h-3 w-3 lg:h-4 lg:w-4 mr-1" />
                       <span>Sign In</span>
                     </Button>
                     <Button 
                       variant="default" 
                       size="sm" 
                       onClick={() => navigate('/signup')}
-                      className="hidden sm:flex items-center"
+                      className="hidden md:flex items-center text-xs lg:text-sm px-2 lg:px-3"
                     >
-                      <UserPlus className="h-4 w-4 mr-1" />
+                      <UserPlus className="h-3 w-3 lg:h-4 lg:w-4 mr-1" />
                       <span>Sign Up</span>
                     </Button>
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="sm:hidden"
+                      className="md:hidden h-8 w-8"
                       onClick={() => navigate('/signin')}
                       title="Account"
                     >
-                      <User className="h-5 w-5" />
+                      <User className="h-4 w-4" />
                     </Button>
                   </div>
                 )}
                 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className="md:hidden">
-                      <Menu className="h-6 w-6" />
+                    <Button variant="ghost" size="icon" className="lg:hidden h-8 w-8">
+                      <Menu className="h-5 w-5" />
                       <span className="sr-only">Toggle menu</span>
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-                    <div className="flex flex-col space-y-4 py-4">
+                  <SheetContent side="left" className="w-[280px] xs:w-[320px] sm:w-[380px]">
+                    <div className="flex flex-col space-y-3 xs:space-y-4 py-3 xs:py-4">
                       {/* Mobile Search */}
                       <SearchBox 
                         onProductSelect={handleProductSelect}
@@ -431,12 +431,12 @@ title="View Favorites"
                       </nav>
 
                       {/* Mobile Cart and Wishlist */}
-                      <div className="flex flex-col space-y-2 pt-4 border-t border-border">
-                        <Button variant="outline" className="justify-start" onClick={handleWishlistClick}>
+                      <div className="flex flex-col space-y-2 pt-3 xs:pt-4 border-t border-border">
+                        <Button variant="outline" className="justify-start text-sm" onClick={handleWishlistClick}>
                           <Heart className="h-4 w-4 mr-2" />
                           Wishlist ({favorites.length})
                         </Button>
-                        <Button variant="outline" className="justify-start" onClick={handleCartClick}>
+                        <Button variant="outline" className="justify-start text-sm" onClick={handleCartClick}>
                           <ShoppingCart className="h-4 w-4 mr-2" />
                           Cart ({cart.length})
                         </Button>

@@ -36,18 +36,18 @@ const Footer = () => {
   return (
     <footer className="bg-ink text-ivory">
       {/* Newsletter Section */}
-      <div className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="bg-gray-900 text-white py-8 xs:py-10 lg:py-12">
+        <div className="container mx-auto">
           <div className="text-center">
-            <h3 className="text-2xl font-playfair font-bold mb-4">Subscribe to Our Newsletter</h3>
-            <p className="mb-6 max-w-2xl mx-auto">Stay updated with our latest collections, exclusive offers, and jewelry care tips</p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <h3 className="text-xl xs:text-2xl lg:text-3xl font-playfair font-bold mb-3 xs:mb-4">Subscribe to Our Newsletter</h3>
+            <p className="text-sm xs:text-base mb-4 xs:mb-6 max-w-xl lg:max-w-2xl mx-auto leading-relaxed">Stay updated with our latest collections, exclusive offers, and jewelry care tips</p>
+            <div className="flex flex-col xs:flex-row gap-3 xs:gap-4 max-w-sm xs:max-w-md mx-auto">
               <Input 
                 type="email" 
                 placeholder="Enter your email" 
-                className="bg-gray-800 border-gray-600 focus:border-white text-white placeholder-gray-400"
+                className="bg-gray-800 border-gray-600 focus:border-white text-white placeholder-gray-400 text-sm xs:text-base"
               />
-              <Button className="bg-white hover:bg-gray-200 text-gray-900">
+              <Button className="bg-white hover:bg-gray-200 text-gray-900 text-sm xs:text-base px-4 xs:px-6">
                 Subscribe
               </Button>
             </div>
@@ -57,21 +57,21 @@ const Footer = () => {
 
       {/* Main Footer */}
       <div className="border-t border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="container mx-auto py-8 xs:py-10 lg:py-12">
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8">
             {/* Company Column */}
             <div>
               <a href="/about#about" className="hover:no-underline">
-                <h3 className="text-lg font-playfair font-semibold mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
+                <h3 className="text-base xs:text-lg font-playfair font-semibold mb-4 xs:mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
                   Company
                 </h3>
               </a>
-              <ul className="space-y-3">
+              <ul className="space-y-2 xs:space-y-3">
                 {companyLinks.map((link) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200"
+                      className="text-sm xs:text-base text-gray-300 hover:text-white transition-colors duration-200"
                     >
                       {link.name}
                     </a>
@@ -83,16 +83,16 @@ const Footer = () => {
             {/* Shop Column */}
             <div>
               <a href="/shop" className="hover:no-underline">
-                <h3 className="text-lg font-playfair font-semibold mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
+                <h3 className="text-base xs:text-lg font-playfair font-semibold mb-4 xs:mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
                   Shop
                 </h3>
               </a>
-              <ul className="space-y-3">
+              <ul className="space-y-2 xs:space-y-3">
                 {shopLinks.map((link) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200"
+                      className="text-sm xs:text-base text-gray-300 hover:text-white transition-colors duration-200"
                     >
                       {link.name}
                     </a>
@@ -104,16 +104,16 @@ const Footer = () => {
             {/* Services Column */}
             <div>
               <a href="/services" className="hover:no-underline">
-                <h3 className="text-lg font-playfair font-semibold mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
+                <h3 className="text-base xs:text-lg font-playfair font-semibold mb-4 xs:mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
                   Services
                 </h3>
               </a>
-              <ul className="space-y-3">
+              <ul className="space-y-2 xs:space-y-3">
                 {serviceLinks.map((link) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200"
+                      className="text-sm xs:text-base text-gray-300 hover:text-white transition-colors duration-200"
                     >
                       {link.name}
                     </a>
@@ -123,18 +123,18 @@ const Footer = () => {
             </div>
 
             {/* Help Column */}
-            <div>
+            <div className="xs:col-span-2 lg:col-span-1">
               <a href="/contact" className="hover:no-underline">
-                <h3 className="text-lg font-playfair font-semibold mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
+                <h3 className="text-base xs:text-lg font-playfair font-semibold mb-4 xs:mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
                   Help
                 </h3>
               </a>
-              <ul className="space-y-3">
+              <ul className="space-y-2 xs:space-y-3 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-1 gap-x-4">
                 {helpLinks.map((link) => (
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-gray-300 hover:text-white transition-colors duration-200"
+                      className="text-sm xs:text-base text-gray-300 hover:text-white transition-colors duration-200"
                     >
                       {link.name}
                     </a>
@@ -145,29 +145,29 @@ const Footer = () => {
           </div>
 
           {/* Contact Info */}
-          <div className="border-t border-ivory/20 mt-12 pt-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start">
-                <Phone className="h-5 w-5 text-yellow-500 mr-3" />
+          <div className="border-t border-ivory/20 mt-8 xs:mt-10 lg:mt-12 pt-6 xs:pt-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 xs:gap-6 text-center lg:text-left">
+              <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start">
+                <Phone className="h-4 w-4 xs:h-5 xs:w-5 text-yellow-500 mb-2 xs:mb-0 xs:mr-3" />
                 <div>
-                  <div className="font-semibold">Call Us</div>
-                  <div className="text-ivory/80">+91 82204 21317</div>
+                  <div className="font-semibold text-sm xs:text-base">Call Us</div>
+                  <div className="text-ivory/80 text-sm xs:text-base">+91 82204 21317</div>
                 </div>
               </div>
               
-              <div className="flex items-center justify-center md:justify-start">
-                <Mail className="h-5 w-5 text-yellow-500 mr-3" />
+              <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start">
+                <Mail className="h-4 w-4 xs:h-5 xs:w-5 text-yellow-500 mb-2 xs:mb-0 xs:mr-3" />
                 <div>
-                  <div className="font-semibold">Email</div>
-                  <div className="text-ivory/80">contact@jrbgold.co.in</div>
+                  <div className="font-semibold text-sm xs:text-base">Email</div>
+                  <div className="text-ivory/80 text-sm xs:text-base">contact@jrbgold.co.in</div>
                 </div>
               </div>
               
-              <div className="flex items-start justify-center md:justify-start">
-                <MapPin className="h-5 w-5 text-yellow-500 mr-3 mt-1" />
+              <div className="flex flex-col xs:flex-row items-center xs:items-start justify-center lg:justify-start">
+                <MapPin className="h-4 w-4 xs:h-5 xs:w-5 text-yellow-500 mb-2 xs:mb-0 xs:mr-3 xs:mt-1" />
                 <div>
-                  <div className="font-semibold">Address</div>
-                  <div className="text-ivory/80 text-sm leading-relaxed">
+                  <div className="font-semibold text-sm xs:text-base">Address</div>
+                  <div className="text-ivory/80 text-xs xs:text-sm leading-relaxed">
                     No: 1539, 1st Floor,<br />
                     Soundar Complex, Vellore Road<br />
                     Near Anna Arch<br />
@@ -180,7 +180,7 @@ const Footer = () => {
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center space-x-6 mt-8">
+          <div className="flex justify-center space-x-4 xs:space-x-6 mt-6 xs:mt-8">
             <a 
               href="https://www.facebook.com/jrbgold" 
               target="_blank" 
@@ -188,7 +188,7 @@ const Footer = () => {
               className="text-ivory/80 hover:text-yellow-500 transition-colors"
               aria-label="Facebook"
             >
-              <Facebook className="h-6 w-6" />
+              <Facebook className="h-5 w-5 xs:h-6 xs:w-6" />
             </a>
             <a 
               href="https://www.instagram.com/jrbgold" 
@@ -197,7 +197,7 @@ const Footer = () => {
               className="text-ivory/80 hover:text-yellow-500 transition-colors"
               aria-label="Instagram"
             >
-              <Instagram className="h-6 w-6" />
+              <Instagram className="h-5 w-5 xs:h-6 xs:w-6" />
             </a>
             <a 
               href="https://wa.me/918220421317" 
@@ -206,13 +206,13 @@ const Footer = () => {
               className="text-ivory/80 hover:text-yellow-500 transition-colors"
               aria-label="WhatsApp"
             >
-              <MessageCircle className="h-6 w-6" />
+              <MessageCircle className="h-5 w-5 xs:h-6 xs:w-6" />
             </a>
           </div>
 
           {/* Help Links */}
-          <div className="border-t border-ivory/20 mt-8 pt-8">
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-ivory/80">
+          <div className="border-t border-ivory/20 mt-6 xs:mt-8 pt-6 xs:pt-8">
+            <div className="flex flex-wrap justify-center gap-3 xs:gap-4 lg:gap-6 text-xs xs:text-sm text-ivory/80">
               {helpLinks.map((link) => (
                 <a 
                   key={link.name}
@@ -226,7 +226,7 @@ const Footer = () => {
           </div>
 
           {/* Copyright */}
-          <div className="mt-8 text-center text-ivory/60 text-sm">
+          <div className="mt-6 xs:mt-8 text-center text-ivory/60 text-xs xs:text-sm">
             &copy; {new Date().getFullYear()} JRB Gold. All rights reserved.
           </div>
         </div>
