@@ -30,7 +30,7 @@ const Header = () => {
       // For demo purposes, check if there's a token in localStorage
       const token = localStorage.getItem('authToken');
       setIsLoggedIn(!!token);
-      
+
       // Set user initials for avatar
       const userName = localStorage.getItem('userName') || 'User';
       setUserInitials(
@@ -42,14 +42,14 @@ const Header = () => {
           .substring(0, 2)
       );
     };
-    
+
     checkAuthStatus();
-    
+
     // Listen for auth state changes (in a real app, this would be from your auth context)
     window.addEventListener('storage', checkAuthStatus);
     return () => window.removeEventListener('storage', checkAuthStatus);
   }, []);
-  
+
   const handleLogout = () => {
     // TODO: Implement proper logout logic
     localStorage.removeItem('authToken');
@@ -108,7 +108,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       {/* Top Bar */}
-      <div className="text-white" style={{background: 'rgb(202, 138, 4)'}}>
+      <div className="text-white" style={{ background: 'rgb(202, 138, 4)' }}>
         <div className="container mx-auto">
           <div className="flex items-center justify-center py-2 xs:py-3 text-xs xs:text-sm">
             <div className="flex flex-col xs:flex-row items-center xs:space-x-4 lg:space-x-6 font-medium text-center xs:text-left">
@@ -126,13 +126,13 @@ const Header = () => {
             {/* Logo */}
             <div className="flex-shrink-0 flex items-center h-full">
               <a href="/" className="group flex items-center space-x-2 xs:space-x-3 lg:space-x-4 h-full py-2 transition-all duration-300 hover:scale-105">
-                <img 
-                  src="/logo1.png?v=1" 
-                  alt="JRB Gold Pvt Ltd Logo" 
+                <img
+                  src="/logo1.png?v=1"
+                  alt="JRB Gold Pvt Ltd Logo"
                   className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 object-contain brightness-110 contrast-110 flex-shrink-0 transition-transform duration-300 group-hover:rotate-3"
                 />
-                <span className="font-playfair text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold leading-none tracking-wide whitespace-nowrap transition-colors duration-300 drop-shadow-lg" style={{color: 'rgb(202, 138, 4)'}}>
-                  JRB GOLD PVt ltd
+                <span className="font-playfair text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-extrabold leading-none tracking-wide whitespace-nowrap transition-colors duration-300 drop-shadow-lg" style={{ color: 'rgb(202, 138, 4)' }}>
+                  JRB GOLD PVT LTD
                 </span>
               </a>
             </div>
@@ -192,7 +192,7 @@ const Header = () => {
             <div className="flex items-center space-x-2 xs:space-x-3">
               {/* Search */}
               <div className="hidden md:block relative w-40 lg:w-48 xl:w-56 2xl:w-64">
-                <SearchBox 
+                <SearchBox
                   onProductSelect={handleProductSelect}
                   placeholder="Search jewelry..."
                   className="w-full text-sm"
@@ -211,10 +211,10 @@ const Header = () => {
                   size="icon"
                   className={`relative ${lastToggledProduct ? 'animate-ping-once' : ''}`}
                   onClick={handleWishlistClick}
-title="View Favorites"
+                  title="View Favorites"
                 >
-                  <Heart 
-                    className={`h-5 w-5 ${lastToggledProduct ? 'fill-current text-red-500' : ''}`} 
+                  <Heart
+                    className={`h-5 w-5 ${lastToggledProduct ? 'fill-current text-red-500' : ''}`}
                     fill={favorites.includes(lastToggledProduct || '') ? 'currentColor' : 'none'}
                   />
                   {favorites.length > 0 && (
@@ -237,7 +237,7 @@ title="View Favorites"
                     </Badge>
                   )}
                 </Button>
-                
+
                 {isLoggedIn ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -269,27 +269,27 @@ title="View Favorites"
                   </DropdownMenu>
                 ) : (
                   <div className="flex space-x-1 xs:space-x-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => navigate('/signin')}
                       className="hidden md:flex items-center text-xs lg:text-sm px-2 lg:px-3"
                     >
                       <LogIn className="h-3 w-3 lg:h-4 lg:w-4 mr-1" />
                       <span>Sign In</span>
                     </Button>
-                    <Button 
-                      variant="default" 
-                      size="sm" 
+                    <Button
+                      variant="default"
+                      size="sm"
                       onClick={() => navigate('/signup')}
                       className="hidden md:flex items-center text-xs lg:text-sm px-2 lg:px-3"
                     >
                       <UserPlus className="h-3 w-3 lg:h-4 lg:w-4 mr-1" />
                       <span>Sign Up</span>
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
+                    <Button
+                      variant="ghost"
+                      size="icon"
                       className="md:hidden h-8 w-8"
                       onClick={() => navigate('/signin')}
                       title="Account"
@@ -298,7 +298,7 @@ title="View Favorites"
                     </Button>
                   </div>
                 )}
-                
+
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" className="lg:hidden h-8 w-8">
@@ -309,7 +309,7 @@ title="View Favorites"
                   <SheetContent side="left" className="w-[280px] xs:w-[320px] sm:w-[380px]">
                     <div className="flex flex-col space-y-3 xs:space-y-4 py-3 xs:py-4">
                       {/* Mobile Search */}
-                      <SearchBox 
+                      <SearchBox
                         onProductSelect={handleProductSelect}
                         placeholder="Search jewelry..."
                         className="w-full"
@@ -367,7 +367,7 @@ title="View Favorites"
                             {link.name}
                           </Button>
                         ))}
-                        
+
                         {/* Mobile Auth Buttons */}
                         {isLoggedIn ? (
                           <>

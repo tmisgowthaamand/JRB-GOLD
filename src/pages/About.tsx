@@ -17,7 +17,7 @@ const About = () => {
     // Get the hash from URL and update active section
     const hash = location.hash.substring(1) || 'about';
     setActiveSection(hash);
-    
+
     // Scroll to the section if it exists
     const element = document.getElementById(hash);
     if (element) {
@@ -66,35 +66,35 @@ const About = () => {
         <h2 className="text-3xl font-playfair font-bold text-center mb-12">Our Journey</h2>
         <div className="relative">
           <div className="absolute left-1/2 h-full w-0.5 bg-yellow-300 transform -translate-x-1/2"></div>
-          
+
           {[
-            { 
-              year: '2016', 
-              title: 'Humble Beginnings', 
+            {
+              year: '2016',
+              title: 'Humble Beginnings',
               description: 'Started as a small family business with a single store',
               icon: <Info className="w-6 h-6 text-yellow-500" />
             },
-            { 
-              year: '2018', 
-              title: 'First Milestone', 
+            {
+              year: '2018',
+              title: 'First Milestone',
               description: 'Opened our flagship store and introduced hallmarking',
               icon: <Briefcase className="w-6 h-6 text-yellow-500" />
             },
-            { 
-              year: '2020', 
-              title: 'Digital Expansion', 
+            {
+              year: '2020',
+              title: 'Digital Expansion',
               description: 'Launched online store and digital gold services',
               icon: <TrendingUp className="w-6 h-6 text-yellow-500" />
             },
-            { 
-              year: '2024', 
-              title: 'Industry Leader', 
+            {
+              year: '2024',
+              title: 'Industry Leader',
               description: 'Recognized as a trusted premium jewelry brand',
               icon: <Award className="w-6 h-6 text-yellow-500" />
             }
           ].map((item, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className={`relative mb-8 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}
               style={{ marginLeft: index % 2 === 0 ? '50%' : '0' }}
             >
@@ -122,7 +122,7 @@ const About = () => {
           <div className="order-2 md:order-1">
             <h3 className="text-2xl font-semibold mb-4">Handcrafted Excellence</h3>
             <p className="mb-6">
-              Each JRB Gold piece is meticulously handcrafted by our master artisans who bring decades of experience and passion to their work. 
+              Each JRB Gold piece is meticulously handcrafted by our master artisans who bring decades of experience and passion to their work.
               We combine traditional techniques with modern technology to create timeless designs.
             </p>
             <div className="space-y-4">
@@ -150,9 +150,9 @@ const About = () => {
             </div>
           </div>
           <div className="order-1 md:order-2">
-            <img 
-              src={craftsmanshipImage} 
-              alt="JRB Gold Craftsmanship" 
+            <img
+              src={craftsmanshipImage}
+              alt="JRB Gold Craftsmanship"
               className="w-full h-auto rounded-lg shadow-xl"
             />
           </div>
@@ -174,7 +174,7 @@ const About = () => {
             <h3 className="text-xl font-semibold mb-2">Our Location</h3>
             <p className="text-gray-600">123 Gold Street, Jewelry District<br />Mumbai, Maharashtra 400001</p>
           </Card>
-          
+
           <Card className="p-6 text-center">
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-yellow-100 flex items-center justify-center">
               <Phone className="w-6 h-6 text-yellow-600" />
@@ -185,7 +185,7 @@ const About = () => {
               <a href="mailto:info@jrbgold.com" className="hover:text-yellow-600">info@jrbgold.com</a>
             </p>
           </Card>
-          
+
           <Card className="p-6 text-center">
             <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-yellow-100 flex items-center justify-center">
               <Clock className="w-6 h-6 text-yellow-600" />
@@ -209,16 +209,16 @@ const About = () => {
           <h2 className="text-3xl font-playfair font-bold text-gray-900">Our Heritage</h2>
           <div className="w-24 h-1 bg-yellow-500 mx-auto mt-4"></div>
         </div>
-        
+
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h3 className="text-2xl font-playfair font-semibold text-gray-900">Three Generations of Excellence</h3>
             <p className="text-gray-600 leading-relaxed">
-              Since our founding in 1985, JRB Gold has been a family-owned business dedicated to the art of fine jewelry making. 
+              Since our founding in 1985, JRB Gold has been a family-owned business dedicated to the art of fine jewelry making.
               What began as a small workshop has grown into a trusted name in the industry, known for our commitment to quality and craftsmanship.
             </p>
             <p className="text-gray-600 leading-relaxed">
-              Our master jewelers combine traditional techniques with modern technology to create pieces that stand the test of time. 
+              Our master jewelers combine traditional techniques with modern technology to create pieces that stand the test of time.
               Each creation is a testament to our passion for excellence and attention to detail.
             </p>
             <div className="grid grid-cols-2 gap-4 mt-8">
@@ -232,11 +232,11 @@ const About = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="relative h-64 rounded-lg overflow-hidden">
-              <img 
-                src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+              <img
+                src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                 alt="Traditional jewelry making"
                 className="w-full h-full object-cover"
               />
@@ -247,8 +247,8 @@ const About = () => {
             </div>
             <div className="grid gap-4">
               <div className="relative h-30 rounded-lg overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1602173576902-8a8a1a9b1b3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                <img
+                  src="https://images.unsplash.com/photo-1602173576902-8a8a1a9b1b3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                   alt="Modern design"
                   className="w-full h-full object-cover"
                 />
@@ -258,8 +258,8 @@ const About = () => {
                 </div>
               </div>
               <div className="relative h-30 rounded-lg overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" 
+                <img
+                  src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                   alt="Quality assurance"
                   className="w-full h-full object-cover"
                 />
@@ -277,7 +277,7 @@ const About = () => {
 
   // Render the active section based on URL hash
   const renderActiveSection = () => {
-    switch(activeSection) {
+    switch (activeSection) {
       case 'story':
         return renderStory();
       case 'craft':
@@ -347,22 +347,16 @@ const About = () => {
 
   const team = [
     {
-      name: 'Jagdish R. Bajaj',
+      name: 'Joseph Ramki',
       position: 'Founder & Chairman',
       experience: '40+ years',
       description: 'Visionary leader who established JRB Gold with a commitment to quality and customer trust.',
     },
     {
-      name: 'Rakesh J. Bajaj',
+      name: 'Esa Beaula',
       position: 'Managing Director',
       experience: '25+ years',
       description: 'Driving innovation and digital transformation while maintaining traditional values.',
-    },
-    {
-      name: 'Bharti R. Bajaj',
-      position: 'Creative Director',
-      experience: '20+ years',
-      description: 'Leading jewelry design and ensuring every piece reflects contemporary elegance.',
     },
   ];
 
@@ -384,7 +378,7 @@ const About = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main>
         {/* Hero Section */}
         <section className="relative py-20 bg-gradient-surface">
@@ -394,7 +388,7 @@ const About = () => {
                 Our Story
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Eight years of craftsmanship, trust, and innovation in the jewelry industry. 
+                Eight years of craftsmanship, trust, and innovation in the jewelry industry.
                 Built on the foundation of transparency, quality, and customer relationships that last generations.
               </p>
               <div className="divider-gold mt-8 max-w-24 mx-auto" />
@@ -426,18 +420,18 @@ const About = () => {
                 </h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
-                    Founded in 2016 by Jagdish R. Bajaj, JRB Gold began as a small family jewelry 
-                    business with a simple mission: provide genuine, high-quality gold and silver 
+                    Founded in 2016 by Joseph Ramki & Esa Beaula, JRB Gold began as a small family jewelry
+                    business with a simple mission: provide genuine, high-quality gold and silver
                     jewelry at fair prices with complete transparency.
                   </p>
                   <p>
-                    What started as a single store has grown into a trusted brand serving thousands 
-                    of customers across India. Our success stems from our unwavering commitment to 
+                    What started as a single store has grown into a trusted brand serving thousands
+                    of customers across India. Our success stems from our unwavering commitment to
                     quality, ethical business practices, and building relationships that span generations.
                   </p>
                   <p>
-                    Today, we continue to honor our founder's vision while embracing innovation 
-                    through digital services, modern retail experiences, and sustainable practices 
+                    Today, we continue to honor our founder's vision while embracing innovation
+                    through digital services, modern retail experiences, and sustainable practices
                     that respect both our customers and the environment.
                   </p>
                 </div>
@@ -484,12 +478,10 @@ const About = () => {
 
               <div className="space-y-8 md:space-y-12">
                 {milestones.map((milestone, index) => (
-                  <div key={index} className={`flex items-center ${
-                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}>
-                    <div className={`flex-1 ${
-                      index % 2 === 0 ? 'md:text-right md:pr-8' : 'md:text-left md:pl-8'
+                  <div key={index} className={`flex items-center ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                     }`}>
+                    <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right md:pr-8' : 'md:text-left md:pl-8'
+                      }`}>
                       <Card className="card-luxury">
                         <CardContent className="p-6">
                           <div className="text-2xl font-bold text-gold mb-2 font-playfair">
@@ -557,7 +549,7 @@ const About = () => {
                   Certified Excellence
                 </h2>
                 <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                  Our commitment to quality is validated by industry-leading certifications 
+                  Our commitment to quality is validated by industry-leading certifications
                   and memberships that ensure every piece of jewelry meets the highest standards.
                 </p>
 
@@ -624,14 +616,14 @@ const About = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {team.map((member, index) => (
                 <Card key={index} className="card-luxury text-center">
                   <CardContent className="p-8">
                     <div className="w-24 h-24 bg-gradient-gold rounded-full flex items-center justify-center mx-auto mb-6">
                       <Users className="h-12 w-12 text-charcoal" />
                     </div>
-                    
+
                     <h3 className="text-xl font-semibold text-foreground mb-1">
                       {member.name}
                     </h3>
@@ -641,7 +633,7 @@ const About = () => {
                     <Badge variant="secondary" className="mb-4">
                       {member.experience}
                     </Badge>
-                    
+
                     <p className="text-muted-foreground text-sm leading-relaxed">
                       {member.description}
                     </p>
@@ -673,11 +665,11 @@ const About = () => {
                         <Star key={i} className="h-5 w-5 text-gold fill-gold" />
                       ))}
                     </div>
-                    
+
                     <blockquote className="text-ivory/90 mb-4 italic leading-relaxed">
                       "{testimonial.text}"
                     </blockquote>
-                    
+
                     <div className="text-gold font-medium">
                       {testimonial.author}
                     </div>
@@ -716,10 +708,10 @@ const About = () => {
               Experience the JRB Gold Difference
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Visit our store or explore our online collection to discover jewelry 
+              Visit our store or explore our online collection to discover jewelry
               that combines traditional craftsmanship with contemporary elegance.
             </p>
-            
+
             <div className="flex justify-center">
               <Button size="lg" variant="hero">
                 Visit Our Store
