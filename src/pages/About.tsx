@@ -302,7 +302,7 @@ const About = () => {
   const milestones = [
     { year: '2016', title: 'Founded', description: 'JRB Gold established as family jewelry business' },
     { year: '2018', title: 'Expansion', description: 'Opened flagship store and introduced certified hallmarking' },
-    { year: '2020', title: 'Innovation', description: 'Launched gold savings schemes and digital services' },
+    { year: '2020', title: 'Innovation', description: 'Introduced 3D jewelry design and digital services' },
     { year: '2022', title: 'Digital Growth', description: 'E-commerce platform and online gold investments' },
     { year: '2024', title: 'Industry Leader', description: 'Recognized as trusted premium jewelry brand' },
   ];
@@ -366,7 +366,7 @@ const About = () => {
       author: "Mrs. Sharma, Loyal Customer"
     },
     {
-      text: "The gold savings scheme helped me buy my dream wedding jewelry. Excellent service and genuine people.",
+      text: "Their exchange process is very transparent. I got the best value for my old gold without any hassle.",
       author: "Priya K., Mumbai"
     },
     {

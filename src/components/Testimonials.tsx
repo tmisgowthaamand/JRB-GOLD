@@ -20,8 +20,8 @@ const Testimonials = () => {
       name: "Rajesh Kumar",
       location: "Delhi",
       rating: 5,
-      text: "The gold savings scheme helped me buy my dream necklace set. Monthly payments were convenient and the bonus month was a great benefit. Highly recommended!",
-      service: "Gold Savings Scheme",
+      text: "The custom design services exceeded my expectations. They created a beautiful necklace set that matches my family heritage perfectly. Truly masterful work!",
+      service: "Custom Design",
     },
     {
       id: 3,
@@ -94,9 +94,8 @@ const Testimonials = () => {
               {getVisibleTestimonials().map((testimonial, index) => (
                 <Card
                   key={`${testimonial.id}-${currentIndex}-${index}`}
-                  className={`bg-ivory/10 border-ivory/20 transition-all duration-500 ${
-                    index === 1 ? 'md:scale-105 md:shadow-luxury' : 'md:scale-95'
-                  }`}
+                  className={`bg-ivory/10 border-ivory/20 transition-all duration-500 ${index === 1 ? 'md:scale-105 md:shadow-luxury' : 'md:scale-95'
+                    }`}
                 >
                   <CardContent className="p-6">
                     {/* Rating */}
@@ -155,9 +154,8 @@ const Testimonials = () => {
           {testimonials.map((_, index) => (
             <button
               key={index}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                index === currentIndex ? "bg-gold w-8" : "bg-ivory/30"
-              }`}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex ? "bg-gold w-8" : "bg-ivory/30"
+                }`}
               onClick={() => setCurrentIndex(index)}
             />
           ))}

@@ -13,7 +13,7 @@ const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState<Set<number>>(new Set());
   const [isHeroLoading, setIsHeroLoading] = useState(true);
-  const { gold22k, silver, isLoading, error, lastUpdated } = useGoldRates();
+  const { gold24k, gold22k, gold18k, gold14k, platinum, silver, isLoading, error, lastUpdated } = useGoldRates();
 
   useEffect(() => {
     // Simulate hero loading
@@ -83,9 +83,8 @@ const Hero = () => {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? "opacity-100" : "opacity-0"
+              }`}
           >
             <div className="relative h-full">
               {/* Background Image */}
@@ -168,59 +167,71 @@ const Hero = () => {
           {slides.map((_, index) => (
             <button
               key={index}
-              className={`w-2 h-2 xs:w-3 xs:h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide ? "bg-gold" : "bg-ivory/50"
-              }`}
+              className={`w-2 h-2 xs:w-3 xs:h-3 rounded-full transition-all duration-300 ${index === currentSlide ? "bg-gold" : "bg-ivory/50"
+                }`}
               onClick={() => goToSlide(index)}
             />
           ))}
         </div>
       </div>
 
-      {/* Live Gold Rates Bar */}
-      <div className="bg-gradient-to-r from-amber-600 to-yellow-500 text-white py-3 xs:py-4">
+      {/* Live Metal Rates Table Section */}
+      <div className="bg-white border-b py-6 xs:py-8">
         <div className="container mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-3 xs:gap-4">
-            <div className="flex flex-col xs:flex-row items-center gap-3 xs:gap-6">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 xs:h-5 xs:w-5" />
-                <span className="font-semibold text-sm xs:text-base lg:text-lg">Today's Rates:</span>
-              </div>
-              <div className="flex items-center gap-3 xs:gap-4">
-                <div className="text-center">
-                  <div className="flex items-center gap-2">
-                    {isLoading ? (
-                      <RefreshCw className="h-3 w-3 xs:h-4 xs:w-4 animate-spin" />
-                    ) : (
-                      <span className="font-bold text-lg xs:text-xl">₹9,470/g</span>
-                    )}
-                  </div>
-                  <div className="text-xs opacity-90">Gold (22K)</div>
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-4 px-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <TrendingUp className="h-5 w-5 text-gold" />
+                  <h3 className="text-xl md:text-2xl font-playfair font-bold text-foreground">Today's Live Market Rates</h3>
                 </div>
-                <div className="h-6 xs:h-8 w-px bg-white/30"></div>
-                <div className="text-center">
-                  <div className="flex items-center gap-2">
-                    {isLoading ? (
-                      <RefreshCw className="h-3 w-3 xs:h-4 xs:w-4 animate-spin" />
-                    ) : (
-                      <span className="font-bold text-lg xs:text-xl">₹131/g</span>
-                    )}
-                  </div>
-                  <div className="text-xs opacity-90">Silver</div>
+                <p className="text-sm text-muted-foreground italic">Updated daily based on standard Indian Bullion Market rates</p>
+              </div>
+              <div className="bg-surface px-4 py-2 rounded-lg border border-gold/10 flex items-center gap-4 text-sm font-medium">
+                <div className="flex items-center gap-2 text-gold">
+                  <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+                  <span>{isLoading ? 'Updating...' : 'Live Rate'}</span>
+                </div>
+                <div className="h-4 w-px bg-gray-200"></div>
+                <div className="text-muted-foreground">
+                  {new Date(lastUpdated).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </div>
               </div>
             </div>
-            <div className="text-xs opacity-75 flex flex-col xs:flex-row items-center gap-1 xs:gap-2 text-center xs:text-left">
-              {error ? (
-                <span className="text-red-200">*Using indicative rates</span>
-              ) : (
-                <>
-                  <span className="hidden lg:inline">*Live rates - Last updated: {new Date(lastUpdated).toLocaleTimeString()}</span>
-                  <span className="lg:hidden">*Live rates updated</span>
-                </>
-              )}
-              <span className="hidden xs:inline">|</span>
-              <span>Visit store for exact rates</span>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 xs:gap-4 lg:gap-6 px-4">
+              {[
+                { label: "Gold (24K)", rate: gold24k, sub: "₹/Gram", purity: "99.9% Pure" },
+                { label: "Gold (22K)", rate: gold22k, sub: "₹/Gram", purity: "91.6% Pure" },
+                { label: "Gold Coin", rate: gold24k, sub: "₹/Gram", purity: "24K Purity" },
+                { label: "Gold (18K)", rate: gold18k, sub: "₹/Gram", purity: "75.0% Pure" },
+                { label: "Silver", rate: silver, sub: "₹/Gram", purity: "Fine 999" }
+              ].map((item, idx) => (
+                <div key={idx} className="bg-white p-4 lg:p-6 rounded-2xl border-2 border-surface shadow-sm hover:shadow-luxury hover:border-gold/30 transition-all duration-300 text-center flex flex-col items-center group">
+                  <div className="text-[10px] lg:text-xs font-bold text-gold/80 mb-1 lg:mb-2 uppercase tracking-widest">{item.label}</div>
+                  <div className="text-xl lg:text-2xl font-extrabold text-charcoal mb-1 group-hover:scale-110 transition-transform">
+                    {isLoading ? "---" : `₹${item.rate.toLocaleString('en-IN')}`}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground font-medium mb-3">{item.sub}</div>
+                  <div className="w-8 h-0.5 bg-gradient-gold mb-3 opacity-30 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="text-[10px] lg:text-xs text-charcoal/60 font-semibold">{item.purity}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 mx-4 p-4 bg-gradient-surface border-2 border-surface/50 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center">
+                  <Shield className="h-5 w-5 text-gold" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-charcoal">HUID Certified & Hallmarked</div>
+                  <div className="text-xs text-muted-foreground">Prices are indicative. Visit our store at Thiruvannamalai for final quotes.</div>
+                </div>
+              </div>
+              <Button variant="hero" size="sm" className="w-full md:w-auto shadow-luxury">
+                Check Coin Rates Today
+              </Button>
             </div>
           </div>
         </div>

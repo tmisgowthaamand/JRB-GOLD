@@ -20,7 +20,6 @@ const Footer = () => {
   const serviceLinks = [
     { name: "Gold Exchange", href: "/services" },
     { name: "Jewelry Repair", href: "/services#repair" },
-    { name: "Gold Savings Scheme", href: "/schemes" },
     { name: "Custom Design", href: "/services#custom" },
   ];
 
@@ -42,9 +41,9 @@ const Footer = () => {
             <h3 className="text-xl xs:text-2xl lg:text-3xl font-playfair font-bold mb-3 xs:mb-4">Subscribe to Our Newsletter</h3>
             <p className="text-sm xs:text-base mb-4 xs:mb-6 max-w-xl lg:max-w-2xl mx-auto leading-relaxed">Stay updated with our latest collections, exclusive offers, and jewelry care tips</p>
             <div className="flex flex-col xs:flex-row gap-3 xs:gap-4 max-w-sm xs:max-w-md mx-auto">
-              <Input 
-                type="email" 
-                placeholder="Enter your email" 
+              <Input
+                type="email"
+                placeholder="Enter your email"
                 className="bg-gray-800 border-gray-600 focus:border-white text-white placeholder-gray-400 text-sm xs:text-base"
               />
               <Button className="bg-white hover:bg-gray-200 text-gray-900 text-sm xs:text-base px-4 xs:px-6">
@@ -154,7 +153,7 @@ const Footer = () => {
                   <div className="text-ivory/80 text-sm xs:text-base">+91 82204 21317</div>
                 </div>
               </div>
-              
+
               <div className="flex flex-col xs:flex-row items-center justify-center lg:justify-start">
                 <Mail className="h-4 w-4 xs:h-5 xs:w-5 text-yellow-500 mb-2 xs:mb-0 xs:mr-3" />
                 <div>
@@ -162,7 +161,7 @@ const Footer = () => {
                   <div className="text-ivory/80 text-sm xs:text-base">contact@jrbgold.co.in</div>
                 </div>
               </div>
-              
+
               <div className="flex flex-col xs:flex-row items-center xs:items-start justify-center lg:justify-start">
                 <MapPin className="h-4 w-4 xs:h-5 xs:w-5 text-yellow-500 mb-2 xs:mb-0 xs:mr-3 xs:mt-1" />
                 <div>
@@ -181,27 +180,27 @@ const Footer = () => {
 
           {/* Social Links */}
           <div className="flex justify-center space-x-4 xs:space-x-6 mt-6 xs:mt-8">
-            <a 
-              href="https://www.facebook.com/jrbgold" 
-              target="_blank" 
+            <a
+              href="https://www.facebook.com/jrbgold"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-ivory/80 hover:text-yellow-500 transition-colors"
               aria-label="Facebook"
             >
               <Facebook className="h-5 w-5 xs:h-6 xs:w-6" />
             </a>
-            <a 
-              href="https://www.instagram.com/jrbgold" 
-              target="_blank" 
+            <a
+              href="https://www.instagram.com/jrbgold"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-ivory/80 hover:text-yellow-500 transition-colors"
               aria-label="Instagram"
             >
               <Instagram className="h-5 w-5 xs:h-6 xs:w-6" />
             </a>
-            <a 
-              href="https://wa.me/918220421317" 
-              target="_blank" 
+            <a
+              href="https://wa.me/918220421317"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-ivory/80 hover:text-yellow-500 transition-colors"
               aria-label="WhatsApp"
@@ -214,7 +213,7 @@ const Footer = () => {
           <div className="border-t border-ivory/20 mt-6 xs:mt-8 pt-6 xs:pt-8">
             <div className="flex flex-wrap justify-center gap-3 xs:gap-4 lg:gap-6 text-xs xs:text-sm text-ivory/80">
               {helpLinks.map((link) => (
-                <a 
+                <a
                   key={link.name}
                   href={link.href}
                   className="hover:text-yellow-500 transition-colors"

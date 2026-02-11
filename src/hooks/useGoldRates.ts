@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 
 interface GoldRates {
-  gold22k: number;
   gold24k: number;
+  gold22k: number;
+  gold18k: number;
+  gold14k: number;
+  platinum: number;
   silver: number;
   lastUpdated: string;
   isLoading: boolean;
@@ -14,18 +17,24 @@ const API_KEY = import.meta.env.VITE_METALPRICE_API_KEY || 'YOUR_API_KEY_HERE';
 const BASE_URL = 'https://api.metalpriceapi.com/v1';
 const USD_TO_INR = parseFloat(import.meta.env.VITE_USD_TO_INR_RATE) || 83.5;
 
-// Fallback rates (static) - Updated with current India rates as of August 28, 2025
+// Fallback rates (static) - Updated with current India rates as of February 11, 2026
 const FALLBACK_RATES = {
-  gold22k: 9405,  // ₹9,405 per gram (22K gold)
-  gold24k: 10267, // ₹10,267 per gram (24K gold)
-  silver: 130,    // ₹130 per gram
+  gold24k: 15862, // ₹15,862 per gram (24K gold)
+  gold22k: 14530, // ₹14,530 per gram (22K gold)
+  gold18k: 11897, // ₹11,897 per gram (18K gold)
+  gold14k: 9253,  // ₹9,253 per gram (14K gold)
+  platinum: 7505, // ₹7,505 per gram (Platinum)
+  silver: 300,    // ₹300 per gram
   lastUpdated: new Date().toISOString(),
 };
 
 export const useGoldRates = (): GoldRates => {
   const [rates, setRates] = useState<GoldRates>({
-    gold22k: FALLBACK_RATES.gold22k,
     gold24k: FALLBACK_RATES.gold24k,
+    gold22k: FALLBACK_RATES.gold22k,
+    gold18k: FALLBACK_RATES.gold18k,
+    gold14k: FALLBACK_RATES.gold14k,
+    platinum: FALLBACK_RATES.platinum,
     silver: FALLBACK_RATES.silver,
     lastUpdated: FALLBACK_RATES.lastUpdated,
     isLoading: true,
@@ -73,8 +82,11 @@ export const useGoldRates = (): GoldRates => {
       const gold22kPrice = goldPricePerGramINR * 0.9167;
 
       setRates({
-        gold22k: Math.round(gold22kPrice),
         gold24k: Math.round(goldPricePerGramINR),
+        gold22k: Math.round(goldPricePerGramINR * 0.9167),
+        gold18k: Math.round(goldPricePerGramINR * 0.75),
+        gold14k: Math.round(goldPricePerGramINR * 0.583),
+        platinum: Math.round(goldPricePerGramINR * 0.47), // Rough estimation if API doesn't provide it
         silver: Math.round(silverPricePerGramINR),
         lastUpdated: new Date().toISOString(),
         isLoading: false,
@@ -83,7 +95,7 @@ export const useGoldRates = (): GoldRates => {
 
     } catch (error) {
       console.error('Error fetching gold rates:', error);
-      
+
       // Use fallback rates on error
       setRates({
         ...FALLBACK_RATES,
@@ -108,8 +120,11 @@ export const useGoldRates = (): GoldRates => {
 // Alternative hook for IBJA API (India-specific)
 export const useIBJAGoldRates = (): GoldRates => {
   const [rates, setRates] = useState<GoldRates>({
-    gold22k: FALLBACK_RATES.gold22k,
     gold24k: FALLBACK_RATES.gold24k,
+    gold22k: FALLBACK_RATES.gold22k,
+    gold18k: FALLBACK_RATES.gold18k,
+    gold14k: FALLBACK_RATES.gold14k,
+    platinum: FALLBACK_RATES.platinum,
     silver: FALLBACK_RATES.silver,
     lastUpdated: FALLBACK_RATES.lastUpdated,
     isLoading: true,
@@ -122,7 +137,7 @@ export const useIBJAGoldRates = (): GoldRates => {
 
       // IBJA API endpoint (requires subscription)
       const IBJA_API_KEY = import.meta.env.VITE_IBJA_API_KEY || 'YOUR_IBJA_API_KEY_HERE';
-      
+
       if (IBJA_API_KEY === 'YOUR_IBJA_API_KEY_HERE') {
         console.warn('IBJA API key not configured. Using fallback rates.');
         setRates({
@@ -145,8 +160,11 @@ export const useIBJAGoldRates = (): GoldRates => {
       const data = await response.json();
 
       setRates({
-        gold22k: data.gold_22k || FALLBACK_RATES.gold22k,
         gold24k: data.gold_24k || FALLBACK_RATES.gold24k,
+        gold22k: data.gold_22k || FALLBACK_RATES.gold22k,
+        gold18k: data.gold_18k || FALLBACK_RATES.gold18k,
+        gold14k: data.gold_14k || FALLBACK_RATES.gold14k,
+        platinum: data.platinum || FALLBACK_RATES.platinum,
         silver: data.silver || FALLBACK_RATES.silver,
         lastUpdated: data.last_updated || new Date().toISOString(),
         isLoading: false,
@@ -155,7 +173,7 @@ export const useIBJAGoldRates = (): GoldRates => {
 
     } catch (error) {
       console.error('Error fetching IBJA gold rates:', error);
-      
+
       setRates({
         ...FALLBACK_RATES,
         isLoading: false,

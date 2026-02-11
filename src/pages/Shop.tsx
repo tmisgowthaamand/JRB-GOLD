@@ -32,14 +32,14 @@ const Shop: React.FC<ShopProps> = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const { addToCart, toggleFavorite, favorites } = useCart();
-  
+
   const [filters, setFilters] = useState({
     categories: [] as string[],
     purities: [] as string[],
   });
-  
+
   // Quantity state for each product
-  const [quantities, setQuantities] = useState<{[key: string]: number}>({});
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
 
   const products = [
     {
@@ -48,10 +48,10 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "bangles",
       purity: "22k",
-      price: 82543,
-      compareAtPrice: 85000,
+      price: 125553,
+      compareAtPrice: 130000,
       weight: 8.5,
-      makingCharges: 2500,
+      makingCharges: 2048,
       image: productBangle,
       rating: { avg: 4.8, count: 24 },
       badges: ["no-wastage", "new"],
@@ -60,13 +60,13 @@ const Shop: React.FC<ShopProps> = () => {
     },
     {
       id: "2",
-      name: "Pure Gold Coin - Lakshmi",
+      name: "Pure Gold Gold Coin - Lakshmi",
       category: "coins",
       subcategory: "religious",
       purity: "24k",
-      price: 20876,
+      price: 31924,
       weight: 2.0,
-      makingCharges: 150,
+      makingCharges: 200,
       image: productCoin,
       rating: { avg: 4.9, count: 156 },
       badges: ["certified"],
@@ -79,9 +79,9 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "necklaces",
       purity: "pure-silver",
-      price: 4050,
+      price: 8000,
       weight: 25.0,
-      makingCharges: 800,
+      makingCharges: 500,
       image: "/silver necklace.jpg",
       rating: { avg: 4.7, count: 43 },
       badges: ["handcrafted"],
@@ -94,10 +94,10 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "rings",
       purity: "22k",
-      price: 60114,
-      compareAtPrice: 35200,
+      price: 91286,
+      compareAtPrice: 95000,
       weight: 6.2,
-      makingCharges: 1800,
+      makingCharges: 1200,
       image: "/gold ring set.jpg",
       rating: { avg: 4.8, count: 67 },
       badges: ["no-wastage", "sale"],
@@ -110,9 +110,9 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "chains",
       purity: "22k",
-      price: 101235,
+      price: 154365,
       weight: 10.5,
-      makingCharges: 3200,
+      makingCharges: 1800,
       image: "/Gold Chain - Rope Design.jpg",
       rating: { avg: 4.9, count: 89 },
       badges: ["premium"],
@@ -125,7 +125,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "bracelets",
       purity: "pure-silver",
-      price: 17161,
+      price: 41300,
       weight: 131.0,
       makingCharges: 2000,
       image: "/Silver Bracelet.jpg",
@@ -140,7 +140,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "gold",
       subcategory: "earrings",
       purity: "22k",
-      price: 52638,
+      price: 79962,
       weight: 5.4,
       makingCharges: 1500,
       image: productCoin,
@@ -155,7 +155,7 @@ const Shop: React.FC<ShopProps> = () => {
       category: "silver",
       subcategory: "anklets",
       purity: "pure-silver",
-      price: 5060,
+      price: 10500,
       weight: 32.0,
       makingCharges: 900,
       image: "/silver necklace.jpg",
@@ -263,7 +263,7 @@ const Shop: React.FC<ShopProps> = () => {
     const purityMatch = filters.purities.length === 0 || filters.purities.includes(product.purity);
     const priceMatch = product.price >= priceRange[0] && product.price <= priceRange[1];
     const weightMatch = product.weight >= weightRange[0] && product.weight <= weightRange[1];
-    
+
     return categoryMatch && purityMatch && priceMatch && weightMatch;
   });
 
@@ -362,7 +362,7 @@ const Shop: React.FC<ShopProps> = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="mb-8">
@@ -396,7 +396,7 @@ const Shop: React.FC<ShopProps> = () => {
                   <h3 className="font-semibold text-foreground mb-2">Gold Chain - Rope Design</h3>
                   <p className="text-sm text-muted-foreground mb-2">22k • 10.5g</p>
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold text-gold">₹1,01,235</div>
+                    <div className="text-lg font-bold text-gold">₹1,54,365</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                       4.9 (89)
@@ -423,7 +423,7 @@ const Shop: React.FC<ShopProps> = () => {
                   <h3 className="font-semibold text-foreground mb-2">Silver Bracelet Set</h3>
                   <p className="text-sm text-muted-foreground mb-2">Pure Silver • 131.0g</p>
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold text-gold">₹17,161</div>
+                    <div className="text-lg font-bold text-gold">₹41,300</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                       4.6 (32)
@@ -450,7 +450,7 @@ const Shop: React.FC<ShopProps> = () => {
                   <h3 className="font-semibold text-foreground mb-2">Silver Designer Necklace</h3>
                   <p className="text-sm text-muted-foreground mb-2">Pure Silver • 25.0g</p>
                   <div className="flex items-center justify-between">
-                    <div className="text-lg font-bold text-gold">₹4,050</div>
+                    <div className="text-lg font-bold text-gold">₹8,000</div>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                       4.7 (43)
@@ -572,7 +572,7 @@ const Shop: React.FC<ShopProps> = () => {
             )}
 
             {/* Products Grid/List */}
-            <div className={viewMode === 'grid' 
+            <div className={viewMode === 'grid'
               ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6 lg:gap-8"
               : "space-y-4 sm:space-y-6"
             }>
@@ -588,7 +588,7 @@ const Shop: React.FC<ShopProps> = () => {
                             alt={product.name}
                             className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
                           />
-                          
+
                           {product.badges && product.badges.length > 0 && (
                             <div className="absolute top-3 left-3 flex flex-wrap gap-1">
                               {product.badges.map((badge) => (
@@ -614,16 +614,16 @@ const Shop: React.FC<ShopProps> = () => {
 
                           <div className="absolute inset-0 bg-charcoal/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                             <div className="flex space-x-2">
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="secondary"
                                 onClick={() => handleViewProduct(product)}
                               >
                                 <Eye className="h-4 w-4 mr-1" />
                                 View
                               </Button>
-                              <Button 
-                                size="sm" 
+                              <Button
+                                size="sm"
                                 variant="hero"
                                 onClick={() => handleAddToCart(product)}
                               >
@@ -649,11 +649,10 @@ const Shop: React.FC<ShopProps> = () => {
                                   {[...Array(5)].map((_, i) => (
                                     <Star
                                       key={i}
-                                      className={`h-3 w-3 ${
-                                        i < Math.floor(product.rating.avg)
-                                          ? "text-gold fill-gold"
-                                          : "text-muted-foreground"
-                                      }`}
+                                      className={`h-3 w-3 ${i < Math.floor(product.rating.avg)
+                                        ? "text-gold fill-gold"
+                                        : "text-muted-foreground"
+                                        }`}
                                     />
                                   ))}
                                 </div>
@@ -685,36 +684,40 @@ const Shop: React.FC<ShopProps> = () => {
                             </div>
                           </div>
 
-                          {/* Quantity Selector */}
-                          <div className="flex items-center justify-center space-x-2 mb-2">
+                          {/* Actions: Quantity and Add to Cart */}
+                          <div className="flex items-center gap-2 mt-auto">
+                            {/* Quantity Selector */}
+                            <div className="flex items-center bg-white border-2 border-gold/30 rounded-lg h-9 sm:h-10 px-0.5 sm:px-1">
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => updateQuantity(product.id, getQuantity(product.id) - 1)}
+                                disabled={getQuantity(product.id) <= 1}
+                                className="h-6 w-6 sm:h-8 sm:w-8 hover:bg-gold/10 hover:text-gold transition-colors"
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <span className="w-5 sm:w-8 text-center font-bold text-xs sm:text-sm">{getQuantity(product.id)}</span>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => updateQuantity(product.id, getQuantity(product.id) + 1)}
+                                className="h-6 w-6 sm:h-8 sm:w-8 hover:bg-gold/10 hover:text-gold transition-colors"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                            </div>
+
+                            {/* Add to Cart Button */}
                             <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updateQuantity(product.id, getQuantity(product.id) - 1)}
-                              disabled={getQuantity(product.id) <= 1}
-                              className="h-7 w-7 p-0"
+                              className="flex-1 h-9 sm:h-10 px-2 text-[10px] sm:text-xs font-bold border-2 border-gold/50 hover:bg-gold hover:text-charcoal transition-all bg-transparent text-charcoal shadow-sm"
+                              variant="outline-gold"
+                              onClick={() => handleAddToCart(product)}
                             >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-6 text-center text-sm font-medium">{getQuantity(product.id)}</span>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => updateQuantity(product.id, getQuantity(product.id) + 1)}
-                              className="h-7 w-7 p-0"
-                            >
-                              <Plus className="h-3 w-3" />
+                              <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                              ADD TO CART
                             </Button>
                           </div>
-
-                          <Button 
-                            className="w-full text-xs py-1.5 sm:py-2" 
-                            variant="outline-gold"
-                            onClick={() => handleAddToCart(product)}
-                          >
-                            <ShoppingCart className="h-3 w-3 mr-1" />
-                            Add To Cart
-                          </Button>
                         </div>
                       </>
                     ) : (
@@ -742,7 +745,7 @@ const Shop: React.FC<ShopProps> = () => {
                             )}
                           </div>
                         </div>
-                        
+
                         <div className="flex-1 flex flex-col justify-between">
                           <div className="flex-1">
                             <div className="flex justify-between items-start mb-3">
@@ -752,7 +755,7 @@ const Shop: React.FC<ShopProps> = () => {
                                 </h3>
                                 <p className="text-sm text-muted-foreground">{product.purity} • SKU: {product.sku}</p>
                               </div>
-                              
+
                               <div className="flex flex-col items-end">
                                 <div className="flex items-center space-x-2 mb-1">
                                   <span className="text-xl font-bold text-foreground">
@@ -783,11 +786,10 @@ const Shop: React.FC<ShopProps> = () => {
                                   {[...Array(5)].map((_, i) => (
                                     <Star
                                       key={i}
-                                      className={`h-4 w-4 ${
-                                        i < Math.floor(product.rating.avg)
-                                          ? "text-gold fill-gold"
-                                          : "text-muted-foreground"
-                                      }`}
+                                      className={`h-4 w-4 ${i < Math.floor(product.rating.avg)
+                                        ? "text-gold fill-gold"
+                                        : "text-muted-foreground"
+                                        }`}
                                     />
                                   ))}
                                 </div>
@@ -821,23 +823,23 @@ const Shop: React.FC<ShopProps> = () => {
                           </div>
 
                           <div className="flex items-center justify-end space-x-3 mt-auto pt-4">
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="ghost"
                               onClick={() => handleToggleFavorite(product.id)}
                             >
                               <Heart className={`h-4 w-4 ${favorites.includes(product.id) ? "fill-red-500 text-red-500" : ""}`} />
                             </Button>
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="secondary"
                               onClick={() => handleViewProduct(product)}
                             >
                               <Eye className="h-4 w-4 mr-2" />
                               View Details
                             </Button>
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="hero"
                               onClick={() => handleAddToCart(product)}
                             >
@@ -881,7 +883,7 @@ const Shop: React.FC<ShopProps> = () => {
                   {selectedProduct.name}
                 </DialogTitle>
               </DialogHeader>
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 {/* Product Image */}
                 <div className="relative">
@@ -918,11 +920,10 @@ const Shop: React.FC<ShopProps> = () => {
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-4 w-4 ${
-                              i < Math.floor(selectedProduct.rating.avg)
-                                ? "text-gold fill-gold"
-                                : "text-muted-foreground"
-                            }`}
+                            className={`h-4 w-4 ${i < Math.floor(selectedProduct.rating.avg)
+                              ? "text-gold fill-gold"
+                              : "text-muted-foreground"
+                              }`}
                           />
                         ))}
                       </div>
@@ -993,15 +994,15 @@ const Shop: React.FC<ShopProps> = () => {
 
                   {/* Action Buttons */}
                   <div className="flex space-x-3 pt-4">
-                    <Button 
-                      className="flex-1" 
+                    <Button
+                      className="flex-1"
                       variant="hero"
                       onClick={() => handleAddToCart(selectedProduct)}
                     >
                       <ShoppingCart className="h-4 w-4 mr-2" />
                       Add {getQuantity(selectedProduct.id)} to Cart
                     </Button>
-                    <Button 
+                    <Button
                       variant="outline"
                       onClick={() => handleToggleFavorite(selectedProduct.id)}
                     >
@@ -1014,7 +1015,7 @@ const Shop: React.FC<ShopProps> = () => {
           )}
         </DialogContent>
       </Dialog>
-      
+
       <Footer />
     </div>
   );

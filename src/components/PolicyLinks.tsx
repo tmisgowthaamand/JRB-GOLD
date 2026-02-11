@@ -35,7 +35,7 @@ Your information helps us to:
 • Process orders, invoices, and payments securely
 • Provide shipping and delivery updates
 • Offer customer service and after-sales support
-• Customize offers or savings schemes (with your consent)
+• Customize offers or exclusive rewards (with your consent)
 • Share promotions, updates, or newsletters (optional opt-in)
 • Improve our website and in-store experience
 • Comply with legal, tax, and regulatory requirements

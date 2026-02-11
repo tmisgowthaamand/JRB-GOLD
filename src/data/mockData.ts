@@ -7,8 +7,8 @@ export const mockProducts: Product[] = [
     name: 'Traditional Gold Bangle',
     category: 'Bangles',
     subcategory: 'Traditional',
-    price: 82543, // 8.5g * ₹9,470 (22K) + ₹2,048 making charges
-    originalPrice: 85000,
+    price: 125553, // 8.5g * ₹14,530 (22K) + ₹2,048 making charges
+    originalPrice: 130000,
     image: '/product-bangle.jpg',
     images: ['/product-bangle.jpg'],
     description: 'Exquisite traditional gold bangle crafted with intricate designs',
@@ -26,8 +26,8 @@ export const mockProducts: Product[] = [
     name: 'Silver Necklace',
     category: 'Necklaces',
     subcategory: 'Silver',
-    price: 3775, // 25g * ₹131 (Pure Silver) + ₹500 making charges
-    originalPrice: 4100,
+    price: 8000, // 25g * ₹300 (Pure Silver) + ₹500 making charges
+    originalPrice: 8500,
     image: '/silver necklace.jpg',
     images: ['/silver necklace.jpg'],
     description: 'Elegant pure silver necklace with contemporary design',
@@ -45,8 +45,8 @@ export const mockProducts: Product[] = [
     name: 'Gold Ring Set',
     category: 'Rings',
     subcategory: 'Sets',
-    price: 60114, // 6.2g * ₹9,470 (22K) + ₹1,200 making charges
-    originalPrice: 35200,
+    price: 91286, // 6.2g * ₹14,530 (22K) + ₹1,200 making charges
+    originalPrice: 95000,
     image: '/gold ring set.jpg',
     images: ['/gold ring set.jpg'],
     description: 'Beautiful 22K gold ring set with elegant craftsmanship',
@@ -64,8 +64,8 @@ export const mockProducts: Product[] = [
     name: 'Gold Chain',
     category: 'Chains',
     subcategory: 'Traditional',
-    price: 101235, // 10.5g * ₹9,470 (22K) + ₹1,800 making charges
-    originalPrice: 105000,
+    price: 154365, // 10.5g * ₹14,530 (22K) + ₹1,800 making charges
+    originalPrice: 160000,
     image: '/Gold Chain - Rope Design.jpg',
     images: ['/Gold Chain - Rope Design.jpg'],
     description: 'Elegant 22K gold chain with premium rope design',
@@ -83,7 +83,7 @@ export const mockProducts: Product[] = [
     name: 'Gold Coin - Lakshmi',
     category: 'Coins',
     subcategory: 'Religious',
-    price: 20876, // 2g * ₹10,338 (24K) + ₹200 making charges
+    price: 31924, // 2g * ₹15,862 (24K) + ₹200 making charges
     image: '/product-coin.jpg',
     images: ['/product-coin.jpg'],
     description: 'Pure gold coin featuring Goddess Lakshmi design',
@@ -96,12 +96,12 @@ export const mockProducts: Product[] = [
     isNew: true
   },
   {
-    id: 'prod-005',
+    id: 'prod-006',
     name: 'Diamond Studded Necklace',
     category: 'Necklaces',
     subcategory: 'Diamond',
-    price: 267675, // 35g * ₹7,648 (18K ≈ 81.3% of 24K) + ₹8,500 making charges
-    originalPrice: 285000,
+    price: 424895, // 35g * ₹11,897 (18K) + ₹8,500 making charges
+    originalPrice: 450000,
     image: '/product-necklace.jpg',
     images: ['/product-necklace.jpg'],
     description: 'Elegant diamond studded gold necklace for special occasions',

@@ -7,12 +7,12 @@ const PrivacyPolicy = () => {
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Privacy Policy</h1>
           <p className="text-lg text-gray-600 mb-8">Your Privacy, Our Promise of Transparency</p>
-          
+
           <div className="prose prose-gray max-w-none">
             <p className="text-sm leading-relaxed mb-6">
               At JRB Gold Pvt Limited, your trust is our most valuable asset. Since our founding in 2016, we've built our reputation on offering genuine, high-quality gold and silver jewelry at fair prices—with honesty and transparency at the heart of every transaction. Protecting your privacy and safeguarding the information you share with us is an extension of these values.
             </p>
-            
+
             <p className="text-sm leading-relaxed mb-6">
               This Privacy Policy explains what data we collect, how we use it, how it's protected, and your rights as a valued customer.
             </p>
@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
               <li>• Process orders, invoices, and payments securely</li>
               <li>• Provide shipping and delivery updates</li>
               <li>• Offer customer service and after-sales support</li>
-              <li>• Customize offers or savings schemes (with your consent)</li>
+              <li>• Customize offers or exclusive rewards (with your consent)</li>
               <li>• Share promotions, updates, or newsletters (optional opt-in)</li>
               <li>• Improve our website and in-store experience</li>
               <li>• Comply with legal, tax, and regulatory requirements</li>

@@ -41,10 +41,10 @@ const ProductDetail = () => {
       category: "gold",
       subcategory: "bangles",
       purity: "22k",
-      price: 82543,
-      compareAtPrice: 85000,
+      price: 125553,
+      compareAtPrice: 130000,
       weight: 8.5,
-      makingCharges: 2500,
+      makingCharges: 2048,
       image: productBangle,
       rating: { avg: 4.8, count: 24 },
       badges: ["no-wastage", "new"],
@@ -57,9 +57,9 @@ const ProductDetail = () => {
       category: "coins",
       subcategory: "religious",
       purity: "24k",
-      price: 20734,
+      price: 31924,
       weight: 2.0,
-      makingCharges: 150,
+      makingCharges: 200,
       image: productCoin,
       rating: { avg: 4.9, count: 156 },
       badges: ["certified"],
@@ -72,9 +72,9 @@ const ProductDetail = () => {
       category: "silver",
       subcategory: "necklaces",
       purity: "pure-silver",
-      price: 3200,
+      price: 8000,
       weight: 25.0,
-      makingCharges: 800,
+      makingCharges: 500,
       image: productNecklace,
       rating: { avg: 4.7, count: 43 },
       badges: ["handcrafted"],
@@ -87,10 +87,10 @@ const ProductDetail = () => {
       category: "gold",
       subcategory: "rings",
       purity: "22k",
-      price: 32400,
-      compareAtPrice: 35200,
+      price: 91286,
+      compareAtPrice: 95000,
       weight: 6.2,
-      makingCharges: 1800,
+      makingCharges: 1200,
       image: productBangle,
       rating: { avg: 4.8, count: 67 },
       badges: ["no-wastage", "sale"],
@@ -103,9 +103,9 @@ const ProductDetail = () => {
       category: "gold",
       subcategory: "chains",
       purity: "22k",
-      price: 98752.5,
+      price: 154365,
       weight: 10.5,
-      makingCharges: 3200,
+      makingCharges: 1800,
       image: productNecklace,
       rating: { avg: 4.9, count: 89 },
       badges: ["premium"],
@@ -118,7 +118,7 @@ const ProductDetail = () => {
       category: "gold",
       subcategory: "earrings",
       purity: "22k",
-      price: 28900,
+      price: 79962,
       weight: 5.4,
       makingCharges: 1500,
       image: productCoin,
@@ -199,8 +199,8 @@ const ProductDetail = () => {
       {/* Header */}
       <div className="bg-background border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={() => navigate(-1)}
             className="mb-4"
           >
@@ -252,11 +252,10 @@ const ProductDetail = () => {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-5 w-5 ${
-                      i < Math.floor(product.rating.avg)
+                    className={`h-5 w-5 ${i < Math.floor(product.rating.avg)
                         ? "text-gold fill-gold"
                         : "text-muted-foreground"
-                    }`}
+                      }`}
                   />
                 ))}
               </div>
@@ -346,8 +345,8 @@ const ProductDetail = () => {
 
               {/* Action Buttons */}
               <div className="flex space-x-4">
-                <Button 
-                  className="flex-1" 
+                <Button
+                  className="flex-1"
                   variant="hero"
                   onClick={handleAddToCart}
                   size="lg"
@@ -355,8 +354,8 @@ const ProductDetail = () => {
                   <ShoppingCart className="h-5 w-5 mr-2" />
                   Add {quantity} to Cart
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="lg"
                   onClick={handleToggleFavorite}
                   className={favorites.includes(product.id) ? "bg-red-50 text-red-500 border-red-200" : ""}

@@ -41,8 +41,8 @@ const Contact = () => {
       title: 'Visit Our Store',
       primary: 'Flagship Store',
       secondary: (
-        <a 
-          href="/location" 
+        <a
+          href="/location"
           className="hover:text-gold transition-colors duration-200"
         >
           No: 1539, 1st Floor, Soundar Complex, Vellore Road<br />
@@ -69,14 +69,14 @@ const Contact = () => {
     { value: 'general', label: 'General Inquiry' },
     { value: 'sales', label: 'Sales & Products' },
     { value: 'exchange', label: 'Gold Exchange' },
-    { value: 'schemes', label: 'Gold Savings Schemes' },
+
     { value: 'services', label: 'Services' },
     { value: 'support', label: 'Customer Support' },
   ];
 
   const quickLinks = [
     { title: 'Gold Exchange Calculator', description: 'Check current exchange rates', action: 'Calculate Now' },
-    { title: 'Scheme Enrollment', description: 'Join our gold savings plans', action: 'Enroll Today' },
+
     { title: 'Product Catalog', description: 'Browse our jewelry collection', action: 'View Catalog' },
     { title: 'Store Visit', description: 'Schedule an appointment', action: 'Book Now' },
   ];
@@ -84,7 +84,7 @@ const Contact = () => {
   const faqs = [
     {
       question: 'What are your current gold rates?',
-      answer: 'Our gold rates are updated daily based on market prices. Current 22k rate is ₹5,847/g. Please call for exact rates as they change throughout the day.'
+      answer: 'Our gold rates are updated daily based on market prices. Current 22k rate is ₹14,530/g. Please call for exact rates as they change throughout the day.'
     },
     {
       question: 'Do you provide home delivery?',
@@ -94,10 +94,7 @@ const Contact = () => {
       question: 'What documents do I need for gold exchange?',
       answer: 'You need a valid ID proof (Aadhar/PAN/Passport) and the original purchase receipt if available. We accept jewelry without receipts too.'
     },
-    {
-      question: 'Can I cancel my gold savings scheme?',
-      answer: 'Yes, you can cancel after completing minimum 6 months. You will receive the paid amount back with applicable deductions as per terms.'
-    },
+
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -122,7 +119,7 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main>
         {/* Hero Section */}
         <section className="bg-gradient-surface py-16">
@@ -132,7 +129,7 @@ const Contact = () => {
                 Contact Us
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Get in touch with our expert team for personalized assistance with all your 
+                Get in touch with our expert team for personalized assistance with all your
                 jewelry needs, from purchases to services and everything in between.
               </p>
               <div className="divider-gold mt-6 max-w-24 mx-auto" />
@@ -162,7 +159,7 @@ const Contact = () => {
             <div className="bg-white rounded-xl shadow-lg p-8 mb-12 border border-gray-100">
               <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-3">Trending Products</h2>
               <p className="text-gray-600 text-base mb-8">Search and explore our most popular jewelry collections</p>
-              
+
               <div className="relative max-w-2xl mx-auto">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Search className="h-5 w-5 text-gray-400" />
@@ -173,7 +170,7 @@ const Contact = () => {
                   className="block w-full pl-10 pr-3 py-4 text-base border-2 border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all duration-200"
                 />
               </div>
-              
+
               <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   'Gold Bangles',
@@ -181,7 +178,7 @@ const Contact = () => {
                   'Temple Jewelry',
                   'Antique Necklaces'
                 ].map((category, index) => (
-                  <div 
+                  <div
                     key={index}
                     className="border border-gray-200 rounded-lg p-3 text-center cursor-pointer hover:bg-gray-50 transition-colors"
                   >
@@ -213,9 +210,9 @@ const Contact = () => {
                       </div>
                     </div>
                     {info.action && info.actionLink && (
-                      <a 
-                        href={info.actionLink} 
-                        target="_blank" 
+                      <a
+                        href={info.actionLink}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center px-4 py-2 bg-gold text-white rounded-md hover:bg-amber-600 transition-colors duration-200 text-sm font-medium shadow-sm"
                       >
@@ -319,9 +316,9 @@ const Contact = () => {
                         />
                       </div>
 
-                      <Button 
-                        type="submit" 
-                        className="w-full" 
+                      <Button
+                        type="submit"
+                        className="w-full"
                         variant="hero"
                         disabled={isSubmitting}
                       >
@@ -358,11 +355,11 @@ const Contact = () => {
                           Visit Our Flagship Store
                         </h3>
                         <p className="text-muted-foreground text-sm">
-                        No: 1539, 1st Floor,
-                        Soundar Complex, Vellore Road<br />
-                        Near Anna Arch
-                        Thiruvannamalai
-                        Tamil Nadu - 606604
+                          No: 1539, 1st Floor,
+                          Soundar Complex, Vellore Road<br />
+                          Near Anna Arch
+                          Thiruvannamalai
+                          Tamil Nadu - 606604
                         </p>
                         <Button variant="outline-gold" size="sm" className="mt-4">
                           Get Directions
@@ -454,7 +451,7 @@ const Contact = () => {
             <p className="text-lg text-ivory/80 mb-8">
               Our customer support team is available to help you with urgent queries and assistance
             </p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-ivory/10 p-6 rounded-lg border border-ivory/20">
                 <Phone className="h-8 w-8 text-gold mx-auto mb-3" />
@@ -464,7 +461,7 @@ const Contact = () => {
                   Call Now
                 </Button>
               </div>
-              
+
               <div className="bg-ivory/10 p-6 rounded-lg border border-ivory/20">
                 <MessageCircle className="h-8 w-8 text-gold mx-auto mb-3" />
                 <h3 className="font-semibold text-ivory mb-2">Live Chat</h3>
@@ -473,7 +470,7 @@ const Contact = () => {
                   Start Chat
                 </Button>
               </div>
-              
+
               <div className="bg-ivory/10 p-6 rounded-lg border border-ivory/20">
                 <Mail className="h-8 w-8 text-gold mx-auto mb-3" />
                 <h3 className="font-semibold text-ivory mb-2">Priority Email</h3>

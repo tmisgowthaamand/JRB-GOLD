@@ -28,13 +28,13 @@ interface SearchBoxProps {
   onProductSelect?: (product: Product) => void;
   placeholder?: string;
   className?: string;
-  trendingProducts?: Array<{id: string; name: string; category: string; price: number; image: string}>;
+  trendingProducts?: Array<{ id: string; name: string; category: string; price: number; image: string }>;
   showTrending?: boolean;
 }
 
-const SearchBox = ({ 
-  onProductSelect, 
-  placeholder = "Search jewelry...", 
+const SearchBox = ({
+  onProductSelect,
+  placeholder = "Search jewelry...",
   className = "",
   trendingProducts = [],
   showTrending = false
@@ -54,10 +54,10 @@ const SearchBox = ({
       category: "Bangles",
       subcategory: "Traditional",
       purity: "22K",
-      price: 237625,
+      price: 228263, // 15.5g * ₹14,530 (22K) + ₹3,048 making charges
       compareAtPrice: 250000,
       weight: 15.5,
-      makingCharges: 3000,
+      makingCharges: 3048,
       image: productBangle,
       rating: { avg: 4.5, count: 128 },
       badges: ["bestseller", "new"],
@@ -65,14 +65,14 @@ const SearchBox = ({
       sku: "GB001"
     },
     {
-      id: "2", 
+      id: "2",
       name: "Gold Coin 10g",
       category: "Coins",
       subcategory: "Investment",
       purity: "24K",
-      price: 65000,
+      price: 158820, // 10g * ₹15,862 (24K) + ₹200 making charges
       weight: 10,
-      makingCharges: 500,
+      makingCharges: 200,
       image: productCoin,
       rating: { avg: 4.8, count: 89 },
       badges: ["investment"],
@@ -82,13 +82,13 @@ const SearchBox = ({
     {
       id: "3",
       name: "Diamond Necklace Set",
-      category: "Necklaces", 
+      category: "Necklaces",
       subcategory: "Bridal",
       purity: "18K",
-      price: 267675,
-      compareAtPrice: 285000,
+      price: 315443, // 25.8g * ₹11,897 (18K) + ₹8,500 making charges
+      compareAtPrice: 350000,
       weight: 25.8,
-      makingCharges: 8000,
+      makingCharges: 8500,
       image: productNecklace,
       rating: { avg: 4.9, count: 45 },
       badges: ["premium", "bridal"],
@@ -136,7 +136,7 @@ const SearchBox = ({
     setIsOpen(searchQuery.length > 0 || showTrending);
   };
 
-  const handleProductClick = (product: Product | {id: string; name: string; category: string; price: number; image: string}) => {
+  const handleProductClick = (product: Product | { id: string; name: string; category: string; price: number; image: string }) => {
     setIsOpen(false);
     setSearchQuery("");
     if (onProductSelect) {
@@ -172,7 +172,7 @@ const SearchBox = ({
           </Button>
         )}
       </div>
-      
+
       {/* Search Results Dropdown */}
       {isOpen && (filteredProducts.length > 0 || (showTrending && trendingProducts && trendingProducts.length > 0)) && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-md border-2 border-yellow-200 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-200">
@@ -185,11 +185,10 @@ const SearchBox = ({
               {filteredProducts.map((product, index) => (
                 <div
                   key={product.id}
-                  className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 ${
-                    index === 0 
-                      ? 'bg-yellow-50 border-l-4 border-l-yellow-400 shadow-sm' 
+                  className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 ${index === 0
+                      ? 'bg-yellow-50 border-l-4 border-l-yellow-400 shadow-sm'
                       : 'hover:bg-yellow-50/50 hover:border-l-4 hover:border-l-yellow-300'
-                  }`}
+                    }`}
                   onClick={() => handleProductClick(product)}
                 >
                   <div className="flex items-center space-x-3">
@@ -218,11 +217,10 @@ const SearchBox = ({
               {trendingProducts.map((product, index) => (
                 <div
                   key={product.id}
-                  className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 ${
-                    index === 0 
-                      ? 'bg-yellow-50 border-l-4 border-l-yellow-400 shadow-sm' 
+                  className={`px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 ${index === 0
+                      ? 'bg-yellow-50 border-l-4 border-l-yellow-400 shadow-sm'
                       : 'hover:bg-yellow-50/50 hover:border-l-4 hover:border-l-yellow-300'
-                  }`}
+                    }`}
                   onClick={() => handleProductClick(product)}
                 >
                   <div className="flex items-center space-x-3">
@@ -245,7 +243,7 @@ const SearchBox = ({
           ) : null}
         </div>
       )}
-      
+
       {/* Empty State */}
       {isOpen && searchQuery && filteredProducts.length === 0 && (
         <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-background border border-border rounded-md shadow-lg">

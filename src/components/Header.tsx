@@ -21,7 +21,7 @@ const Header = () => {
   const [userInitials, setUserInitials] = useState('');
   const { cart, favorites } = useCart();
   const navigate = useNavigate();
-  const { gold22k, silver, isLoading, error } = useGoldRates();
+  const { gold24k, gold22k, silver, isLoading, error } = useGoldRates();
 
   // Check if user is logged in (in a real app, this would come from your auth context)
   useEffect(() => {
@@ -59,7 +59,6 @@ const Header = () => {
   };
 
   const navigationLinks = [
-    { name: "Schemes", href: "/schemes" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
@@ -74,15 +73,15 @@ const Header = () => {
   const serviceCategories = [
     { name: "Exchange Old Gold", href: "/services/exchange-old-gold" },
     { name: "Re-Pledge Transfer", href: "/services/re-pledge-transfer" },
-    { name: "Gold Savings Scheme", href: "/services/gold-savings-scheme" },
+
     { name: "Appraiser Training", href: "/services/appraiser-training" },
   ];
 
   const trendingProducts = [
-    { id: '1', name: 'Gold Bangles', category: 'Bangles', price: 15999, image: productBangle },
-    { id: '2', name: 'Diamond Rings', category: 'Rings', price: 45999, image: productCoin },
-    { id: '3', name: 'Temple Jewelry', category: 'Necklaces', price: 32499, image: productNecklace },
-    { id: '4', name: 'Antique Necklaces', category: 'Necklaces', price: 28999, image: productBangle },
+    { id: '1', name: 'Gold Bangles', category: 'Bangles', price: 125553, image: productBangle },
+    { id: '2', name: 'Diamond Rings', category: 'Rings', price: 91286, image: productCoin },
+    { id: '3', name: 'Temple Jewelry', category: 'Necklaces', price: 424895, image: productNecklace },
+    { id: '4', name: 'Antique Necklaces', category: 'Necklaces', price: 154365, image: productBangle },
   ];
 
   const handleProductSelect = (product: any) => {
@@ -112,8 +111,9 @@ const Header = () => {
         <div className="container mx-auto">
           <div className="flex items-center justify-center py-2 xs:py-3 text-xs xs:text-sm">
             <div className="flex flex-col xs:flex-row items-center xs:space-x-4 lg:space-x-6 font-medium text-center xs:text-left">
-              <span className="tracking-wide">₹9,470/g Gold (22K)</span>
-              <span className="tracking-wide">₹131/g Silver</span>
+              <span className="tracking-wide">₹{isLoading ? '...' : gold24k.toLocaleString('en-IN')}/g Gold (24K)</span>
+              <span className="tracking-wide">₹{isLoading ? '...' : gold22k.toLocaleString('en-IN')}/g Gold (22K)</span>
+              <span className="tracking-wide">₹{isLoading ? '...' : silver.toLocaleString('en-IN')}/g Silver</span>
               <span className="text-xs opacity-75 mt-1 xs:mt-0 xs:ml-2">*Indicative rates—visit store for exact rate</span>
             </div>
           </div>

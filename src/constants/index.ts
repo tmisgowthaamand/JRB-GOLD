@@ -65,13 +65,13 @@ export const PAYMENT_STATUS = {
 } as const;
 
 export const DEFAULT_GOLD_RATES = {
-  "22K": 9470,
-  "24K": 10338,
-  "18K": 7102.5,
-  "14K": 5507.5
+  "22K": 14530,
+  "24K": 15862,
+  "18K": 11897,
+  "14K": 9253
 };
 
-export const DEFAULT_SILVER_RATE = 131;
+export const DEFAULT_SILVER_RATE = 300;
 
 export const API_ENDPOINTS = {
   GOLD_RATES: '/api/gold-rates',

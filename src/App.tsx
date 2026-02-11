@@ -13,7 +13,6 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Location from './pages/Location';
-import Schemes from './pages/Schemes';
 import Consultation from './pages/Consultation';
 import SignIn from './pages/auth/SignIn';
 import CreateAccount from './pages/auth/CreateAccount';
@@ -38,12 +37,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const authToken = localStorage.getItem('authToken');
   const userEmail = localStorage.getItem('userEmail');
   const isAuthenticated = !!(authToken && userEmail);
-  
+
   if (!isAuthenticated) {
     // Redirect to sign-in page if not authenticated
     return <Navigate to="/signin" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -59,14 +58,14 @@ function App() {
       try {
         // Preload fonts
         await document.fonts.ready;
-        
+
         // Preload critical images
         const criticalImages = [
           '/logo1.png?v=1',
           '/hero-jewelry.jpg',
           '/craftsmanship.jpg'
         ];
-        
+
         const imagePromises = criticalImages.map(src => {
           return new Promise((resolve, reject) => {
             const img = new Image();
@@ -75,12 +74,12 @@ function App() {
             img.src = src;
           });
         });
-        
+
         await Promise.all(imagePromises);
-        
+
         // Minimum loading time for smooth experience
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
+
         setIsAppReady(true);
       } catch (error) {
         console.warn('Some resources failed to preload:', error);
@@ -108,49 +107,48 @@ function App() {
             <PageTransition>
               <div className="min-h-screen bg-background animate-fade-in">
                 <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Index />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/order/:orderId" element={<OrderDetails />} />
-                <Route path="/favorites" element={<Favorites />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/location" element={<Location />} />
-                <Route path="/schemes" element={<Schemes />} />
-                <Route path="/consultation" element={<Consultation />} />
-                <Route path="/help" element={<Help />} />
-                <Route path="/services/re-pledge-transfer" element={<RePledgeTransfer />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-conditions" element={<TermsConditions />} />
-            <Route path="/cancellation-refund" element={<CancellationRefund />} />
-            <Route path="/shipping-policy" element={<ShippingPolicy />} />
-                
-                {/* Authentication Routes */}
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<CreateAccount />} />
-                
-                {/* Protected Routes */}
-                <Route 
-                  path="/account/orders" 
-                  element={
-                    <ProtectedRoute>
-                      <MyOrders />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/account/settings" 
-                  element={
-                    <ProtectedRoute>
-                      <ProfileSettings />
-                    </ProtectedRoute>
-                  } 
-                />
-                
+                  {/* Public Routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/product/:id" element={<ProductDetail />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order/:orderId" element={<OrderDetails />} />
+                  <Route path="/favorites" element={<Favorites />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/location" element={<Location />} />
+                  <Route path="/consultation" element={<Consultation />} />
+                  <Route path="/help" element={<Help />} />
+                  <Route path="/services/re-pledge-transfer" element={<RePledgeTransfer />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-conditions" element={<TermsConditions />} />
+                  <Route path="/cancellation-refund" element={<CancellationRefund />} />
+                  <Route path="/shipping-policy" element={<ShippingPolicy />} />
+
+                  {/* Authentication Routes */}
+                  <Route path="/signin" element={<SignIn />} />
+                  <Route path="/signup" element={<CreateAccount />} />
+
+                  {/* Protected Routes */}
+                  <Route
+                    path="/account/orders"
+                    element={
+                      <ProtectedRoute>
+                        <MyOrders />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/account/settings"
+                    element={
+                      <ProtectedRoute>
+                        <ProfileSettings />
+                      </ProtectedRoute>
+                    }
+                  />
+
                   {/* 404 Not Found */}
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
