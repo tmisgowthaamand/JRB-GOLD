@@ -24,21 +24,21 @@ JRB GOLD SHINE - INVOICE
 ========================
 
 Order ID: ${order.id}
-Date: ${new Date(order.date).toLocaleDateString('en-IN', { 
-  weekday: 'long', 
-  year: 'numeric', 
-  month: 'long', 
-  day: 'numeric' 
-})}
+Date: ${new Date(order.date).toLocaleDateString('en-IN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })}
 Status: ${order.status.toUpperCase()}
 Payment Status: ${order.paymentStatus.toUpperCase()}
 
 ------------------------
 ITEMS ORDERED:
 ------------------------
-${order.items.map((item: any, index: number) => 
-  `${index + 1}. ${item.name}\n   Quantity: ${item.quantity}\n   Price: ₹${item.price.toLocaleString('en-IN')}\n`
-).join('\n')}
+${order.items.map((item: any, index: number) =>
+    `${index + 1}. ${item.name}\n   Quantity: ${item.quantity}\n   Price: ₹${item.price.toLocaleString('en-IN')}\n`
+  ).join('\n')}
 ------------------------
 ORDER SUMMARY:
 ------------------------
@@ -57,7 +57,7 @@ ${order.expectedDelivery ? `\nExpected Delivery: ${new Date(order.expectedDelive
 
 ------------------------
 Thank you for shopping with JRB Gold Shine!
-For support, contact us at support@jrbgoldshine.com
+For support, contact us at inforjrb@gmail.com
   `;
 
   // Create and download the file
@@ -76,7 +76,7 @@ For support, contact us at support@jrbgoldshine.com
 const cancelOrder = (orderId: string, onOrderUpdate: (orderId: string) => void, toast: any) => {
   // In a real app, this would make an API call to cancel the order
   // For now, we'll simulate the cancellation
-  
+
   // Update the order status in localStorage if it exists
   try {
     const allOrders = JSON.parse(localStorage.getItem('allOrders') || '{}');
@@ -90,10 +90,10 @@ const cancelOrder = (orderId: string, onOrderUpdate: (orderId: string) => void, 
   } catch (error) {
     console.error('Error updating order in localStorage:', error);
   }
-  
+
   // Call the callback to update the UI
   onOrderUpdate(orderId);
-  
+
   // Show success message
   toast({
     title: "Order Cancelled",
@@ -164,7 +164,7 @@ const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (order
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const { toast } = useToast();
-  
+
   const handleCancelOrder = () => {
     cancelOrder(order.id, onOrderUpdate, toast);
     setShowCancelDialog(false);
@@ -195,7 +195,7 @@ const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (order
 
   return (
     <Card className="mb-6 overflow-hidden">
-      <div 
+      <div
         className="p-4 cursor-pointer hover:bg-gray-50 flex justify-between items-center"
         onClick={() => setIsExpanded(!isExpanded)}
       >
@@ -220,7 +220,7 @@ const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (order
           {isExpanded ? 'Hide details' : 'View details'}
         </Button>
       </div>
-      
+
       {isExpanded && (
         <CardContent className="border-t pt-4">
           <div className="space-y-4">
@@ -231,9 +231,9 @@ const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (order
                   <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
                     <div className="flex items-center">
                       <div className="w-16 h-16 bg-gray-200 rounded mr-4">
-                        <img 
-                          src={item.image || '/product-bangle.jpg'} 
-                          alt={item.name} 
+                        <img
+                          src={item.image || '/product-bangle.jpg'}
+                          alt={item.name}
                           className="w-full h-full object-cover rounded"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
@@ -257,7 +257,7 @@ const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (order
                 <h4 className="font-medium mb-2">Shipping Address</h4>
                 <p className="text-gray-700">{order.shippingAddress || 'N/A'}</p>
               </div>
-              
+
               <div>
                 <h4 className="font-medium mb-2">Order Summary</h4>
                 <div className="space-y-2">
@@ -323,8 +323,8 @@ const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (order
             )}
 
             <div className="flex justify-end space-x-3 pt-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => downloadInvoice(order)}
                 className="flex items-center gap-2"
@@ -334,15 +334,15 @@ const OrderCard = ({ order, onOrderUpdate }: { order: any, onOrderUpdate: (order
               </Button>
               {order.status === 'processing' && (
                 <>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className="text-red-600 border-red-200 hover:bg-red-50"
                     onClick={() => setShowCancelDialog(true)}
                   >
                     Cancel Order
                   </Button>
-                  
+
                   <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
                     <DialogContent>
                       <DialogHeader>
@@ -387,7 +387,7 @@ const EmptyState = ({ type }: { type: string }) => (
     <Package className="h-12 w-12 text-gray-400 mx-auto" />
     <h3 className="mt-2 text-lg font-medium text-gray-900">No {type} orders</h3>
     <p className="mt-1 text-sm text-gray-500">
-      {type === 'active' 
+      {type === 'active'
         ? 'You don\'t have any active orders at the moment.'
         : `You don't have any ${type} orders.`}
     </p>
@@ -404,28 +404,28 @@ const EmptyState = ({ type }: { type: string }) => (
 const MyOrders = () => {
   const [activeTab, setActiveTab] = useState('active');
   const [orders, setOrders] = useState(mockOrders);
-  
+
   const handleOrderUpdate = (orderId: string) => {
     // Move the cancelled order from active to cancelled
     setOrders(prevOrders => {
       const updatedOrders = { ...prevOrders };
-      
+
       // Find the order in active orders
       const orderIndex = updatedOrders.active.findIndex(order => order.id === orderId);
       if (orderIndex !== -1) {
-        const cancelledOrder = { 
+        const cancelledOrder = {
           ...updatedOrders.active[orderIndex],
           status: 'cancelled',
           cancelledOn: getCurrentDate(),
           reason: 'Cancelled by customer',
           paymentStatus: 'refund_pending'
         };
-        
+
         // Remove from active and add to cancelled
         updatedOrders.active.splice(orderIndex, 1);
         updatedOrders.cancelled.unshift(cancelledOrder);
       }
-      
+
       return updatedOrders;
     });
   };
@@ -440,8 +440,8 @@ const MyOrders = () => {
       <Tabs defaultValue="active" className="w-full" onValueChange={setActiveTab}>
         <div className="border-b">
           <TabsList className="bg-transparent p-0 h-auto rounded-none">
-            <TabsTrigger 
-              value="active" 
+            <TabsTrigger
+              value="active"
               className="relative py-4 px-6 data-[state=active]:shadow-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-yellow-500 rounded-none"
             >
               <div className="flex items-center">
@@ -454,8 +454,8 @@ const MyOrders = () => {
                 )}
               </div>
             </TabsTrigger>
-            <TabsTrigger 
-              value="completed" 
+            <TabsTrigger
+              value="completed"
               className="relative py-4 px-6 data-[state=active]:shadow-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-yellow-500 rounded-none"
             >
               <div className="flex items-center">
@@ -468,8 +468,8 @@ const MyOrders = () => {
                 )}
               </div>
             </TabsTrigger>
-            <TabsTrigger 
-              value="cancelled" 
+            <TabsTrigger
+              value="cancelled"
               className="relative py-4 px-6 data-[state=active]:shadow-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-yellow-500 rounded-none"
             >
               <div className="flex items-center">

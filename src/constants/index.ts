@@ -19,7 +19,7 @@ export const CONTACT_INFO = {
     country: 'India'
   },
   phone: '82204 21317',
-  email: 'contact@jrbgold.co.in',
+  email: 'inforjrb@gmail.com',
   website: 'https://www.jrbgold.co.in'
 };
 

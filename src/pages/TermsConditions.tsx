@@ -7,12 +7,12 @@ const TermsConditions = () => {
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Terms & Conditions</h1>
           <p className="text-lg text-gray-600 mb-8">Last Updated: August 2025</p>
-          
+
           <div className="prose prose-gray max-w-none">
             <p className="text-sm leading-relaxed mb-6">
               Welcome to JRB Gold Pvt Limited. By accessing and using our website, store, or services, you agree to comply with and be bound by the following Terms & Conditions. These terms govern all purchases, transactions, and interactions with JRB Gold Pvt Limited, whether in-store, online, or via our customer support channels.
             </p>
-            
+
             <p className="text-sm leading-relaxed mb-6">
               If you do not agree with these terms, we kindly ask you to discontinue use of our services.
             </p>
@@ -97,7 +97,7 @@ const TermsConditions = () => {
               <p>Thiruvannamalai</p>
               <p>Tamil Nadu - 606604</p>
               <p>Mobile - 82204 21317</p>
-              <p>Email: contact@jrbgold.co.in</p>
+              <p>Email: inforjrb@gmail.com</p>
               <p>Website: https://www.jrbgold.co.in</p>
             </div>
           </div>

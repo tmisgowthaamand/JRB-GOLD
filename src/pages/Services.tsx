@@ -219,10 +219,10 @@ const Services = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       {/* Add anchor point for exchange section */}
       <div id="exchange" className="relative -top-20"></div>
-      
+
       <main>
         {/* Hero Section */}
         <section className="bg-gradient-surface py-16">
@@ -232,7 +232,7 @@ const Services = () => {
                 Our Services
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Comprehensive jewelry and gold investment services designed to maximize value 
+                Comprehensive jewelry and gold investment services designed to maximize value
                 and provide secure, transparent solutions for all your precious metal needs.
               </p>
               <div className="divider-gold mt-6 max-w-24 mx-auto" />
@@ -265,9 +265,8 @@ const Services = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="space-y-16">
               {services.map((service, index) => (
-                <div key={service.id} className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                  index % 2 === 1 ? 'lg:grid-flow-dense' : ''
-                }`}>
+                <div key={service.id} className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''
+                  }`}>
                   {/* Content */}
                   <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
                     <div className="flex items-center mb-4">
@@ -278,7 +277,7 @@ const Services = () => {
                         {service.id.toUpperCase()}
                       </Badge>
                     </div>
-                    
+
                     <h2 className="text-title font-playfair text-foreground mb-2">
                       {service.title}
                     </h2>
@@ -301,7 +300,7 @@ const Services = () => {
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button 
+                          <Button
                             variant="hero"
                             onClick={() => openServiceEnquiry(service.id)}
                           >
@@ -320,7 +319,7 @@ const Services = () => {
                                 <Input
                                   id="name"
                                   value={formData.name}
-                                  onChange={(e) => setFormData(prev => ({...prev, name: e.target.value}))}
+                                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                                   required
                                 />
                               </div>
@@ -330,19 +329,19 @@ const Services = () => {
                                   id="phone"
                                   type="tel"
                                   value={formData.phone}
-                                  onChange={(e) => setFormData(prev => ({...prev, phone: e.target.value}))}
+                                  onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                                   required
                                 />
                               </div>
                             </div>
-                            
+
                             <div>
                               <Label htmlFor="email">Email Address</Label>
                               <Input
                                 id="email"
                                 type="email"
                                 value={formData.email}
-                                onChange={(e) => setFormData(prev => ({...prev, email: e.target.value}))}
+                                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                               />
                             </div>
 
@@ -354,7 +353,7 @@ const Services = () => {
                                 <Input
                                   id="goldWeight"
                                   value={formData.goldWeight}
-                                  onChange={(e) => setFormData(prev => ({...prev, goldWeight: e.target.value}))}
+                                  onChange={(e) => setFormData(prev => ({ ...prev, goldWeight: e.target.value }))}
                                 />
                               </div>
                             )}
@@ -364,7 +363,7 @@ const Services = () => {
                               <Textarea
                                 id="message"
                                 value={formData.message}
-                                onChange={(e) => setFormData(prev => ({...prev, message: e.target.value}))}
+                                onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                                 placeholder="Tell us more about your requirements..."
                                 rows={3}
                               />
@@ -373,14 +372,14 @@ const Services = () => {
                             <Button type="submit" className="w-full" variant="hero">
                               Submit Enquiry
                             </Button>
-                            
+
                             <p className="text-xs text-muted-foreground text-center">
                               Our expert will contact you within 2 hours to discuss your requirements.
                             </p>
                           </form>
                         </DialogContent>
                       </Dialog>
-                      
+
                       <Button variant="outline-gold">
                         Learn More
                       </Button>
@@ -397,7 +396,7 @@ const Services = () => {
                             <TabsTrigger value="requirements">Requirements</TabsTrigger>
                             <TabsTrigger value="details">Details</TabsTrigger>
                           </TabsList>
-                          
+
                           <TabsContent value="process" className="mt-4">
                             <h4 className="font-semibold text-foreground mb-3">How It Works</h4>
                             <ol className="space-y-2">
@@ -411,7 +410,7 @@ const Services = () => {
                               ))}
                             </ol>
                           </TabsContent>
-                          
+
                           <TabsContent value="requirements" className="mt-4">
                             <h4 className="font-semibold text-foreground mb-3">Required Documents</h4>
                             <ul className="space-y-2">
@@ -423,7 +422,7 @@ const Services = () => {
                               ))}
                             </ul>
                           </TabsContent>
-                          
+
                           <TabsContent value="details" className="mt-4">
                             <h4 className="font-semibold text-foreground mb-3">Service Details</h4>
                             <div className="space-y-3">
@@ -517,9 +516,9 @@ const Services = () => {
                 <TabsContent key={service} value={service}>
                   <Accordion type="single" collapsible className="space-y-4">
                     {questions.map((faq, index) => (
-                      <AccordionItem 
-                        key={index} 
-                        value={`${service}-${index}`} 
+                      <AccordionItem
+                        key={index}
+                        value={`${service}-${index}`}
                         className="border border-border rounded-lg px-6"
                       >
                         <AccordionTrigger className="text-left font-semibold text-foreground">
@@ -546,7 +545,7 @@ const Services = () => {
             <p className="text-lg text-ivory/80 mb-8">
               Our expert team is ready to help you with personalized solutions for all your gold and jewelry needs
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <div className="flex items-center justify-center">
                 <Phone className="h-5 w-5 text-gold mr-3" />
@@ -555,12 +554,12 @@ const Services = () => {
                   <div className="text-ivory/80">+91 82204 21317</div>
                 </div>
               </div>
-              
+
               <div className="flex items-center justify-center">
                 <Mail className="h-5 w-5 text-gold mr-3" />
                 <div>
                   <div className="font-semibold">Email Us</div>
-                  <div className="text-ivory/80">services@jrbgold.com</div>
+                  <div className="text-ivory/80">inforjrb@gmail.com</div>
                 </div>
               </div>
             </div>

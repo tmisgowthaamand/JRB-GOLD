@@ -7,12 +7,12 @@ const ShippingPolicy = () => {
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Shipping Policy</h1>
           <p className="text-lg text-gray-600 mb-8">Secure, Insured, and On-Time Delivery – Every Time</p>
-          
+
           <div className="prose prose-gray max-w-none">
             <p className="text-sm leading-relaxed mb-6">
               At JRB Gold Pvt Limited, we are committed to delivering your jewelry safely, securely, and within the promised timeframe. Whether it's a single ornament or a bulk wholesale consignment, every shipment is handled with utmost care, reflecting our values of transparency and trust.
             </p>
-            
+
             <p className="text-sm leading-relaxed mb-6">
               This Shipping Policy outlines our order processing, delivery timelines, logistics, and support.
             </p>
@@ -25,7 +25,7 @@ const ShippingPolicy = () => {
             </ul>
 
             <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">Shipping Destinations & Delivery Timelines</h2>
-            
+
             <h3 className="text-lg font-semibold text-gray-800 mt-6 mb-3">Domestic (India)</h3>
             <ul className="text-sm space-y-2 mb-4 ml-6">
               <li>• <strong>Metro Cities:</strong> 2–5 business days post-dispatch</li>
@@ -98,7 +98,7 @@ const ShippingPolicy = () => {
               <p>Thiruvannamalai</p>
               <p>Tamil Nadu - 606604</p>
               <p>Mobile - 82204 21317</p>
-              <p>Email: contact@jrbgold.co.in</p>
+              <p>Email: inforjrb@gmail.com</p>
               <p>Website: https://www.jrbgold.co.in</p>
             </div>
           </div>

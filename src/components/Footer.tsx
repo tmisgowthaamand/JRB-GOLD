@@ -158,7 +158,7 @@ const Footer = () => {
                 <Mail className="h-4 w-4 xs:h-5 xs:w-5 text-yellow-500 mb-2 xs:mb-0 xs:mr-3" />
                 <div>
                   <div className="font-semibold text-sm xs:text-base">Email</div>
-                  <div className="text-ivory/80 text-sm xs:text-base">contact@jrbgold.co.in</div>
+                  <div className="text-ivory/80 text-sm xs:text-base">inforjrb@gmail.com</div>
                 </div>
               </div>
 

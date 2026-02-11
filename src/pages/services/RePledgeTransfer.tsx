@@ -62,7 +62,7 @@ const RePledgeTransfer = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
@@ -70,7 +70,7 @@ const RePledgeTransfer = () => {
             Re-Pledge Transfer Service
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
-            Transfer your existing gold loan to JRB Gold and enjoy better interest rates, 
+            Transfer your existing gold loan to JRB Gold and enjoy better interest rates,
             flexible terms, and exceptional customer service.
           </p>
           <div className="divider-gold mx-auto max-w-24" />
@@ -228,7 +228,7 @@ const RePledgeTransfer = () => {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" style={{backgroundColor: 'rgb(202, 138, 4)'}}>
+                  <Button type="submit" className="w-full" style={{ backgroundColor: 'rgb(202, 138, 4)' }}>
                     Submit Application
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -246,9 +246,9 @@ const RePledgeTransfer = () => {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {process.map((step, index) => (
               <div key={index} className="text-center">
-                <div 
+                <div
                   className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg mx-auto mb-4"
-                  style={{backgroundColor: 'rgb(202, 138, 4)'}}
+                  style={{ backgroundColor: 'rgb(202, 138, 4)' }}
                 >
                   {index + 1}
                 </div>
@@ -268,17 +268,17 @@ const RePledgeTransfer = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               <div className="flex flex-col items-center space-y-2">
-                <Phone className="h-8 w-8" style={{color: 'rgb(202, 138, 4)'}} />
+                <Phone className="h-8 w-8" style={{ color: 'rgb(202, 138, 4)' }} />
                 <h3 className="font-semibold text-foreground">Call Us</h3>
                 <p className="text-muted-foreground">82204 21317</p>
               </div>
               <div className="flex flex-col items-center space-y-2">
-                <Mail className="h-8 w-8" style={{color: 'rgb(202, 138, 4)'}} />
+                <Mail className="h-8 w-8" style={{ color: 'rgb(202, 138, 4)' }} />
                 <h3 className="font-semibold text-foreground">Email Us</h3>
-                <p className="text-muted-foreground">contact@jrbgold.co.in</p>
+                <p className="text-muted-foreground">inforjrb@gmail.com</p>
               </div>
               <div className="flex flex-col items-center space-y-2">
-                <MapPin className="h-8 w-8" style={{color: 'rgb(202, 138, 4)'}} />
+                <MapPin className="h-8 w-8" style={{ color: 'rgb(202, 138, 4)' }} />
                 <h3 className="font-semibold text-foreground">Visit Us</h3>
                 <p className="text-muted-foreground text-sm">
                   No: 1539, 1st Floor, Soundar Complex<br />

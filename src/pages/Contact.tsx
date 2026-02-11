@@ -32,8 +32,8 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email',
-      primary: 'contact@jrbgold.co.in',
-      secondary: 'support@jrbgold.co.in',
+      primary: 'inforjrb@gmail.com',
+      secondary: 'inforjrb@gmail.com',
       description: 'Send us your queries anytime',
     },
     {

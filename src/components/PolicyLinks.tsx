@@ -85,7 +85,7 @@ Near Anna Arch
 Thiruvannamalai
 Tamil Nadu - 606604
 Mobile - 82204 21317
-Email: contact@jrbgold.co.in
+Email: inforjrb@gmail.com
 Website: https://www.jrbgold.co.in`
     },
     {
@@ -181,7 +181,7 @@ Near Anna Arch
 Thiruvannamalai
 Tamil Nadu - 606604
 Mobile - 82204 21317
-Email: contact@jrbgold.co.in
+Email: inforjrb@gmail.com
 Website: https://www.jrbgold.co.in`
     },
     {
@@ -263,7 +263,7 @@ Near Anna Arch
 Thiruvannamalai
 Tamil Nadu - 606604
 Mobile - 82204 21317
-Email: contact@jrbgold.co.in
+Email: inforjrb@gmail.com
 Website: https://www.jrbgold.co.in`
     },
     {
@@ -337,7 +337,7 @@ Near Anna Arch
 Thiruvannamalai
 Tamil Nadu - 606604
 Mobile - 82204 21317
-Email: contact@jrbgold.co.in
+Email: inforjrb@gmail.com
 Website: https://www.jrbgold.co.in`
     }
   ];

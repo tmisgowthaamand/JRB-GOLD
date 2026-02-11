@@ -11,7 +11,7 @@ export default function LocationPage() {
     line3: 'Thiruvannamalai',
     line4: 'Tamil Nadu - 606604',
     phone: '+91 82204 21317',
-    email: 'contact@jrbgold.co.in',
+    email: 'inforjrb@gmail.com',
     hours: {
       weekdays: 'Monday - Saturday: 10:00 AM - 8:00 PM',
       sunday: 'Sunday: 11:00 AM - 6:00 PM'
@@ -23,7 +23,7 @@ export default function LocationPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Page Header */}
         <div className="text-center mb-12">
@@ -85,9 +85,9 @@ export default function LocationPage() {
               </div>
 
               <div className="pt-4">
-                <a 
-                  href={address.directionsUrl} 
-                  target="_blank" 
+                <a
+                  href={address.directionsUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 transition-colors shadow-sm"
                 >

@@ -7,14 +7,14 @@ const CancellationRefund = () => {
         <div className="bg-white rounded-lg shadow-sm p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Cancellation & Refund Policy</h1>
           <p className="text-lg text-gray-600 mb-8">Fair, Transparent, and Customer-Centric</p>
-          
+
           <div className="prose prose-gray max-w-none">
             <p className="text-sm leading-relaxed mb-6">
               At JRB Gold Pvt Limited, we strive to deliver genuine, high-quality gold and silver jewelry with complete transparency. While we work hard to ensure every order meets your expectations, we recognize that occasional issues may arise. This policy outlines how cancellations, returns, and refunds are handled for retail and wholesale customers.
             </p>
 
             <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">Order Cancellations</h2>
-            
+
             <h3 className="text-lg font-semibold text-gray-800 mt-6 mb-3">Retail Orders:</h3>
             <ul className="text-sm space-y-2 mb-4 ml-6">
               <li>• Cancellations must be requested within 2 hours of order placement.</li>
@@ -30,7 +30,7 @@ const CancellationRefund = () => {
             <ul className="text-sm space-y-2 mb-6 ml-6">
               <li>• Cancellations for bulk or trade orders are subject to the agreed purchase contract. Any cancellation after procurement or production has begun may incur a restocking or processing fee.</li>
             </ul>
-            
+
             <p className="text-sm leading-relaxed mb-6">
               To request cancellation, contact us via phone or email with your Order ID and details.
             </p>
@@ -98,7 +98,7 @@ const CancellationRefund = () => {
               <p>Thiruvannamalai</p>
               <p>Tamil Nadu - 606604</p>
               <p>Mobile - 82204 21317</p>
-              <p>Email: contact@jrbgold.co.in</p>
+              <p>Email: inforjrb@gmail.com</p>
               <p>Website: https://www.jrbgold.co.in</p>
             </div>
           </div>

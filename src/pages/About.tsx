@@ -182,7 +182,7 @@ const About = () => {
             <h3 className="text-xl font-semibold mb-2">Contact Us</h3>
             <p className="text-gray-600">
               <a href="tel:+912234567890" className="hover:text-yellow-600">+91 22 3456 7890</a><br />
-              <a href="mailto:info@jrbgold.com" className="hover:text-yellow-600">info@jrbgold.com</a>
+              <a href="mailto:inforjrb@gmail.com" className="hover:text-yellow-600">inforjrb@gmail.com</a>
             </p>
           </Card>
 

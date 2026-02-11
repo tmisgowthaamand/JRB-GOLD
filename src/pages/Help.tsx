@@ -5,14 +5,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  MessageCircle, 
-  Phone, 
-  Mail, 
-  Clock, 
-  HelpCircle, 
-  Package, 
-  CreditCard, 
+import {
+  MessageCircle,
+  Phone,
+  Mail,
+  Clock,
+  HelpCircle,
+  Package,
+  CreditCard,
   RefreshCw,
   CheckCircle,
   ArrowRight
@@ -148,7 +148,7 @@ const Help = () => {
             </div>
             <h3 className="font-semibold text-lg mb-2">Email Support</h3>
             <p className="text-gray-600 mb-4">Get help via email</p>
-            <p className="font-medium">support@jrbgoldshine.com</p>
+            <p className="font-medium">inforjrb@gmail.com</p>
             <p className="text-sm text-gray-500">Response within 24 hours</p>
           </CardContent>
         </Card>
@@ -225,7 +225,7 @@ const Help = () => {
                     <Input
                       required
                       value={contactForm.name}
-                      onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
+                      onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                       placeholder="Your full name"
                     />
                   </div>
@@ -237,7 +237,7 @@ const Help = () => {
                       type="email"
                       required
                       value={contactForm.email}
-                      onChange={(e) => setContactForm({...contactForm, email: e.target.value})}
+                      onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                       placeholder="your.email@example.com"
                     />
                   </div>
@@ -250,7 +250,7 @@ const Help = () => {
                     </label>
                     <Input
                       value={contactForm.orderNumber}
-                      onChange={(e) => setContactForm({...contactForm, orderNumber: e.target.value})}
+                      onChange={(e) => setContactForm({ ...contactForm, orderNumber: e.target.value })}
                       placeholder="ORD-2025-XXXX"
                     />
                   </div>
@@ -261,7 +261,7 @@ const Help = () => {
                     <Input
                       required
                       value={contactForm.subject}
-                      onChange={(e) => setContactForm({...contactForm, subject: e.target.value})}
+                      onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
                       placeholder="Brief subject of your inquiry"
                     />
                   </div>
@@ -275,7 +275,7 @@ const Help = () => {
                     required
                     rows={6}
                     value={contactForm.message}
-                    onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
+                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                     placeholder="Please describe your question or issue in detail..."
                   />
                 </div>
