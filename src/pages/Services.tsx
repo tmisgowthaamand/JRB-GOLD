@@ -49,30 +49,7 @@ const Services = () => {
       timeframe: 'Same day processing',
       minWeight: '1 gram',
     },
-    {
-      id: 'repledge',
-      icon: Banknote,
-      title: 'Re-Pledge Transfer',
-      subtitle: 'Transfer Your Gold Loans for Better Terms',
-      description: 'Move your existing gold loans from other banks or financiers to us for lower interest rates and better terms.',
-      features: [
-        'Lower interest rates (from 8% p.a.)',
-        'Higher loan amount up to 85% of gold value',
-        'Flexible repayment options',
-        'Quick approval process',
-        'No prepayment penalties',
-      ],
-      process: [
-        'Submit existing loan details',
-        'Gold valuation and documentation',
-        'Loan approval and sanction',
-        'Transfer from existing lender',
-        'New loan account activation'
-      ],
-      documents: ['Existing loan documents', 'ID & Address proof', 'Income proof', 'Gold evaluation certificate'],
-      timeframe: '3-5 business days',
-      minAmount: '₹50,000',
-    },
+
     {
       id: 'bonds',
       icon: TrendingUp,
@@ -161,20 +138,7 @@ const Services = () => {
         answer: 'We follow a transparent pricing policy with minimal deductions only for wastage removal if applicable. All deductions are clearly explained before the transaction.'
       }
     ],
-    repledge: [
-      {
-        question: 'What is the maximum loan amount I can get?',
-        answer: 'You can get up to 85% of the current gold value as loan amount. The exact amount depends on the purity and current market rate of gold.'
-      },
-      {
-        question: 'How long does the transfer process take?',
-        answer: 'The complete transfer process typically takes 3-5 business days from documentation to loan activation, depending on the cooperation of your existing lender.'
-      },
-      {
-        question: 'Are there any transfer charges?',
-        answer: 'We handle most of the transfer formalities. Minimal charges may apply for documentation and legal processes, which will be clearly communicated upfront.'
-      }
-    ],
+
     bonds: [
       {
         question: 'When can I redeem my gold bonds?',
@@ -345,10 +309,10 @@ const Services = () => {
                               />
                             </div>
 
-                            {(service.id === 'exchange' || service.id === 'repledge') && (
+                            {service.id === 'exchange' && (
                               <div>
                                 <Label htmlFor="goldWeight">
-                                  {service.id === 'exchange' ? 'Approximate Gold Weight (grams)' : 'Existing Loan Amount (₹)'}
+                                  Approximate Gold Weight (grams)
                                 </Label>
                                 <Input
                                   id="goldWeight"
@@ -505,9 +469,9 @@ const Services = () => {
             </div>
 
             <Tabs defaultValue="exchange" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsList className="grid w-full grid-cols-3 mb-8">
                 <TabsTrigger value="exchange">Exchange</TabsTrigger>
-                <TabsTrigger value="repledge">Re-pledge</TabsTrigger>
+
                 <TabsTrigger value="bonds">Bonds</TabsTrigger>
                 <TabsTrigger value="training">Training</TabsTrigger>
               </TabsList>

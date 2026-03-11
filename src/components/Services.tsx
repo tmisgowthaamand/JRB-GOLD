@@ -12,14 +12,7 @@ const Services = () => {
       cta: "Get Quote",
       accent: "gold",
     },
-    {
-      icon: Banknote,
-      title: "Re-Pledge Transfer",
-      description: "Transfer your pledged gold from other institutions to us for better rates and flexible terms.",
-      features: ["Lower interest rates", "Easy documentation", "Quick processing"],
-      cta: "Learn More",
-      accent: "maroon",
-    },
+
     {
       icon: TrendingUp,
       title: "Gold Bonds",

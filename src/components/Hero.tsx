@@ -41,7 +41,7 @@ const Hero = () => {
     {
       image: craftsmanshipImage,
       title: "Heritage Craftsmanship",
-      subtitle: "Three Generations of Excellence",
+      subtitle: "8+ Years of Excellence",
       description: "Experience the artistry of traditional jewelry making with modern certified quality standards.",
       primaryCTA: "View Collection",
       primaryLink: "/shop?category=featured",

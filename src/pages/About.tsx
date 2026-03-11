@@ -212,9 +212,9 @@ const About = () => {
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h3 className="text-2xl font-playfair font-semibold text-gray-900">Three Generations of Excellence</h3>
+            <h3 className="text-2xl font-playfair font-semibold text-gray-900">8+ Years of Excellence</h3>
             <p className="text-gray-600 leading-relaxed">
-              Since our founding in 1985, JRB Gold has been a family-owned business dedicated to the art of fine jewelry making.
+              Since our founding in 2016, JRB Gold has been a family-owned business dedicated to the art of fine jewelry making.
               What began as a small workshop has grown into a trusted name in the industry, known for our commitment to quality and craftsmanship.
             </p>
             <p className="text-gray-600 leading-relaxed">
@@ -223,7 +223,7 @@ const About = () => {
             </p>
             <div className="grid grid-cols-2 gap-4 mt-8">
               <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-                <div className="text-3xl font-bold text-yellow-600">35+</div>
+                <div className="text-3xl font-bold text-yellow-600">8+</div>
                 <div className="text-gray-600">Years of Excellence</div>
               </div>
               <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
@@ -325,8 +325,8 @@ const About = () => {
     },
     {
       icon: Heart,
-      title: 'Heritage Craftsmanship',
-      description: 'Three generations of skilled artisans creating timeless pieces that blend tradition with modern design.',
+      title: 'Dedicated Craftsmanship',
+      description: 'Our skilled artisans create timeless pieces that blend tradition with modern design.',
     },
   ];
 
@@ -349,28 +349,28 @@ const About = () => {
     {
       name: 'Joseph Ramki',
       position: 'Founder & Chairman',
-      experience: '40+ years',
+      experience: '8+ years',
       description: 'Visionary leader who established JRB Gold with a commitment to quality and customer trust.',
     },
     {
       name: 'Esa Beaula',
       position: 'Managing Director',
-      experience: '25+ years',
+      experience: '8+ years',
       description: 'Driving innovation and digital transformation while maintaining traditional values.',
     },
   ];
 
   const testimonialHighlights = [
     {
-      text: "JRB Gold has been our family's trusted jeweler for over 15 years. Their transparency and quality is unmatched.",
-      author: "Mrs. Sharma, Loyal Customer"
-    },
-    {
-      text: "Their exchange process is very transparent. I got the best value for my old gold without any hassle.",
+      text: "Their gold exchange process is very transparent. I got the best value for my old gold without any hassle.",
       author: "Priya K., Mumbai"
     },
     {
-      text: "Best exchange rates and honest evaluation. They truly value customer relationships over profits.",
+      text: "They effectively repaired my family's vintage jewelry. Their craftsmanship and care for jewelry repair is unmatched.",
+      author: "Mrs. Sharma, Loyal Customer"
+    },
+    {
+      text: "The custom design team created a beautiful necklace set that matches my family heritage perfectly. Truly masterful work!",
       author: "Rajesh M., Delhi"
     }
   ];
@@ -649,7 +649,7 @@ const About = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-display font-playfair text-ivory mb-4">
-                What Our Customers Say
+                Customer Reviews
               </h2>
               <p className="text-lg text-ivory/80">
                 Building relationships that last generations

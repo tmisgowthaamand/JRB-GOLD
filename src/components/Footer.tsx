@@ -17,11 +17,6 @@ const Footer = () => {
     { name: "New Arrivals", href: "/shop?category=new" },
   ];
 
-  const serviceLinks = [
-    { name: "Gold Exchange", href: "/services" },
-    { name: "Jewelry Repair", href: "/services#repair" },
-    { name: "Custom Design", href: "/services#custom" },
-  ];
 
   const helpLinks = [
     { name: "Contact Us", href: "/contact" },
@@ -57,7 +52,7 @@ const Footer = () => {
       {/* Main Footer */}
       <div className="border-t border-gray-700">
         <div className="container mx-auto py-8 xs:py-10 lg:py-12">
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8">
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8">
             {/* Company Column */}
             <div>
               <a href="/about#about" className="hover:no-underline">
@@ -100,29 +95,9 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Services Column */}
-            <div>
-              <a href="/services" className="hover:no-underline">
-                <h3 className="text-base xs:text-lg font-playfair font-semibold mb-4 xs:mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
-                  Services
-                </h3>
-              </a>
-              <ul className="space-y-2 xs:space-y-3">
-                {serviceLinks.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-sm xs:text-base text-gray-300 hover:text-white transition-colors duration-200"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
             {/* Help Column */}
-            <div className="xs:col-span-2 lg:col-span-1">
+            <div>
               <a href="/contact" className="hover:no-underline">
                 <h3 className="text-base xs:text-lg font-playfair font-semibold mb-4 xs:mb-6 text-yellow-500 hover:text-yellow-400 transition-colors">
                   Help

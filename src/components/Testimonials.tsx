@@ -9,43 +9,43 @@ const Testimonials = () => {
   const testimonials = [
     {
       id: 1,
-      name: "Priya Sharma",
-      location: "Mumbai",
+      name: "Ramesh Kumar",
+      location: "Chennai",
       rating: 5,
-      text: "Exceptional quality and transparent pricing. I exchanged my old gold jewelry and got exactly the rate they promised. The craftsmanship of their new pieces is outstanding.",
-      service: "Gold Exchange",
+      text: "I recently purchased a gold chain and I’m very happy with the quality and purity. The buying process was smooth and the staff explained everything clearly before the purchase.",
+      service: "Gold Purchase",
     },
     {
       id: 2,
-      name: "Rajesh Kumar",
-      location: "Delhi",
+      name: "Priya Sharma",
+      location: "Bangalore",
       rating: 5,
-      text: "The custom design services exceeded my expectations. They created a beautiful necklace set that matches my family heritage perfectly. Truly masterful work!",
-      service: "Custom Design",
+      text: "My experience with JRB Gold was excellent. The gold quality and pricing were transparent, and the team helped me choose the right jewelry for my family function.",
+      service: "Gold Purchase",
     },
     {
       id: 3,
-      name: "Anita Patel",
-      location: "Pune",
+      name: "Sandeep Patel",
+      location: "Ahmedabad",
       rating: 5,
-      text: "Professional appraiser training course was comprehensive. Now I'm certified and working with a reputed jewelry store. Great investment in my career.",
-      service: "Appraiser Training",
+      text: "I bought gold coins recently and the service was very professional. The pricing was fair and the product quality was exactly as promised.",
+      service: "Gold Purchase",
     },
     {
       id: 4,
-      name: "Vikram Singh",
-      location: "Bangalore",
+      name: "Lakshmi Narayanan",
+      location: "Coimbatore",
       rating: 5,
-      text: "Re-pledge transfer was seamless. Lower interest rates and better terms than my previous lender. The team handled all documentation professionally.",
-      service: "Re-Pledge Transfer",
+      text: "I purchased wedding jewelry from JRB Gold and the designs were beautiful. The staff were very supportive and made the whole experience comfortable.",
+      service: "Gold Purchase",
     },
     {
       id: 5,
-      name: "Meera Reddy",
-      location: "Hyderabad",
+      name: "Anita Verma",
+      location: "Delhi",
       rating: 5,
-      text: "Beautiful craftsmanship and certified hallmark jewelry. The no wastage policy saved me significant money. Will definitely purchase again.",
-      service: "Jewelry Purchase",
+      text: "Very satisfied with my gold purchase. The purity certification and clear explanation of pricing gave me confidence in the purchase.",
+      service: "Gold Purchase",
     },
   ];
 
@@ -79,7 +79,7 @@ const Testimonials = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-display font-playfair text-ivory mb-4">
-            What Our Customers Say
+            Customer Reviews
           </h2>
           <p className="text-lg text-ivory/80 max-w-2xl mx-auto">
             Trusted by thousands of customers for quality, transparency, and exceptional service
@@ -118,11 +118,7 @@ const Testimonials = () => {
                       <div className="text-sm text-ivory/70 mb-2">
                         {testimonial.location}
                       </div>
-                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-gold/20 border border-gold/30">
-                        <span className="text-xs text-gold font-medium">
-                          {testimonial.service}
-                        </span>
-                      </div>
+
                     </div>
                   </CardContent>
                 </Card>
@@ -190,7 +186,7 @@ const Testimonials = () => {
             <div className="text-ivory/80 text-sm">Happy Customers</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-gold mb-2">30+</div>
+            <div className="text-3xl font-bold text-gold mb-2">8+</div>
             <div className="text-ivory/80 text-sm">Years Experience</div>
           </div>
           <div className="text-center">
