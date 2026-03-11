@@ -17,12 +17,12 @@ const API_KEY = import.meta.env.VITE_METALPRICE_API_KEY || 'YOUR_API_KEY_HERE';
 const BASE_URL = 'https://api.metalpriceapi.com/v1';
 const USD_TO_INR = parseFloat(import.meta.env.VITE_USD_TO_INR_RATE) || 83.5;
 
-// Fallback rates (static) - Updated with current India rates as of February 11, 2026
+// Fallback rates (static) - Updated with current GRT Jewelry rates
 const FALLBACK_RATES = {
-  gold24k: 15862, // ₹15,862 per gram (24K gold)
-  gold22k: 14530, // ₹14,530 per gram (22K gold)
-  gold18k: 11897, // ₹11,897 per gram (18K gold)
-  gold14k: 9253,  // ₹9,253 per gram (14K gold)
+  gold24k: 16343, // ₹16,343 per gram (24K gold)
+  gold22k: 14970, // ₹14,970 per gram (22K gold)
+  gold18k: 12257, // ₹12,257 per gram (18K gold)
+  gold14k: 9533,  // ₹9,533 per gram (14K gold)
   platinum: 7505, // ₹7,505 per gram (Platinum)
   silver: 300,    // ₹300 per gram
   lastUpdated: new Date().toISOString(),
