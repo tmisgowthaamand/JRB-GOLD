@@ -70,12 +70,6 @@ const Header = () => {
     { name: "Gift Cards", href: "/gift-cards" },
   ];
 
-  const serviceCategories = [
-    { name: "Exchange Old Gold", href: "/services/exchange-old-gold" },
-    { name: "Re-Pledge Transfer", href: "/services/re-pledge-transfer" },
-
-    { name: "Appraiser Training", href: "/services/appraiser-training" },
-  ];
 
   const trendingProducts = [
     { id: '1', name: 'Gold Bangles', category: 'Bangles', price: 125553, image: productBangle },
@@ -158,24 +152,6 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* Services Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-foreground hover:text-gold transition-colors duration-200 font-medium p-0 h-auto">
-                    Services
-                    <ChevronDown className="ml-1 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-56">
-                  {serviceCategories.map((service) => (
-                    <DropdownMenuItem key={service.name} asChild>
-                      <a href={service.href} className="cursor-pointer">
-                        {service.name}
-                      </a>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
 
               {navigationLinks.map((link) => (
                 <a
@@ -335,23 +311,6 @@ const Header = () => {
                           ))}
                         </div>
 
-                        {/* Mobile Services Categories */}
-                        <div className="space-y-1">
-                          <div className="text-sm font-semibold text-muted-foreground px-3 py-2">Services</div>
-                          {serviceCategories.map((service) => (
-                            <Button
-                              key={service.href}
-                              variant="ghost"
-                              className="w-full justify-start pl-6"
-                              onClick={() => {
-                                navigate(service.href);
-                                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-                              }}
-                            >
-                              {service.name}
-                            </Button>
-                          ))}
-                        </div>
 
                         {navigationLinks.map((link) => (
                           <Button
