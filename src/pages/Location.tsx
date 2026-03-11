@@ -11,7 +11,7 @@ export default function LocationPage() {
     line3: 'Thiruvannamalai',
     line4: 'Tamil Nadu - 606604',
     phone: '+91 82204 21317',
-    email: 'inforjrb@gmail.com',
+    emails: ['jrbgoldprivateltd@gmail.com', 'inforjrb@gmail.com'],
     hours: {
       weekdays: 'Monday - Saturday: 10:00 AM - 8:00 PM',
       sunday: 'Sunday: 11:00 AM - 6:00 PM'
@@ -69,9 +69,13 @@ export default function LocationPage() {
                 <Mail className="h-5 w-5 text-amber-600 mr-3 mt-1 flex-shrink-0" />
                 <div>
                   <p className="text-gray-900 font-medium">Email Us</p>
-                  <a href={`mailto:${address.email}`} className="text-gray-700 hover:text-amber-600 transition-colors">
-                    {address.email}
-                  </a>
+                  <div className="flex flex-col space-y-1">
+                    {address.emails.map(email => (
+                      <a key={email} href={`mailto:${email}`} className="text-gray-700 hover:text-amber-600 transition-colors">
+                        {email}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
 

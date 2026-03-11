@@ -523,6 +523,7 @@ const Services = () => {
                 <Mail className="h-5 w-5 text-gold mr-3" />
                 <div>
                   <div className="font-semibold">Email Us</div>
+                  <div className="text-ivory/80">jrbgoldprivateltd@gmail.com</div>
                   <div className="text-ivory/80">inforjrb@gmail.com</div>
                 </div>
               </div>

@@ -136,7 +136,7 @@ const Help = () => {
             </div>
             <h3 className="font-semibold text-lg mb-2">Call Us</h3>
             <p className="text-gray-600 mb-4">Speak with our support team</p>
-            <p className="font-medium text-lg">+91 98765 43210</p>
+            <p className="font-medium text-lg">+91 82204 21317</p>
             <p className="text-sm text-gray-500">Mon-Sat, 9 AM - 7 PM</p>
           </CardContent>
         </Card>
@@ -148,6 +148,7 @@ const Help = () => {
             </div>
             <h3 className="font-semibold text-lg mb-2">Email Support</h3>
             <p className="text-gray-600 mb-4">Get help via email</p>
+            <p className="font-medium">jrbgoldprivateltd@gmail.com</p>
             <p className="font-medium">inforjrb@gmail.com</p>
             <p className="text-sm text-gray-500">Response within 24 hours</p>
           </CardContent>

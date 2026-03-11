@@ -32,7 +32,7 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email',
-      primary: 'inforjrb@gmail.com',
+      primary: 'jrbgoldprivateltd@gmail.com',
       secondary: 'inforjrb@gmail.com',
       description: 'Send us your queries anytime',
     },

@@ -57,7 +57,7 @@ ${order.expectedDelivery ? `\nExpected Delivery: ${new Date(order.expectedDelive
 
 ------------------------
 Thank you for shopping with JRB Gold Shine!
-For support, contact us at inforjrb@gmail.com
+For support, contact us at jrbgoldprivateltd@gmail.com or inforjrb@gmail.com
   `;
 
   // Create and download the file

@@ -19,7 +19,7 @@ export const CONTACT_INFO = {
     country: 'India'
   },
   phone: '82204 21317',
-  email: 'inforjrb@gmail.com',
+  email: 'jrbgoldprivateltd@gmail.com, inforjrb@gmail.com',
   website: 'https://www.jrbgold.co.in'
 };
 
@@ -65,10 +65,10 @@ export const PAYMENT_STATUS = {
 } as const;
 
 export const DEFAULT_GOLD_RATES = {
-  "22K": 14530,
-  "24K": 15862,
-  "18K": 11897,
-  "14K": 9253
+  "22K": 14970,
+  "24K": 16343,
+  "18K": 12257,
+  "14K": 9533
 };
 
 export const DEFAULT_SILVER_RATE = 300;

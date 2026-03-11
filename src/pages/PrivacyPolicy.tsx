@@ -98,6 +98,7 @@ const PrivacyPolicy = () => {
               <p>Thiruvannamalai</p>
               <p>Tamil Nadu - 606604</p>
               <p>Mobile - 82204 21317</p>
+              <p>Email: jrbgoldprivateltd@gmail.com</p>
               <p>Email: inforjrb@gmail.com</p>
               <p>Website: https://www.jrbgold.co.in</p>
             </div>
