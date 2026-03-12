@@ -1,9 +1,14 @@
 // Backend Server for JRB Gold - Payment Callback Handler + Checksum Generation
 // Deploy this to Render
+// Uses OFFICIAL paytmchecksum npm package for correct checksum generation
 
 import express from 'express';
 import cors from 'cors';
-import crypto from 'crypto';
+import { createRequire } from 'module';
+
+// Import the official Paytm checksum library (CommonJS module)
+const require = createRequire(import.meta.url);
+const PaytmChecksum = require('paytmchecksum');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -11,83 +16,13 @@ const PORT = process.env.PORT || 3001;
 // Unified frontend URL — MUST match where the app is actually deployed
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://jrb-gold.vercel.app';
 
-// Paytm credentials (from environment or defaults)
+// Paytm credentials (from environment)
 const PAYTM_MERCHANT_ID = process.env.PAYTM_MERCHANT_ID || process.env.VITE_MERCHANT_ID || '';
 const PAYTM_MERCHANT_KEY = process.env.PAYTM_MERCHANT_KEY || process.env.VITE_MERCHANT_KEY || '';
 const PAYTM_ENVIRONMENT = process.env.PAYTM_ENVIRONMENT || process.env.VITE_PAYMENT_ENV || 'test';
 const PAYTM_WEBSITE = process.env.PAYTM_WEBSITE || process.env.VITE_PAYTM_WEBSITE || 'WEBSTAGING';
 const PAYTM_INDUSTRY_TYPE = process.env.PAYTM_INDUSTRY_TYPE || process.env.VITE_PAYTM_INDUSTRY_TYPE || 'Retail';
 const PAYTM_CHANNEL_ID = process.env.PAYTM_CHANNEL_ID || process.env.VITE_PAYTM_CHANNEL_ID || 'WEB';
-
-// ============================
-// Paytm Checksum Generation
-// Official algorithm: AES-128-CBC
-// ============================
-
-const IV = '@@@@&&&&####$$$$';
-const ALGOS = { AES: 'AES', AES128: 'aes-128-cbc' };
-
-function getStringByParams(params) {
-  const data = {};
-  Object.keys(params).sort().forEach(key => {
-    data[key] = (params[key] !== null && params[key].toLowerCase() !== 'null') 
-      ? params[key] 
-      : '';
-  });
-  return Object.values(data).join('|');
-}
-
-function calculateHash(params, salt) {
-  const finalString = getStringByParams(params) + '|' + salt;
-  return crypto.createHash('sha256').update(finalString).digest('hex') + salt;
-}
-
-function encrypt(input, key) {
-  const cipher = crypto.createCipheriv(ALGOS.AES128, key, IV);
-  let encrypted = cipher.update(input, 'binary', 'base64');
-  encrypted += cipher.final('base64');
-  return encrypted;
-}
-
-function decrypt(encrypted, key) {
-  const decipher = crypto.createDecipheriv(ALGOS.AES128, key, IV);
-  let decrypted = decipher.update(encrypted, 'base64', 'binary');
-  decrypted += decipher.final('binary');
-  return decrypted;
-}
-
-function generateRandomString(length) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const randomBytes = crypto.randomBytes(length);
-  for (let i = 0; i < length; i++) {
-    result += chars[randomBytes[i] % chars.length];
-  }
-  return result;
-}
-
-function generateChecksum(params, key) {
-  const salt = generateRandomString(4);
-  const hashString = calculateHash(params, salt);
-  const checksum = encrypt(hashString, key);
-  return checksum;
-}
-
-function verifyChecksum(params, key, checksumHash) {
-  try {
-    const paramsData = { ...params };
-    delete paramsData.CHECKSUMHASH;
-    
-    const decrypted = decrypt(checksumHash, key);
-    const salt = decrypted.substring(decrypted.length - 4);
-    const calculatedHash = calculateHash(paramsData, salt);
-    
-    return calculatedHash === decrypted;
-  } catch (e) {
-    console.error('Checksum verification error:', e);
-    return false;
-  }
-}
 
 // ============================
 // Middleware
@@ -123,16 +58,18 @@ app.get('/api/health', (req, res) => {
     message: 'JRB Gold Payment Backend is running',
     frontendUrl: FRONTEND_URL,
     merchantId: PAYTM_MERCHANT_ID ? `${PAYTM_MERCHANT_ID.substring(0, 8)}...` : 'NOT SET',
-    merchantKey: PAYTM_MERCHANT_KEY ? 'SET' : 'NOT SET',
+    merchantKeySet: PAYTM_MERCHANT_KEY ? true : false,
+    merchantKeyLength: PAYTM_MERCHANT_KEY ? PAYTM_MERCHANT_KEY.length : 0,
     environment: PAYTM_ENVIRONMENT,
+    website: PAYTM_WEBSITE,
     timestamp: new Date().toISOString()
   });
 });
 
 // ============================
-// Initiate Payment — generates checksum server-side
+// Initiate Payment — generates checksum using official Paytm SDK
 // ============================
-app.post('/api/initiate-payment', (req, res) => {
+app.post('/api/initiate-payment', async (req, res) => {
   try {
     const { orderId, amount, customerId, email, mobile } = req.body;
 
@@ -147,6 +84,8 @@ app.post('/api/initiate-payment', (req, res) => {
 
     if (!PAYTM_MERCHANT_ID || !PAYTM_MERCHANT_KEY) {
       console.error('Paytm credentials not configured!');
+      console.error('PAYTM_MERCHANT_ID:', PAYTM_MERCHANT_ID ? 'SET' : 'MISSING');
+      console.error('PAYTM_MERCHANT_KEY:', PAYTM_MERCHANT_KEY ? 'SET' : 'MISSING');
       return res.status(500).json({ 
         success: false, 
         error: 'Payment gateway not configured. Please contact support.' 
@@ -154,7 +93,8 @@ app.post('/api/initiate-payment', (req, res) => {
     }
 
     // Callback URL — Paytm will POST to this after payment
-    const callbackUrl = `${process.env.BACKEND_URL || `https://jrb-gold.onrender.com`}/payment/callback`;
+    const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
+    const callbackUrl = `${backendUrl}/payment/callback`;
 
     // Paytm transaction parameters
     const paytmParams = {
@@ -170,10 +110,26 @@ app.post('/api/initiate-payment', (req, res) => {
       MOBILE_NO: mobile || ''
     };
 
-    // Generate checksum using Paytm's algorithm (AES-128-CBC)
-    const checksum = generateChecksum(paytmParams, PAYTM_MERCHANT_KEY);
+    console.log('Paytm params for checksum:', paytmParams);
+    console.log('Using merchant key (length):', PAYTM_MERCHANT_KEY.length);
 
-    console.log('Checksum generated successfully for order:', orderId);
+    // Generate checksum using OFFICIAL Paytm SDK
+    const checksum = await PaytmChecksum.generateSignature(paytmParams, PAYTM_MERCHANT_KEY);
+
+    console.log('Checksum generated successfully (official SDK) for order:', orderId);
+    console.log('Checksum value:', checksum.substring(0, 20) + '...');
+
+    // Verify our own checksum to make sure it's valid
+    const isValidChecksum = PaytmChecksum.verifySignature(paytmParams, PAYTM_MERCHANT_KEY, checksum);
+    console.log('Self-verification of generated checksum:', isValidChecksum);
+
+    if (!isValidChecksum) {
+      console.error('Self-verification FAILED! Merchant key might be incorrect.');
+      return res.status(500).json({
+        success: false,
+        error: 'Checksum generation error. Please contact support.'
+      });
+    }
 
     // Determine Paytm gateway URL
     const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
@@ -207,10 +163,10 @@ app.post('/payment/callback', (req, res) => {
   
   const body = req.body || {};
 
-  // Optionally verify the checksum from Paytm
+  // Verify the checksum from Paytm using official SDK
   if (body.CHECKSUMHASH && PAYTM_MERCHANT_KEY) {
-    const isValidChecksum = verifyChecksum(body, PAYTM_MERCHANT_KEY, body.CHECKSUMHASH);
-    console.log('Checksum verification:', isValidChecksum ? 'VALID' : 'INVALID');
+    const isValidChecksum = PaytmChecksum.verifySignature(body, PAYTM_MERCHANT_KEY, body.CHECKSUMHASH);
+    console.log('Callback checksum verification:', isValidChecksum ? 'VALID ✅' : 'INVALID ❌');
   }
 
   const ORDERID = body.ORDERID || body.orderid || '';
@@ -270,6 +226,44 @@ app.get('/test/callback-fail', (req, res) => {
   res.redirect(testCallbackUrl);
 });
 
+// Debug endpoint — test checksum generation
+app.get('/test/checksum', async (req, res) => {
+  try {
+    const testParams = {
+      MID: PAYTM_MERCHANT_ID,
+      ORDER_ID: 'TEST_' + Date.now(),
+      TXN_AMOUNT: '1.00',
+      CUST_ID: 'test@example.com',
+      CHANNEL_ID: PAYTM_CHANNEL_ID,
+      WEBSITE: PAYTM_WEBSITE,
+      INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
+      CALLBACK_URL: 'https://jrb-gold.onrender.com/payment/callback'
+    };
+
+    const checksum = await PaytmChecksum.generateSignature(testParams, PAYTM_MERCHANT_KEY);
+    const isValid = PaytmChecksum.verifySignature(testParams, PAYTM_MERCHANT_KEY, checksum);
+
+    res.json({
+      success: true,
+      merchantId: PAYTM_MERCHANT_ID,
+      merchantKeyLength: PAYTM_MERCHANT_KEY.length,
+      checksumGenerated: checksum.substring(0, 30) + '...',
+      selfVerification: isValid,
+      testParams,
+      message: isValid 
+        ? 'Checksum generation and verification working correctly ✅' 
+        : 'Checksum verification failed! Check merchant key ❌'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      merchantKeyLength: PAYTM_MERCHANT_KEY ? PAYTM_MERCHANT_KEY.length : 0,
+      merchantKeySet: !!PAYTM_MERCHANT_KEY
+    });
+  }
+});
+
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
@@ -279,7 +273,8 @@ app.get('/', (req, res) => {
       initiatePayment: '/api/initiate-payment (POST)',
       callback: '/payment/callback (POST)',
       testSuccess: '/test/callback',
-      testFail: '/test/callback-fail'
+      testFail: '/test/callback-fail',
+      testChecksum: '/test/checksum'
     },
     frontend: FRONTEND_URL
   });
@@ -287,8 +282,11 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 JRB Gold Backend running on port ${PORT}`);
-  console.log(`📡 Payment callback endpoint: http://localhost:${PORT}/payment/callback`);
-  console.log(`💳 Payment initiation endpoint: http://localhost:${PORT}/api/initiate-payment`);
+  console.log(`📡 Payment callback: http://localhost:${PORT}/payment/callback`);
+  console.log(`💳 Payment initiation: http://localhost:${PORT}/api/initiate-payment`);
   console.log(`🌐 Frontend URL: ${FRONTEND_URL}`);
   console.log(`🔑 Merchant ID: ${PAYTM_MERCHANT_ID ? PAYTM_MERCHANT_ID.substring(0, 8) + '...' : 'NOT SET'}`);
+  console.log(`🔐 Merchant Key: ${PAYTM_MERCHANT_KEY ? 'SET (' + PAYTM_MERCHANT_KEY.length + ' chars)' : 'NOT SET'}`);
+  console.log(`🌍 Environment: ${PAYTM_ENVIRONMENT}`);
+  console.log(`🌐 Website: ${PAYTM_WEBSITE}`);
 });
