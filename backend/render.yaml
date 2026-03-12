@@ -20,9 +20,9 @@ services:
       - key: PAYTM_MERCHANT_KEY
         value: 7x3aqULKxZe&Sj7V
       - key: PAYTM_ENVIRONMENT
-        value: test
+        value: production
       - key: PAYTM_WEBSITE
-        value: WEBSTAGING
+        value: DEFAULT
       - key: PAYTM_INDUSTRY_TYPE
         value: Retail
       - key: PAYTM_CHANNEL_ID
