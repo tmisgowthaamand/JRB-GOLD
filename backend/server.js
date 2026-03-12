@@ -266,6 +266,56 @@ app.get('/test/checksum', async (req, res) => {
   }
 });
 
+// Debug endpoint — test checksum generation bypassing frontend
+app.get('/test/pay', async (req, res) => {
+  try {
+    const orderId = 'TEST_' + Date.now();
+    const testParams = {
+      MID: PAYTM_MERCHANT_ID,
+      ORDER_ID: orderId,
+      TXN_AMOUNT: '1.00',
+      CUST_ID: 'TEST_USER_01',
+      CHANNEL_ID: PAYTM_CHANNEL_ID,
+      WEBSITE: PAYTM_WEBSITE,
+      INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
+      CALLBACK_URL: `${process.env.BACKEND_URL || 'https://jrb-gold.onrender.com'}/payment/callback`
+    };
+
+    const checksum = await PaytmChecksum.generateSignature(testParams, PAYTM_MERCHANT_KEY);
+    
+    const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
+      ? 'https://securegw.paytm.in/order/process'
+      : 'https://securegw-stage.paytm.in/order/process';
+
+    // Generate raw HTML form that submits exactly the signed data
+    let html = `
+      <html>
+        <head><title>Test Paytm Redirect</title></head>
+        <body>
+          <h2>Redirecting to Paytm...</h2>
+          <form method="post" action="${paytmGatewayUrl}" name="paytm">
+    `;
+    
+    for (const key in testParams) {
+      html += `<input type="hidden" name="${key}" value="${testParams[key]}">\n`;
+    }
+    html += `<input type="hidden" name="CHECKSUMHASH" value="${checksum}">\n`;
+    
+    html += `
+          </form>
+          <script type="text/javascript">
+            document.paytm.submit();
+          </script>
+        </body>
+      </html>
+    `;
+    
+    res.send(html);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
