@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: jrb-gold-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://jrb-gold-56cs.vercel.app
+      - key: CORS_ORIGINS
+        value: https://jrb-gold-56cs.vercel.app,http://localhost:5173,http://localhost:8080,https://www.jrbgold.co.in
+      - key: VITE_MERCHANT_ID
+        value: nfvifF32655861820763
+      - key: VITE_MERCHANT_KEY
+        value: 7x3aqULKxZe&Sj7V
+      - key: VITE_PAYMENT_ENV
+        value: production
