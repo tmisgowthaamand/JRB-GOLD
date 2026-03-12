@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Banknote, CheckCircle, Package, Calendar } from "lucide-react";
+import { CreditCard, Banknote, CheckCircle, Package, Calendar, Loader2 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { paymentService } from "@/services/paymentService";
+import { toast } from "sonner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import productBangle from "@/assets/product-bangle.jpg";
@@ -86,6 +88,7 @@ export default function Checkout() {
   // Payment form state
   const [paymentMethod, setPaymentMethod] = useState('credit'); // 'credit', 'debit', or 'netbanking'
   const [selectedBank, setSelectedBank] = useState('');
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   
   // Order confirmation state
   const [showOrderConfirmation, setShowOrderConfirmation] = useState(false);
@@ -117,10 +120,10 @@ export default function Checkout() {
     return `JRB${timestamp.slice(-6)}${random}`;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCountry || !selectedState) {
-      alert('Please select your country and state');
+      toast.error('Please select your country and state');
       return;
     }
     
@@ -139,7 +142,7 @@ export default function Checkout() {
     const userEmail = localStorage.getItem('userEmail');
     
     if (!authToken || !userEmail) {
-      alert('Please sign in to complete your order');
+      toast.error('Please sign in to complete your order');
       navigate('/signin');
       return;
     }
@@ -184,7 +187,7 @@ export default function Checkout() {
       total: total,
       status: 'Processing',
       paymentMethod: paymentMethod === 'credit' ? 'Credit Card' : paymentMethod === 'debit' ? 'Debit Card' : 'Net Banking',
-      paymentStatus: 'completed',
+      paymentStatus: 'pending',
       createdAt: orderDate,
       customerEmail: userEmail,
       shippingAddress: {
@@ -210,10 +213,37 @@ export default function Checkout() {
     allOrders.push(order);
     localStorage.setItem('allOrders', JSON.stringify(allOrders));
     
-    clearCart();
+    // Initiate payment
+    setIsProcessingPayment(true);
     
-    // Redirect to order details page
-    navigate(`/order/${orderId}`);
+    try {
+      const paymentResponse = await paymentService.initiatePayment({
+        orderId: orderId,
+        amount: total,
+        currency: 'INR',
+        customerName: `${firstName} ${lastName}`,
+        customerEmail: email,
+        customerPhone: phone,
+        returnUrl: `${window.location.origin}/payment/callback`,
+        cancelUrl: `${window.location.origin}/checkout`,
+        paymentMethod: paymentMethod as 'credit' | 'debit' | 'netbanking'
+      });
+
+      if (paymentResponse.success && paymentResponse.redirectUrl) {
+        // Clear cart before redirecting to payment gateway
+        clearCart();
+        
+        // Redirect to payment gateway
+        window.location.href = paymentResponse.redirectUrl;
+      } else {
+        toast.error(paymentResponse.message || 'Failed to initiate payment');
+        setIsProcessingPayment(false);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast.error('An error occurred while processing payment');
+      setIsProcessingPayment(false);
+    }
   };
 
   if (cart.length === 0) {
@@ -426,10 +456,19 @@ export default function Checkout() {
                 </div>
                 
                 <div className="mt-6 space-y-4">
-                  <Button type="submit" className="w-full">
-                    {paymentMethod === 'netbanking' 
-                      ? `Pay ₹${total.toFixed(2)} via NetBanking`
-                      : `Pay ₹${total.toFixed(2)} with ${paymentMethod === 'credit' ? 'Credit' : 'Debit'} Card`}
+                  <Button type="submit" className="w-full" disabled={isProcessingPayment}>
+                    {isProcessingPayment ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Processing Payment...
+                      </>
+                    ) : (
+                      <>
+                        {paymentMethod === 'netbanking' 
+                          ? `Pay ₹${total.toFixed(2)} via NetBanking`
+                          : `Pay ₹${total.toFixed(2)} with ${paymentMethod === 'credit' ? 'Credit' : 'Debit'} Card`}
+                      </>
+                    )}
                   </Button>
                   <p className="text-xs text-gray-500 text-center">
                     Your payment is secured with 256-bit SSL encryption
