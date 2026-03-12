@@ -143,29 +143,26 @@ class PaymentService {
       if (this.config.environment === 'test') {
         console.log('TEST MODE: Simulating Paytm payment gateway');
         
-        // Generate mock transaction ID
-        const mockTxnId = `PAYTM${Date.now()}${Math.random().toString(36).substring(7).toUpperCase()}`;
+        // In test mode, still use the redirect flow but with a simulated payment page
+        // Store the payment data for the redirect page to simulate payment
+        const mockPaymentData = {
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          customerName: paymentData.customerName,
+          customerEmail: paymentData.customerEmail,
+          returnUrl: paymentData.returnUrl,
+          isTestMode: true
+        };
         
-        // Simulate Paytm callback parameters
-        const callbackUrl = `${paymentData.returnUrl}?` +
-          `ORDERID=${paymentData.orderId}&` +
-          `TXNID=${mockTxnId}&` +
-          `TXNAMOUNT=${paymentData.amount.toFixed(2)}&` +
-          `STATUS=TXN_SUCCESS&` +
-          `RESPCODE=01&` +
-          `RESPMSG=Txn Success&` +
-          `TXNDATE=${new Date().toISOString()}&` +
-          `GATEWAYNAME=PAYTM&` +
-          `BANKNAME=TEST&` +
-          `PAYMENTMODE=${paymentData.paymentMethod || 'CREDIT_CARD'}`;
+        sessionStorage.setItem('mockPaymentData', JSON.stringify(mockPaymentData));
         
         return {
           success: true,
           orderId: paymentData.orderId,
           amount: paymentData.amount,
           status: 'pending',
-          message: 'Paytm payment initiated successfully (Test Mode)',
-          redirectUrl: callbackUrl
+          message: 'Redirecting to test payment gateway...',
+          redirectUrl: '/payment/redirect'
         };
       }
 
