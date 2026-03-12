@@ -1,22 +1,17 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "dist/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/dist/$1"
-    },
-    {
-      "src": "/.*",
-      "dest": "/dist/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
-    "VITE_BACKEND_URL": "https://jrb-gold-backend.onrender.com"
+    "VITE_BACKEND_URL": "https://jrb-gold-backend.onrender.com",
+    "VITE_PAYMENT_ENV": "production",
+    "VITE_MERCHANT_ID": "nfvifF32655861820763",
+    "VITE_MERCHANT_KEY": "7x3aqULKxZe&Sj7V",
+    "VITE_PAYTM_WEBSITE": "WEBSTAGING",
+    "VITE_PAYTM_INDUSTRY_TYPE": "Retail",
+    "VITE_PAYTM_CHANNEL_ID": "WEB"
   }
 }

@@ -9,6 +9,7 @@
     "dev:8081": "vite --config vite.config.8081.ts",
     "dev:8082": "vite --config vite.config.8082.ts",
     "build": "tsc -b && vite build",
+    "vercel-build": "npm run build",
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "node server.js",
