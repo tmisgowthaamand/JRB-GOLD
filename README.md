@@ -6,6 +6,24 @@
 **Website**: https://jrb-gold.vercel.app/
 **Description**: Trusted Gold & Silver — Fair Prices, Fine Craft. Low making charges, no wastage, certified hallmark jewelry.
 
+## 💳 Payment Integration
+
+The website now includes a complete payment gateway integration with:
+
+- **Credit Card** payments (Visa, MasterCard, Amex)
+- **Debit Card** payments (all major banks)
+- **Net Banking** (SBI, HDFC, ICICI, Axis, and more)
+- Secure SHA-256 encryption
+- Payment verification system
+
+**Merchant Credentials:**
+- Merchant ID: `nfvifF32655861820763`
+- Merchant Key: `7x3aqULKxZe&Sj7V`
+
+📖 **Documentation:**
+- Quick Setup: [PAYMENT_SETUP.md](./PAYMENT_SETUP.md)
+- Full Guide: [docs/PAYMENT_INTEGRATION.md](./docs/PAYMENT_INTEGRATION.md)
+
 ## How to edit this code?
 
 There are several ways of editing your application.
