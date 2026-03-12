@@ -54,7 +54,7 @@ app.post('/payment/callback', (req, res) => {
   } = req.body;
 
   // Build redirect URL to Vercel frontend
-  const frontendUrl = process.env.FRONTEND_URL || 'https://www.jrbgold.co.in';
+  const frontendUrl = process.env.FRONTEND_URL || 'https://jrb-gold.vercel.app';
   const callbackUrl = new URL('/payment/callback', frontendUrl);
   
   // Add all parameters as query strings
@@ -77,7 +77,7 @@ app.post('/payment/callback', (req, res) => {
 
 // Test endpoint for payment callback
 app.get('/test/callback', (req, res) => {
-  const frontendUrl = process.env.FRONTEND_URL || 'https://www.jrbgold.co.in';
+  const frontendUrl = process.env.FRONTEND_URL || 'https://jrb-gold.vercel.app';
   const testCallbackUrl = `${frontendUrl}/payment/callback?ORDERID=TEST123&STATUS=TXN_SUCCESS&TXNID=TEST456&TXNAMOUNT=1000.00&RESPCODE=01&RESPMSG=Test%20Success`;
   
   res.redirect(testCallbackUrl);
@@ -92,12 +92,12 @@ app.get('/', (req, res) => {
       callback: '/payment/callback',
       test: '/test/callback'
     },
-    frontend: process.env.FRONTEND_URL || 'https://www.jrbgold.co.in'
+    frontend: process.env.FRONTEND_URL || 'https://jrb-gold.vercel.app'
   });
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 JRB Gold Backend running on port ${PORT}`);
   console.log(`📡 Payment callback endpoint: http://localhost:${PORT}/payment/callback`);
-  console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'https://www.jrbgold.co.in'}`);
+  console.log(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'https://jrb-gold.vercel.app'}`);
 });
