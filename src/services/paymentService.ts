@@ -117,6 +117,10 @@ class PaymentService {
       }
 
       // Prepare Paytm payment parameters
+      // Use Render backend for POST callback handling
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://jrb-gold-backend.onrender.com';
+      const callbackUrl = `${backendUrl}/payment/callback`;
+        
       const paytmParams = {
         MID: this.config.merchantId,
         WEBSITE: this.config.websiteName,
@@ -125,7 +129,7 @@ class PaymentService {
         ORDER_ID: paymentData.orderId,
         CUST_ID: paymentData.customerEmail,
         TXN_AMOUNT: paymentData.amount.toFixed(2),
-        CALLBACK_URL: paymentData.returnUrl,
+        CALLBACK_URL: callbackUrl,
         EMAIL: paymentData.customerEmail,
         MOBILE_NO: paymentData.customerPhone
       };
