@@ -96,7 +96,7 @@ app.post('/api/initiate-payment', async (req, res) => {
     const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
     const callbackUrl = `${backendUrl}/payment/callback`;
 
-    // Paytm transaction parameters
+    // Initial required Paytm transaction parameters
     const paytmParams = {
       MID: PAYTM_MERCHANT_ID,
       WEBSITE: PAYTM_WEBSITE,
@@ -105,10 +105,12 @@ app.post('/api/initiate-payment', async (req, res) => {
       ORDER_ID: orderId,
       CUST_ID: customerId,
       TXN_AMOUNT: parseFloat(amount).toFixed(2),
-      CALLBACK_URL: callbackUrl,
-      EMAIL: email || '',
-      MOBILE_NO: mobile || ''
+      CALLBACK_URL: callbackUrl
     };
+
+    // Only add optional parameters if they have truthy values
+    if (email) paytmParams.EMAIL = email.trim();
+    if (mobile) paytmParams.MOBILE_NO = mobile.trim();
 
     console.log('Paytm params for checksum:', paytmParams);
     console.log('Using merchant key (length):', PAYTM_MERCHANT_KEY.length);
