@@ -1,15 +1,10 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api).*)",
       "destination": "/index.html"
     }
   ],
-  "functions": {
-    "api/payment-callback.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "env": {
     "VITE_BACKEND_URL": "https://jrb-gold-56cs.vercel.app",
     "VITE_FRONTEND_URL": "https://jrb-gold-56cs.vercel.app",
