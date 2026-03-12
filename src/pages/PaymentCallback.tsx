@@ -12,6 +12,9 @@ export default function PaymentCallback() {
 
   useEffect(() => {
     const verifyPayment = async () => {
+      // Debug: Log all search params
+      console.log('Payment callback received with params:', Object.fromEntries(searchParams.entries()));
+      
       // Paytm sends different parameter names
       const transactionId = searchParams.get('TXNID') || searchParams.get('txnid');
       const orderId = searchParams.get('ORDERID') || searchParams.get('orderid');
@@ -19,9 +22,17 @@ export default function PaymentCallback() {
       const responseCode = searchParams.get('RESPCODE');
       const responseMsg = searchParams.get('RESPMSG');
 
+      // If no parameters at all, this might be a direct access
+      if (searchParams.toString() === '') {
+        setStatus('failed');
+        setMessage('No payment data received. Please try again from checkout.');
+        return;
+      }
+
       if (!transactionId || !orderId || !paymentStatus) {
         setStatus('failed');
-        setMessage('Invalid payment response');
+        setMessage('Invalid payment response - missing required parameters');
+        console.error('Missing payment parameters:', { transactionId, orderId, paymentStatus });
         return;
       }
 

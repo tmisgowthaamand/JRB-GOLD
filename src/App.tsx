@@ -24,6 +24,7 @@ import ProductDetail from './pages/ProductDetail';
 import OrderDetails from './pages/OrderDetails';
 import PaymentCallback from './pages/PaymentCallback';
 import PaymentRedirect from './pages/PaymentRedirect';
+import PaymentTest from './pages/PaymentTest';
 import Help from './pages/Help';
 import RePledgeTransfer from "./pages/services/RePledgeTransfer";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -118,6 +119,7 @@ function App() {
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/payment/redirect" element={<PaymentRedirect />} />
                   <Route path="/payment/callback" element={<PaymentCallback />} />
+                  <Route path="/payment/test" element={<PaymentTest />} />
                   <Route path="/order/:orderId" element={<OrderDetails />} />
                   <Route path="/favorites" element={<Favorites />} />
                   <Route path="/about" element={<About />} />
