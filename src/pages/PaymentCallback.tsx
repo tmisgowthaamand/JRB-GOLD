@@ -17,15 +17,27 @@ export default function PaymentCallback() {
     const verifyPayment = async () => {
       try {
         // Debug: Log all search params
-        console.log('Payment callback received with params:', Object.fromEntries(searchParams.entries()));
+        const allParams = Object.fromEntries(searchParams.entries());
+        console.log('Payment callback received with params:', allParams);
+        console.log('All URL params:', window.location.search);
         
         // Check if this is a POST callback (Paytm sends form data)
         // In this case, we'll handle it as GET parameters
-        let transactionId = searchParams.get('TXNID') || searchParams.get('txnid');
-        let orderId = searchParams.get('ORDERID') || searchParams.get('orderid');
+        let transactionId = searchParams.get('TXNID') || searchParams.get('txnid') || searchParams.get('TXNID');
+        let orderId = searchParams.get('ORDERID') || searchParams.get('orderid') || searchParams.get('ORDER_ID');
         let paymentStatus = searchParams.get('STATUS') || searchParams.get('status');
-        let responseCode = searchParams.get('RESPCODE');
-        let responseMsg = searchParams.get('RESPMSG');
+        let responseCode = searchParams.get('RESPCODE') || searchParams.get('respcode');
+        let responseMsg = searchParams.get('RESPMSG') || searchParams.get('respmsg');
+        let txnAmount = searchParams.get('TXNAMOUNT') || searchParams.get('txnamount');
+
+        console.log('Extracted params:', {
+          transactionId,
+          orderId,
+          paymentStatus,
+          responseCode,
+          responseMsg,
+          txnAmount
+        });
 
         // If no URL parameters, check if data was passed via sessionStorage (from POST)
         if (!transactionId && !orderId && !paymentStatus) {
@@ -42,17 +54,22 @@ export default function PaymentCallback() {
         }
 
         // If still no parameters, this might be a direct access
-        if (!transactionId && !orderId && !paymentStatus) {
+        if (!orderId || !paymentStatus) {
           setStatus('failed');
-          setMessage('No payment data received. Please try again from checkout.');
+          setMessage(`Missing required parameters. OrderID: ${orderId || 'missing'}, Status: ${paymentStatus || 'missing'}`);
+          console.error('Missing payment parameters:', { 
+            transactionId, 
+            orderId, 
+            paymentStatus,
+            allParams 
+          });
           return;
         }
 
-        if (!transactionId || !orderId || !paymentStatus) {
-          setStatus('failed');
-          setMessage('Invalid payment response - missing required parameters');
-          console.error('Missing payment parameters:', { transactionId, orderId, paymentStatus });
-          return;
+        // Transaction ID is optional for some payment methods
+        if (!transactionId) {
+          console.warn('Transaction ID missing, using order ID as fallback');
+          transactionId = orderId;
         }
 
         const isValid = await paymentService.verifyPayment(
