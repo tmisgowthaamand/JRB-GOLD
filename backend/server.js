@@ -103,7 +103,7 @@ app.post('/api/initiate-payment', async (req, res) => {
       INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
       CHANNEL_ID: PAYTM_CHANNEL_ID,
       ORDER_ID: orderId,
-      CUST_ID: customerId,
+      CUST_ID: customerId.replace(/[^a-zA-Z0-9_\-]/g, '_'),
       TXN_AMOUNT: parseFloat(amount).toFixed(2),
       CALLBACK_URL: callbackUrl
     };
