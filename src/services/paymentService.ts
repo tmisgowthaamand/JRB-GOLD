@@ -37,34 +37,52 @@ class PaymentService {
 
   constructor() {
     this.config = {
-      merchantId: import.meta.env.VITE_MERCHANT_ID || 'nfvifF326558618207637x3aqULKxZe&Sj7V',
-      merchantKey: import.meta.env.VITE_MERCHANT_KEY || '7x3aqULKxZe&Sj7V',
+      merchantId: import.meta.env.VITE_MERCHANT_ID || '',
+      merchantKey: import.meta.env.VITE_MERCHANT_KEY || '',
       environment: (import.meta.env.VITE_PAYMENT_ENV as 'test' | 'production') || 'test',
       websiteName: import.meta.env.VITE_PAYTM_WEBSITE || 'WEBSTAGING',
       industryType: import.meta.env.VITE_PAYTM_INDUSTRY_TYPE || 'Retail',
       channelId: import.meta.env.VITE_PAYTM_CHANNEL_ID || 'WEB'
     };
+
+    // Debug logging (remove in production)
+    console.log('Paytm Configuration:', {
+      merchantId: this.config.merchantId ? `${this.config.merchantId.substring(0, 8)}...` : 'NOT SET',
+      merchantKey: this.config.merchantKey ? 'SET' : 'NOT SET',
+      environment: this.config.environment,
+      websiteName: this.config.websiteName,
+      industryType: this.config.industryType,
+      channelId: this.config.channelId
+    });
+
+    // Validate required configuration
+    if (!this.config.merchantId || !this.config.merchantKey) {
+      console.error('Paytm configuration missing: VITE_MERCHANT_ID and VITE_MERCHANT_KEY are required');
+    }
   }
 
   /**
    * Generate Paytm checksum for secure transaction
    */
   private async generatePaytmChecksum(params: any): Promise<string> {
-    // Paytm checksum generation
-    // Sort parameters alphabetically
+    // Note: In production, checksum generation should be done on the server side
+    // for security reasons. This client-side implementation is for development only.
+    
+    // Sort parameters alphabetically (excluding CHECKSUMHASH)
     const sortedParams = Object.keys(params)
+      .filter(key => key !== 'CHECKSUMHASH')
       .sort()
       .reduce((acc: any, key) => {
-        acc[key] = params[key];
+        if (params[key] && params[key] !== '') {
+          acc[key] = params[key];
+        }
         return acc;
       }, {});
 
     // Create parameter string
     let paramStr = '';
     for (const key in sortedParams) {
-      if (sortedParams[key]) {
-        paramStr += `${key}=${sortedParams[key]}&`;
-      }
+      paramStr += `${key}=${sortedParams[key]}&`;
     }
     paramStr = paramStr.slice(0, -1); // Remove last &
 
@@ -86,6 +104,18 @@ class PaymentService {
    */
   async initiatePayment(paymentData: PaymentRequest): Promise<PaymentResponse> {
     try {
+      // Validate configuration before proceeding
+      if (!this.config.merchantId || !this.config.merchantKey) {
+        console.error('Paytm configuration error: Missing merchant credentials');
+        return {
+          success: false,
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          status: 'failed',
+          message: 'Payment gateway configuration error. Please contact support.'
+        };
+      }
+
       // Prepare Paytm payment parameters
       const paytmParams = {
         MID: this.config.merchantId,
@@ -144,6 +174,13 @@ class PaymentService {
       
       // Create form data for POST redirect
       const formData = { ...paytmParams, CHECKSUMHASH: checksum };
+      
+      console.log('Production payment initiated:', {
+        orderId: paymentData.orderId,
+        amount: paymentData.amount,
+        paytmUrl,
+        merchantId: this.config.merchantId
+      });
       
       // Store form data in sessionStorage for redirect
       sessionStorage.setItem('paytmFormData', JSON.stringify(formData));
