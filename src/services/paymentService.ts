@@ -64,35 +64,11 @@ class PaymentService {
         };
       }
 
-      // In test mode, simulate Paytm payment
-      if (this.config.environment === 'test') {
-        console.log('TEST MODE: Simulating Paytm payment gateway');
-        
-        const mockPaymentData = {
-          orderId: paymentData.orderId,
-          amount: paymentData.amount,
-          customerName: paymentData.customerName,
-          customerEmail: paymentData.customerEmail,
-          returnUrl: paymentData.returnUrl,
-          isTestMode: true
-        };
-        
-        sessionStorage.setItem('mockPaymentData', JSON.stringify(mockPaymentData));
-        
-        return {
-          success: true,
-          orderId: paymentData.orderId,
-          amount: paymentData.amount,
-          status: 'pending',
-          message: 'Redirecting to test payment gateway...',
-          redirectUrl: '/payment/redirect'
-        };
-      }
-
       // =============================================
-      // PRODUCTION: Call backend to generate checksum
+      // Call backend to generate checksum (works for both test/staging and production)
+      // Backend decides which Paytm gateway to use based on PAYTM_ENVIRONMENT
       // =============================================
-      console.log('Production payment: Calling backend for checksum generation...');
+      console.log(`Calling backend for checksum generation (env: ${this.config.environment})...`);
       
       const response = await fetch(`${this.config.backendUrl}/api/initiate-payment`, {
         method: 'POST',

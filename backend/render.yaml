@@ -20,7 +20,7 @@ services:
       - key: PAYTM_MERCHANT_KEY
         value: 7x3aqULKxZe&Sj7V
       - key: PAYTM_ENVIRONMENT
-        value: production
+        value: test
       - key: PAYTM_WEBSITE
         value: WEBSTAGING
       - key: PAYTM_INDUSTRY_TYPE
