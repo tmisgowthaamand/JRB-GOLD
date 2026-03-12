@@ -9,13 +9,21 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: BACKEND_URL
+        value: https://jrb-gold.onrender.com
       - key: FRONTEND_URL
         value: https://jrb-gold.vercel.app
       - key: CORS_ORIGINS
-        value: https://jrb-gold.vercel.app,https://www.jrbgold.co.in,http://localhost:5173,http://localhost:8080
-      - key: VITE_MERCHANT_ID
+        value: https://jrb-gold.vercel.app,https://www.jrbgold.co.in,https://jrbgold.co.in,http://localhost:5173,http://localhost:8080
+      - key: PAYTM_MERCHANT_ID
         value: nfvifF32655861820763
-      - key: VITE_MERCHANT_KEY
+      - key: PAYTM_MERCHANT_KEY
         value: 7x3aqULKxZe&Sj7V
-      - key: VITE_PAYMENT_ENV
+      - key: PAYTM_ENVIRONMENT
         value: production
+      - key: PAYTM_WEBSITE
+        value: WEBSTAGING
+      - key: PAYTM_INDUSTRY_TYPE
+        value: Retail
+      - key: PAYTM_CHANNEL_ID
+        value: WEB

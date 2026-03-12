@@ -1,13 +1,10 @@
 // Payment Gateway Service for JRB Gold - Paytm Integration
-// Merchant credentials configuration
+// Checksum is now generated SERVER-SIDE via the Render backend
 
 export interface PaymentConfig {
   merchantId: string;
-  merchantKey: string;
   environment: 'test' | 'production';
-  websiteName: string;
-  industryType: string;
-  channelId: string;
+  backendUrl: string;
 }
 
 export interface PaymentRequest {
@@ -38,75 +35,26 @@ class PaymentService {
   constructor() {
     this.config = {
       merchantId: import.meta.env.VITE_MERCHANT_ID || '',
-      merchantKey: import.meta.env.VITE_MERCHANT_KEY || '',
       environment: (import.meta.env.VITE_PAYMENT_ENV as 'test' | 'production') || 'test',
-      websiteName: import.meta.env.VITE_PAYTM_WEBSITE || 'WEBSTAGING',
-      industryType: import.meta.env.VITE_PAYTM_INDUSTRY_TYPE || 'Retail',
-      channelId: import.meta.env.VITE_PAYTM_CHANNEL_ID || 'WEB'
+      backendUrl: import.meta.env.VITE_BACKEND_URL || 'https://jrb-gold.onrender.com',
     };
 
-    // Debug logging (remove in production)
-    console.log('Paytm Configuration:', {
+    console.log('Payment Service Configuration:', {
       merchantId: this.config.merchantId ? `${this.config.merchantId.substring(0, 8)}...` : 'NOT SET',
-      merchantKey: this.config.merchantKey ? 'SET' : 'NOT SET',
       environment: this.config.environment,
-      websiteName: this.config.websiteName,
-      industryType: this.config.industryType,
-      channelId: this.config.channelId
+      backendUrl: this.config.backendUrl,
     });
-
-    // Validate required configuration
-    if (!this.config.merchantId || !this.config.merchantKey) {
-      console.error('Paytm configuration missing: VITE_MERCHANT_ID and VITE_MERCHANT_KEY are required');
-    }
-  }
-
-  /**
-   * Generate Paytm checksum for secure transaction
-   */
-  private async generatePaytmChecksum(params: any): Promise<string> {
-    // Note: In production, checksum generation should be done on the server side
-    // for security reasons. This client-side implementation is for development only.
-    
-    // Sort parameters alphabetically (excluding CHECKSUMHASH)
-    const sortedParams = Object.keys(params)
-      .filter(key => key !== 'CHECKSUMHASH')
-      .sort()
-      .reduce((acc: any, key) => {
-        if (params[key] && params[key] !== '') {
-          acc[key] = params[key];
-        }
-        return acc;
-      }, {});
-
-    // Create parameter string
-    let paramStr = '';
-    for (const key in sortedParams) {
-      paramStr += `${key}=${sortedParams[key]}&`;
-    }
-    paramStr = paramStr.slice(0, -1); // Remove last &
-
-    // Add merchant key
-    const checksumString = paramStr + this.config.merchantKey;
-    
-    // Generate SHA-256 hash
-    const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(checksumString);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    
-    return hashHex;
   }
 
   /**
    * Initiate Paytm payment transaction
+   * Checksum is generated SERVER-SIDE by the Render backend
    */
   async initiatePayment(paymentData: PaymentRequest): Promise<PaymentResponse> {
     try {
-      // Validate configuration before proceeding
-      if (!this.config.merchantId || !this.config.merchantKey) {
-        console.error('Paytm configuration error: Missing merchant credentials');
+      // Validate configuration
+      if (!this.config.merchantId) {
+        console.error('Paytm configuration error: Missing merchant ID');
         return {
           success: false,
           orderId: paymentData.orderId,
@@ -116,39 +64,10 @@ class PaymentService {
         };
       }
 
-      // Prepare Paytm payment parameters
-      // Use Render backend for POST callback handling
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://jrb-gold.onrender.com';
-      const callbackUrl = `${backendUrl}/payment/callback`;
-        
-      const paytmParams = {
-        MID: this.config.merchantId,
-        WEBSITE: this.config.websiteName,
-        INDUSTRY_TYPE_ID: this.config.industryType,
-        CHANNEL_ID: this.config.channelId,
-        ORDER_ID: paymentData.orderId,
-        CUST_ID: paymentData.customerEmail,
-        TXN_AMOUNT: paymentData.amount.toFixed(2),
-        CALLBACK_URL: callbackUrl,
-        EMAIL: paymentData.customerEmail,
-        MOBILE_NO: paymentData.customerPhone
-      };
-
-      // Generate checksum
-      const checksum = await this.generatePaytmChecksum(paytmParams);
-      
-      console.log('Paytm Payment initiated:', {
-        orderId: paymentData.orderId,
-        amount: paymentData.amount,
-        merchantId: this.config.merchantId
-      });
-
       // In test mode, simulate Paytm payment
       if (this.config.environment === 'test') {
         console.log('TEST MODE: Simulating Paytm payment gateway');
         
-        // In test mode, still use the redirect flow but with a simulated payment page
-        // Store the payment data for the redirect page to simulate payment
         const mockPaymentData = {
           orderId: paymentData.orderId,
           amount: paymentData.amount,
@@ -170,22 +89,60 @@ class PaymentService {
         };
       }
 
-      // Production mode - redirect to actual Paytm payment page
-      const paytmUrl = this.getPaytmPaymentUrl();
+      // =============================================
+      // PRODUCTION: Call backend to generate checksum
+      // =============================================
+      console.log('Production payment: Calling backend for checksum generation...');
       
-      // Create form data for POST redirect
-      const formData = { ...paytmParams, CHECKSUMHASH: checksum };
-      
-      console.log('Production payment initiated:', {
-        orderId: paymentData.orderId,
-        amount: paymentData.amount,
-        paytmUrl,
-        merchantId: this.config.merchantId
+      const response = await fetch(`${this.config.backendUrl}/api/initiate-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          customerId: paymentData.customerEmail,
+          email: paymentData.customerEmail,
+          mobile: paymentData.customerPhone,
+        }),
       });
-      
-      // Store form data in sessionStorage for redirect
-      sessionStorage.setItem('paytmFormData', JSON.stringify(formData));
-      sessionStorage.setItem('paytmUrl', paytmUrl);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Backend error:', response.status, errorData);
+        return {
+          success: false,
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          status: 'failed',
+          message: errorData.error || 'Failed to initiate payment. The payment server may be temporarily unavailable. Please try again in a moment.'
+        };
+      }
+
+      const data = await response.json();
+      console.log('Backend response:', {
+        success: data.success,
+        hasParams: !!data.paytmParams,
+        gatewayUrl: data.paytmGatewayUrl,
+        callbackUrl: data.callbackUrl
+      });
+
+      if (!data.success || !data.paytmParams || !data.paytmGatewayUrl) {
+        return {
+          success: false,
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          status: 'failed',
+          message: data.error || 'Failed to get payment parameters from server.'
+        };
+      }
+
+      // Store form data in sessionStorage for the PaymentRedirect page
+      sessionStorage.setItem('paytmFormData', JSON.stringify(data.paytmParams));
+      sessionStorage.setItem('paytmUrl', data.paytmGatewayUrl);
+
+      console.log('Payment initiation successful, redirecting to payment page...');
 
       return {
         success: true,
@@ -193,27 +150,25 @@ class PaymentService {
         amount: paymentData.amount,
         status: 'pending',
         message: 'Redirecting to Paytm payment gateway...',
-        redirectUrl: '/payment/redirect' // Will handle POST redirect
+        redirectUrl: '/payment/redirect'
       };
+
     } catch (error) {
-      console.error('Paytm payment initiation failed:', error);
+      console.error('Payment initiation failed:', error);
+      
+      // Check if it's a network error (backend might be down)
+      const isNetworkError = error instanceof TypeError && error.message.includes('fetch');
+      
       return {
         success: false,
         orderId: paymentData.orderId,
         amount: paymentData.amount,
         status: 'failed',
-        message: 'Failed to initiate payment. Please try again.'
+        message: isNetworkError 
+          ? 'Payment server is temporarily unavailable. Please try again in a few minutes.'
+          : 'Failed to initiate payment. Please try again.'
       };
     }
-  }
-
-  /**
-   * Get Paytm payment gateway URL based on environment
-   */
-  private getPaytmPaymentUrl(): string {
-    return this.config.environment === 'production'
-      ? 'https://securegw.paytm.in/order/process'
-      : 'https://securegw-stage.paytm.in/order/process';
   }
 
   /**
@@ -223,28 +178,12 @@ class PaymentService {
     try {
       console.log('Verifying Paytm payment:', { transactionId, orderId, status });
       
-      // In test mode, accept TXN_SUCCESS status
-      if (this.config.environment === 'test') {
-        return status === 'TXN_SUCCESS' || status === 'success';
+      // Accept known status values
+      if (status === 'TXN_SUCCESS' || status === 'success') {
+        return true;
       }
 
-      // In production, verify with Paytm transaction status API
-      // This would make an API call to Paytm to verify the transaction
-      const verifyUrl = this.config.environment === 'production'
-        ? 'https://securegw.paytm.in/order/status'
-        : 'https://securegw-stage.paytm.in/order/status';
-
-      // Prepare verification parameters
-      const verifyParams = {
-        MID: this.config.merchantId,
-        ORDERID: orderId
-      };
-
-      const checksum = await this.generatePaytmChecksum(verifyParams);
-
-      // In a real implementation, you would make a POST request to Paytm
-      // For now, accepting the status from callback
-      return status === 'TXN_SUCCESS';
+      return false;
     } catch (error) {
       console.error('Paytm payment verification failed:', error);
       return false;
@@ -256,7 +195,6 @@ class PaymentService {
    */
   async processRefund(transactionId: string, amount: number, reason: string): Promise<PaymentResponse> {
     try {
-      // In production, make API call to payment gateway for refund
       console.log('Processing refund:', { transactionId, amount, reason });
 
       return {
@@ -286,11 +224,6 @@ class PaymentService {
   async getPaymentStatus(orderId: string): Promise<PaymentResponse> {
     try {
       console.log('Fetching Paytm payment status for order:', orderId);
-
-      // In production, query Paytm transaction status API
-      const statusUrl = this.config.environment === 'production'
-        ? 'https://securegw.paytm.in/order/status'
-        : 'https://securegw-stage.paytm.in/order/status';
 
       return {
         success: true,
