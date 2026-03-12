@@ -6,6 +6,7 @@
     }
   ],
   "env": {
+    "FRONTEND_URL": "https://jrb-gold.vercel.app",
     "VITE_BACKEND_URL": "https://jrb-gold.onrender.com",
     "VITE_FRONTEND_URL": "https://jrb-gold.vercel.app",
     "VITE_CALLBACK_URL": "https://jrb-gold.onrender.com/payment/callback",
