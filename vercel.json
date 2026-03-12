@@ -6,8 +6,8 @@
     }
   ],
   "env": {
-    "VITE_BACKEND_URL": "https://jrb-gold-56cs.vercel.app",
-    "VITE_FRONTEND_URL": "https://jrb-gold-56cs.vercel.app",
+    "VITE_BACKEND_URL": "https://jrb-gold.vercel.app",
+    "VITE_FRONTEND_URL": "https://www.jrbgold.co.in",
     "VITE_PAYMENT_ENV": "production",
     "VITE_MERCHANT_ID": "nfvifF32655861820763",
     "VITE_MERCHANT_KEY": "7x3aqULKxZe&Sj7V",

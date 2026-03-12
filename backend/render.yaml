@@ -10,9 +10,9 @@ services:
       - key: NODE_ENV
         value: production
       - key: FRONTEND_URL
-        value: https://jrb-gold-56cs.vercel.app
+        value: https://www.jrbgold.co.in
       - key: CORS_ORIGINS
-        value: https://jrb-gold-56cs.vercel.app,http://localhost:5173,http://localhost:8080,https://www.jrbgold.co.in
+        value: https://jrb-gold.vercel.app,https://www.jrbgold.co.in,http://localhost:5173,http://localhost:8080
       - key: VITE_MERCHANT_ID
         value: nfvifF32655861820763
       - key: VITE_MERCHANT_KEY

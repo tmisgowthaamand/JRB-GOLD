@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     } = req.body;
 
     // Build redirect URL to frontend with query parameters
-    const frontendUrl = 'https://jrb-gold-56cs.vercel.app';
+    const frontendUrl = 'https://www.jrbgold.co.in';
     const callbackUrl = new URL('/payment/callback', frontendUrl);
     
     // Add all parameters as query strings

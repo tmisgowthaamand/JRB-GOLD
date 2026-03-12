@@ -118,7 +118,7 @@ class PaymentService {
 
       // Prepare Paytm payment parameters
       // Use Vercel serverless function for callback handling
-      const frontendUrl = import.meta.env.VITE_FRONTEND_URL || 'https://jrb-gold-56cs.vercel.app';
+      const frontendUrl = import.meta.env.VITE_FRONTEND_URL || 'https://jrb-gold.vercel.app';
       const callbackUrl = `${frontendUrl}/api/payment-callback`;
         
       const paytmParams = {
