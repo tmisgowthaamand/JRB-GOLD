@@ -19,15 +19,30 @@ export default function PaymentCallback() {
         // Debug: Log all search params
         console.log('Payment callback received with params:', Object.fromEntries(searchParams.entries()));
         
-        // Paytm sends different parameter names
-        const transactionId = searchParams.get('TXNID') || searchParams.get('txnid');
-        const orderId = searchParams.get('ORDERID') || searchParams.get('orderid');
-        const paymentStatus = searchParams.get('STATUS') || searchParams.get('status');
-        const responseCode = searchParams.get('RESPCODE');
-        const responseMsg = searchParams.get('RESPMSG');
+        // Check if this is a POST callback (Paytm sends form data)
+        // In this case, we'll handle it as GET parameters
+        let transactionId = searchParams.get('TXNID') || searchParams.get('txnid');
+        let orderId = searchParams.get('ORDERID') || searchParams.get('orderid');
+        let paymentStatus = searchParams.get('STATUS') || searchParams.get('status');
+        let responseCode = searchParams.get('RESPCODE');
+        let responseMsg = searchParams.get('RESPMSG');
 
-        // If no parameters at all, this might be a direct access
-        if (searchParams.toString() === '') {
+        // If no URL parameters, check if data was passed via sessionStorage (from POST)
+        if (!transactionId && !orderId && !paymentStatus) {
+          const postData = sessionStorage.getItem('paytmCallbackData');
+          if (postData) {
+            const data = JSON.parse(postData);
+            transactionId = data.TXNID;
+            orderId = data.ORDERID;
+            paymentStatus = data.STATUS;
+            responseCode = data.RESPCODE;
+            responseMsg = data.RESPMSG;
+            sessionStorage.removeItem('paytmCallbackData');
+          }
+        }
+
+        // If still no parameters, this might be a direct access
+        if (!transactionId && !orderId && !paymentStatus) {
           setStatus('failed');
           setMessage('No payment data received. Please try again from checkout.');
           return;
