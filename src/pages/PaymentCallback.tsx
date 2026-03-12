@@ -10,33 +10,36 @@ export default function PaymentCallback() {
   const [status, setStatus] = useState<'processing' | 'success' | 'failed'>('processing');
   const [message, setMessage] = useState('Processing your payment...');
 
+  // Add error boundary
+  const [hasError, setHasError] = useState(false);
+
   useEffect(() => {
     const verifyPayment = async () => {
-      // Debug: Log all search params
-      console.log('Payment callback received with params:', Object.fromEntries(searchParams.entries()));
-      
-      // Paytm sends different parameter names
-      const transactionId = searchParams.get('TXNID') || searchParams.get('txnid');
-      const orderId = searchParams.get('ORDERID') || searchParams.get('orderid');
-      const paymentStatus = searchParams.get('STATUS') || searchParams.get('status');
-      const responseCode = searchParams.get('RESPCODE');
-      const responseMsg = searchParams.get('RESPMSG');
-
-      // If no parameters at all, this might be a direct access
-      if (searchParams.toString() === '') {
-        setStatus('failed');
-        setMessage('No payment data received. Please try again from checkout.');
-        return;
-      }
-
-      if (!transactionId || !orderId || !paymentStatus) {
-        setStatus('failed');
-        setMessage('Invalid payment response - missing required parameters');
-        console.error('Missing payment parameters:', { transactionId, orderId, paymentStatus });
-        return;
-      }
-
       try {
+        // Debug: Log all search params
+        console.log('Payment callback received with params:', Object.fromEntries(searchParams.entries()));
+        
+        // Paytm sends different parameter names
+        const transactionId = searchParams.get('TXNID') || searchParams.get('txnid');
+        const orderId = searchParams.get('ORDERID') || searchParams.get('orderid');
+        const paymentStatus = searchParams.get('STATUS') || searchParams.get('status');
+        const responseCode = searchParams.get('RESPCODE');
+        const responseMsg = searchParams.get('RESPMSG');
+
+        // If no parameters at all, this might be a direct access
+        if (searchParams.toString() === '') {
+          setStatus('failed');
+          setMessage('No payment data received. Please try again from checkout.');
+          return;
+        }
+
+        if (!transactionId || !orderId || !paymentStatus) {
+          setStatus('failed');
+          setMessage('Invalid payment response - missing required parameters');
+          console.error('Missing payment parameters:', { transactionId, orderId, paymentStatus });
+          return;
+        }
+
         const isValid = await paymentService.verifyPayment(
           transactionId,
           orderId,
@@ -71,6 +74,7 @@ export default function PaymentCallback() {
         }
       } catch (error) {
         console.error('Payment verification error:', error);
+        setHasError(true);
         setStatus('failed');
         setMessage('An error occurred while verifying payment.');
       }
@@ -78,6 +82,25 @@ export default function PaymentCallback() {
 
     verifyPayment();
   }, [searchParams, navigate]);
+
+  // If there's an error, show a simple error page
+  if (hasError) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error</h2>
+          <p className="text-gray-600 mb-4">There was an error processing the payment callback.</p>
+          <p className="text-sm text-gray-500 mb-4">URL: {window.location.href}</p>
+          <button 
+            onClick={() => navigate('/checkout')}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Return to Checkout
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
