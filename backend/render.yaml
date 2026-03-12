@@ -3,6 +3,7 @@ services:
     name: jrb-gold-backend
     env: node
     plan: free
+    region: oregon
     buildCommand: npm install
     startCommand: npm start
     envVars:
