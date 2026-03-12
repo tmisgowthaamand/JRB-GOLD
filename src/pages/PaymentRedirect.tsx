@@ -7,10 +7,15 @@ export default function PaymentRedirect() {
   const [paymentData, setPaymentData] = useState<any>(null);
 
   useEffect(() => {
+    console.log('PaymentRedirect: Starting redirect process');
+    
     // Check for test mode data first
     const mockPaymentDataStr = sessionStorage.getItem('mockPaymentData');
+    console.log('PaymentRedirect: mockPaymentData found:', !!mockPaymentDataStr);
+    
     if (mockPaymentDataStr) {
       const mockData = JSON.parse(mockPaymentDataStr);
+      console.log('PaymentRedirect: Using test mode with data:', mockData);
       setIsTestMode(true);
       setPaymentData(mockData);
       return;
@@ -19,9 +24,16 @@ export default function PaymentRedirect() {
     // Get production form data from sessionStorage
     const formDataStr = sessionStorage.getItem('paytmFormData');
     const paytmUrl = sessionStorage.getItem('paytmUrl');
+    
+    console.log('PaymentRedirect: Production data found:', {
+      hasFormData: !!formDataStr,
+      hasPaytmUrl: !!paytmUrl,
+      paytmUrl: paytmUrl
+    });
 
     if (formDataStr && paytmUrl) {
       const formData = JSON.parse(formDataStr);
+      console.log('PaymentRedirect: Submitting form to Paytm with data:', formData);
       
       // Create a form and submit it to Paytm
       const form = document.createElement('form');
@@ -45,8 +57,11 @@ export default function PaymentRedirect() {
       sessionStorage.removeItem('paytmFormData');
       sessionStorage.removeItem('paytmUrl');
     } else {
+      console.log('PaymentRedirect: No payment data found, redirecting to checkout');
       // Redirect back to checkout if no form data
-      window.location.href = '/checkout';
+      setTimeout(() => {
+        window.location.href = '/checkout';
+      }, 3000); // Give user time to see the message
     }
   }, []);
 
@@ -141,6 +156,16 @@ export default function PaymentRedirect() {
         <p className="text-sm text-gray-500 mt-4">
           If you are not redirected automatically, please go back and try again.
         </p>
+        
+        {/* Debug info */}
+        <div className="mt-6 p-4 bg-gray-100 rounded text-left text-xs">
+          <h4 className="font-semibold mb-2">Debug Info:</h4>
+          <div>Test Mode: {isTestMode ? 'Yes' : 'No'}</div>
+          <div>Payment Data: {paymentData ? 'Found' : 'Not Found'}</div>
+          <div>SessionStorage mockPaymentData: {sessionStorage.getItem('mockPaymentData') ? 'Found' : 'Not Found'}</div>
+          <div>SessionStorage paytmFormData: {sessionStorage.getItem('paytmFormData') ? 'Found' : 'Not Found'}</div>
+          <div>SessionStorage paytmUrl: {sessionStorage.getItem('paytmUrl') || 'Not Found'}</div>
+        </div>
       </div>
     </div>
   );
