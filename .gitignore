@@ -23,3 +23,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env
+.env.local
+
+# Documentation files (optional - keep local only)
+*_SUMMARY.md
+*_SETUP.md
+*_GUIDE.md
+*_COMPLETE.md
+PAYMENT_*.md
+PAYTM_*.md
+INTEGRATION_*.md
+QUICK_*.md
+
+# TypeScript build info
+*.tsbuildinfo
