@@ -20,9 +20,9 @@ const PORT = process.env.PORT || 3001;
 // Unified frontend URL — MUST match where the app is actually deployed
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://jrb-gold.vercel.app';
 
-// Paytm credentials (from environment)
-const PAYTM_MERCHANT_ID = process.env.PAYTM_MERCHANT_ID || process.env.VITE_MERCHANT_ID || '';
-const PAYTM_MERCHANT_KEY = process.env.PAYTM_MERCHANT_KEY || process.env.VITE_MERCHANT_KEY || '';
+// Paytm credentials (from environment) - Strip quotes if present
+const PAYTM_MERCHANT_ID = (process.env.PAYTM_MERCHANT_ID || process.env.VITE_MERCHANT_ID || '').replace(/^["']|["']$/g, '');
+const PAYTM_MERCHANT_KEY = (process.env.PAYTM_MERCHANT_KEY || process.env.VITE_MERCHANT_KEY || '').replace(/^["']|["']$/g, '');
 const PAYTM_ENVIRONMENT = process.env.PAYTM_ENVIRONMENT || process.env.VITE_PAYMENT_ENV || 'test';
 
 // Smart defaults for Website and Industry based on environment
