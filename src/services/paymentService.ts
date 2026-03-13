@@ -36,7 +36,7 @@ class PaymentService {
     this.config = {
       merchantId: import.meta.env.VITE_MERCHANT_ID || '',
       environment: (import.meta.env.VITE_PAYMENT_ENV as 'test' | 'production') || 'test',
-      backendUrl: import.meta.env.VITE_BACKEND_URL || 'https://jrb-gold.onrender.com',
+      backendUrl: import.meta.env.VITE_BACKEND_URL || 'https://jrb-gold-4azo.onrender.com',
     };
 
     console.log('Payment Service Configuration:', {

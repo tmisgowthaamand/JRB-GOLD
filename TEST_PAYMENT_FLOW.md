@@ -2,7 +2,7 @@
 
 ## ✅ Backend Status: DEPLOYED AND WORKING!
 
-Your backend is live at: `https://jrb-gold.onrender.com`
+Your backend is live at: `https://jrb-gold-4azo.onrender.com`
 
 ## 🧪 How to Test Payment Flow
 
@@ -16,7 +16,7 @@ This gives 405 error because there's no payment data!
 
 **Option 1: Test via Backend Test Endpoint**
 ```
-https://jrb-gold.onrender.com/test/callback
+https://jrb-gold-4azo.onrender.com/test/callback
 ```
 This will:
 1. Simulate a payment callback
@@ -33,7 +33,7 @@ This will:
 
 **Option 3: Manual Test with cURL**
 ```bash
-curl -X POST https://jrb-gold.onrender.com/payment/callback \
+curl -X POST https://jrb-gold-4azo.onrender.com/payment/callback \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "ORDERID=TEST123&STATUS=TXN_SUCCESS&TXNID=TEST456&RESPCODE=01&RESPMSG=Success&TXNAMOUNT=1000.00"
 ```
@@ -41,9 +41,9 @@ curl -X POST https://jrb-gold.onrender.com/payment/callback \
 ## 📡 Current Configuration
 
 ### Backend (Render) ✅
-- URL: `https://jrb-gold.onrender.com`
+- URL: `https://jrb-gold-4azo.onrender.com`
 - Status: DEPLOYED AND WORKING
-- Health Check: `https://jrb-gold.onrender.com/api/health`
+- Health Check: `https://jrb-gold-4azo.onrender.com/api/health`
 
 ### Frontend (Vercel) ✅
 - URL: `https://jrb-gold.vercel.app`
@@ -51,7 +51,7 @@ curl -X POST https://jrb-gold.onrender.com/payment/callback \
 
 ### Payment Callback URL (for Paytm)
 ```
-https://jrb-gold.onrender.com/payment/callback
+https://jrb-gold-4azo.onrender.com/payment/callback
 ```
 
 ## 🎯 Update Paytm Dashboard
@@ -60,7 +60,7 @@ https://jrb-gold.onrender.com/payment/callback
 2. Go to: Developer Settings → API Details
 3. Update Callback URL to:
    ```
-   https://jrb-gold.onrender.com/payment/callback
+   https://jrb-gold-4azo.onrender.com/payment/callback
    ```
 4. Save changes
 
@@ -79,14 +79,14 @@ This is NORMAL behavior! The callback URL is meant to be called by Paytm, not ac
 
 ### Step 1: Test Backend
 ```bash
-curl https://jrb-gold.onrender.com/api/health
+curl https://jrb-gold-4azo.onrender.com/api/health
 ```
 Expected: `{"status":"ok","message":"JRB Gold Payment Backend is running"}`
 
 ### Step 2: Test Callback Redirect
 Open in browser:
 ```
-https://jrb-gold.onrender.com/test/callback
+https://jrb-gold-4azo.onrender.com/test/callback
 ```
 Expected: Redirects to frontend with test payment data
 
@@ -103,7 +103,7 @@ Expected: Redirects to frontend with test payment data
 Both backend and frontend are deployed and working correctly. The 405 error you're seeing is expected behavior when accessing the callback URL directly.
 
 **To test the actual payment flow:**
-1. Use the test callback: `https://jrb-gold.onrender.com/test/callback`
+1. Use the test callback: `https://jrb-gold-4azo.onrender.com/test/callback`
 2. OR make a real purchase through your website
 
 **The payment integration is complete and working!** ✅

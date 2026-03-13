@@ -97,7 +97,7 @@ async function createPaytmTransaction(orderId, amount, customerId, email, mobile
     throw new Error('Paytm credentials not properly configured in environment');
   }
 
-  const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
+  const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold-4azo.onrender.com';
   const callbackUrl = `${backendUrl}/payment/callback`;
 
   const ordIdStr = orderId.toString().trim();
@@ -190,7 +190,7 @@ app.post('/api/initiate-payment', async (req, res) => {
       }
     }
 
-    const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
+    const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold-4azo.onrender.com';
     const redirectUrl = `${backendUrl}/payment/redirect/${orderId.toString().trim()}`;
 
     console.log('Payment parameters generated, redirect URL:', redirectUrl);
@@ -369,7 +369,7 @@ app.get('/test/checksum', async (req, res) => {
       CHANNEL_ID: PAYTM_CHANNEL_ID,
       WEBSITE: PAYTM_WEBSITE,
       INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
-      CALLBACK_URL: `${process.env.BACKEND_URL || 'https://jrb-gold.onrender.com'}/payment/callback`
+      CALLBACK_URL: `${process.env.BACKEND_URL || 'https://jrb-gold-4azo.onrender.com'}/payment/callback`
     };
 
     const checksum = await PaytmChecksum.generateSignature(testParams, PAYTM_MERCHANT_KEY);
@@ -455,6 +455,6 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🌐 Website: ${PAYTM_WEBSITE}`);
   console.log(`📋 Channel: ${PAYTM_CHANNEL_ID}`);
   console.log(`🏭 Industry: ${PAYTM_INDUSTRY_TYPE}`);
-  console.log(`🔗 Backend URL: ${process.env.BACKEND_URL || 'https://jrb-gold.onrender.com'}`);
+  console.log(`🔗 Backend URL: ${process.env.BACKEND_URL || 'https://jrb-gold-4azo.onrender.com'}`);
   console.log(`✅ Server ready to accept connections`);
 });

@@ -11,7 +11,7 @@ services:
       - key: NODE_ENV
         value: "production"
       - key: BACKEND_URL
-        value: "https://jrb-gold.onrender.com"
+        value: "https://jrb-gold-4azo.onrender.com"
       - key: FRONTEND_URL
         value: "https://jrb-gold.vercel.app"
       - key: CORS_ORIGINS

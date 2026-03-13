@@ -42,7 +42,7 @@ git push origin main
 
 ### 1. Check Backend Health
 ```bash
-curl https://jrb-gold.onrender.com/api/health
+curl https://jrb-gold-4azo.onrender.com/api/health
 ```
 
 Look for:
@@ -55,7 +55,7 @@ Look for:
 
 ### 2. Test Checksum Generation
 ```bash
-curl https://jrb-gold.onrender.com/test/checksum
+curl https://jrb-gold-4azo.onrender.com/test/checksum
 ```
 
 Should return:

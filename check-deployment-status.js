@@ -1,7 +1,7 @@
 // Quick script to check if backend is deployed and working
 const https = require('https');
 
-const BACKEND_URL = 'https://jrb-gold.onrender.com';
+const BACKEND_URL = 'https://jrb-gold-4azo.onrender.com';
 const FRONTEND_URL = 'https://jrb-gold.vercel.app';
 
 console.log('🔍 Checking Deployment Status...\n');
