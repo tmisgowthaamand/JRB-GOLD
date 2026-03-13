@@ -66,14 +66,14 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     message: 'JRB Gold Payment Backend is running',
-    frontendUrl: FRONTEND_URL,
-    merchantId: PAYTM_MERCHANT_ID ? `${PAYTM_MERCHANT_ID.substring(0, 8)}...` : 'NOT SET',
-    merchantKeySet: PAYTM_MERCHANT_KEY ? true : false,
-    merchantKeyLength: PAYTM_MERCHANT_KEY ? PAYTM_MERCHANT_KEY.length : 0,
     environment: PAYTM_ENVIRONMENT,
-    website: PAYTM_WEBSITE,
     timestamp: new Date().toISOString()
   });
+});
+
+// Root path handler for Render
+app.get('/', (req, res) => {
+  res.status(200).send('JRB Gold Backend is Live');
 });
 
 // ============================
@@ -359,11 +359,6 @@ app.get('/test/pay', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
-
-// Root endpoint - Simple health check for Render
-app.get('/', (req, res) => {
-  res.status(200).send('OK');
 });
 
 // Detailed API info endpoint
