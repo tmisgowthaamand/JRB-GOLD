@@ -80,45 +80,54 @@ app.get('/api/health', (req, res) => {
 // Core Payment Function — Robust logic for checksum generation
 // ============================
 async function createPaytmTransaction(orderId, amount, customerId, email, mobile) {
-  if (!PAYTM_MERCHANT_ID || !PAYTM_MERCHANT_KEY) {
-    throw new Error('Paytm credentials not configured');
+  // Ensure we have a clean Merchant Key and ID
+  const M_ID = PAYTM_MERCHANT_ID.trim();
+  const M_KEY = PAYTM_MERCHANT_KEY.trim();
+
+  if (!M_ID || !M_KEY) {
+    throw new Error('Paytm credentials not properly configured in environment');
   }
 
   // Callback URL — Paytm will POST to this after payment
   const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
-  // IMPORTANT: No trailing slash unless signed exactly that way
   const callbackUrl = `${backendUrl}/payment/callback`;
 
   // Base parameters REQUIRED for checksum
+  // Note: CUST_ID and ORDER_ID must be strictly alphanumeric for highest compatibility
   const paytmParams = {
-    MID: PAYTM_MERCHANT_ID,
-    WEBSITE: PAYTM_WEBSITE,
-    INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
-    CHANNEL_ID: PAYTM_CHANNEL_ID,
-    ORDER_ID: orderId,
-    // Keep CUST_ID extremely simple - alphanumeric only
-    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9]/g, '').substring(0, 20),
+    MID: M_ID,
+    WEBSITE: PAYTM_WEBSITE.trim(),
+    INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE.trim(),
+    CHANNEL_ID: PAYTM_CHANNEL_ID.trim(),
+    ORDER_ID: orderId.toString().trim(),
+    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9]/g, '').substring(0, 50),
     TXN_AMOUNT: parseFloat(amount).toFixed(2),
-    CALLBACK_URL: callbackUrl
+    CALLBACK_URL: callbackUrl.trim()
   };
 
-  console.log('Generating checksum for mandatory params only:', paytmParams);
+  console.log('--- SIGNING START ---');
+  console.log('Params to sign:', paytmParams);
+  console.log(`Key length: ${M_KEY.length}, Key starts with: ${M_KEY.substring(0, 3)}... and ends with: ...${M_KEY.substring(M_KEY.length - 3)}`);
   
   // Generate checksum using OFFICIAL Paytm SDK
-  const checksum = await PaytmChecksum.generateSignature(paytmParams, PAYTM_MERCHANT_KEY);
+  const checksum = await PaytmChecksum.generateSignature(paytmParams, M_KEY);
+
+  console.log('Generated Checksum:', checksum.substring(0, 15) + '...');
 
   // Verify it internally before returning
-  const isValid = await PaytmChecksum.verifySignature(paytmParams, PAYTM_MERCHANT_KEY, checksum);
+  const isValid = await PaytmChecksum.verifySignature(paytmParams, M_KEY, checksum);
+  console.log('Internal verification check:', isValid ? 'PASSED ✅' : 'FAILED ❌');
   
   if (!isValid) {
-    console.error('INTERNAL CHECKSUM VERIFICATION FAILED! Target Key might be invalid.');
-    throw new Error('Checksum verification failed internally');
+    throw new Error('Internal checksum verification failed. Key or params mismatch.');
   }
 
   // Determine Paytm gateway URL
   const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
     ? 'https://securegw.paytm.in/order/process'
     : 'https://securegw-stage.paytm.in/order/process';
+
+  console.log('--- SIGNING END ---');
 
   return {
     params: {
