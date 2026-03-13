@@ -25,6 +25,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Payment callback server is running' });
 });
 
+// Root path handler for Render health checks
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Paytm POST callback handler
 app.post('/payment/callback', (req, res) => {
   console.log('Received Paytm POST callback:', req.body);
@@ -68,10 +73,16 @@ app.post('/payment/callback', (req, res) => {
 
 // Fallback: serve React app for all other routes (SPA support)
 app.get('*', (req, res) => {
-  res.sendFile(join(__dirname, 'dist', 'index.html'));
+  const indexPath = join(__dirname, 'dist', 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.status(404).send('Frontend build not found. Please run npm run build first.');
+    }
+  });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Payment callback server running on port ${PORT}`);
   console.log(`Callback endpoint: http://localhost:${PORT}/payment/callback`);
 });
+
