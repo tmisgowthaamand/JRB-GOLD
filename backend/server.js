@@ -96,22 +96,13 @@ async function createPaytmTransaction(orderId, amount, customerId, email, mobile
     INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
     CHANNEL_ID: PAYTM_CHANNEL_ID,
     ORDER_ID: orderId,
-    // Sanitize CUST_ID to remove spaces and special chars but keep it unique
-    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9_\-\.\@]/g, '_').substring(0, 50),
+    // Keep CUST_ID extremely simple - alphanumeric only
+    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9]/g, '').substring(0, 20),
     TXN_AMOUNT: parseFloat(amount).toFixed(2),
     CALLBACK_URL: callbackUrl
   };
 
-  // Optional but recommended params — MUST be in checksum if sent in form
-  if (email && email.includes('@')) {
-    paytmParams.EMAIL = email.trim();
-  }
-  if (mobile) {
-    // Basic mobile sanitization
-    paytmParams.MOBILE_NO = mobile.toString().replace(/[^0-9\+]/g, '').substring(0, 15);
-  }
-
-  console.log('Generating checksum for params:', paytmParams);
+  console.log('Generating checksum for mandatory params only:', paytmParams);
   
   // Generate checksum using OFFICIAL Paytm SDK
   const checksum = await PaytmChecksum.generateSignature(paytmParams, PAYTM_MERCHANT_KEY);
