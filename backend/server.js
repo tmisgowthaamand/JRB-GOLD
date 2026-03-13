@@ -361,8 +361,13 @@ app.get('/test/pay', async (req, res) => {
   }
 });
 
-// Root endpoint
+// Root endpoint - Simple health check for Render
 app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
+// Detailed API info endpoint
+app.get('/api', (req, res) => {
   res.json({
     message: 'JRB Gold Payment Backend API',
     endpoints: {
@@ -377,7 +382,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 JRB Gold Backend running on port ${PORT}`);
   console.log(`📡 Payment callback: http://localhost:${PORT}/payment/callback`);
   console.log(`💳 Payment initiation: http://localhost:${PORT}/api/initiate-payment`);
@@ -386,4 +391,5 @@ app.listen(PORT, () => {
   console.log(`🔐 Merchant Key: ${PAYTM_MERCHANT_KEY ? 'SET (' + PAYTM_MERCHANT_KEY.length + ' chars)' : 'NOT SET'}`);
   console.log(`🌍 Environment: ${PAYTM_ENVIRONMENT}`);
   console.log(`🌐 Website: ${PAYTM_WEBSITE}`);
+  console.log(`✅ Server ready to accept connections`);
 });

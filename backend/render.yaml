@@ -16,7 +16,7 @@ services:
       - key: CORS_ORIGINS
         value: https://jrb-gold.vercel.app,https://www.jrbgold.co.in,https://jrbgold.co.in,http://localhost:5173,http://localhost:8080
       - key: PAYTM_MERCHANT_ID
-        value: nfvifF32655861820763
+        value: nfvlfF32655861820763
       - key: PAYTM_MERCHANT_KEY
         value: 7x3aqULKxZe&Sj7V
       - key: PAYTM_ENVIRONMENT
