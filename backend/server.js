@@ -92,51 +92,59 @@ async function createPaytmTransaction(orderId, amount, customerId, email, mobile
   const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
   const callbackUrl = `${backendUrl}/payment/callback`;
 
-  // Base parameters REQUIRED for checksum
-  // Note: CUST_ID and ORDER_ID must be strictly alphanumeric for highest compatibility
+  // CRITICAL: Only include parameters that Paytm uses for checksum validation
+  // Order matters for some payment gateways, so we use a consistent order
   const paytmParams = {
     MID: M_ID,
-    WEBSITE: PAYTM_WEBSITE.trim(),
-    INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE.trim(),
-    CHANNEL_ID: PAYTM_CHANNEL_ID.trim(),
     ORDER_ID: orderId.toString().trim(),
-    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9]/g, '').substring(0, 50),
+    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9_]/g, '_').substring(0, 64),
     TXN_AMOUNT: parseFloat(amount).toFixed(2),
-    CALLBACK_URL: callbackUrl.trim()
+    CHANNEL_ID: PAYTM_CHANNEL_ID.trim(),
+    WEBSITE: PAYTM_WEBSITE.trim(),
+    CALLBACK_URL: callbackUrl.trim(),
+    INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE.trim()
   };
 
-  console.log('--- SIGNING START ---');
-  console.log('Params to sign:', paytmParams);
-  console.log(`Key length: ${M_KEY.length}, Key starts with: ${M_KEY.substring(0, 3)}... and ends with: ...${M_KEY.substring(M_KEY.length - 3)}`);
+  console.log('=== CHECKSUM GENERATION ===');
+  console.log('Order ID:', orderId);
+  console.log('Amount:', amount);
+  console.log('Params for signing:', JSON.stringify(paytmParams, null, 2));
+  console.log('Merchant Key length:', M_KEY.length);
   
-  // Generate checksum using OFFICIAL Paytm SDK
-  const checksum = await PaytmChecksum.generateSignature(paytmParams, M_KEY);
+  try {
+    // Generate checksum using OFFICIAL Paytm SDK
+    const checksum = await PaytmChecksum.generateSignature(paytmParams, M_KEY);
+    console.log('✅ Checksum generated:', checksum.substring(0, 20) + '...');
 
-  console.log('Generated Checksum:', checksum.substring(0, 15) + '...');
+    // Verify it internally before returning
+    const isValid = await PaytmChecksum.verifySignature(paytmParams, M_KEY, checksum);
+    console.log('✅ Self-verification:', isValid ? 'PASSED' : 'FAILED');
+    
+    if (!isValid) {
+      throw new Error('Internal checksum verification failed');
+    }
 
-  // Verify it internally before returning
-  const isValid = await PaytmChecksum.verifySignature(paytmParams, M_KEY, checksum);
-  console.log('Internal verification check:', isValid ? 'PASSED ✅' : 'FAILED ❌');
-  
-  if (!isValid) {
-    throw new Error('Internal checksum verification failed. Key or params mismatch.');
+    // Determine Paytm gateway URL
+    const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
+      ? 'https://securegw.paytm.in/order/process'
+      : 'https://securegw-stage.paytm.in/order/process';
+
+    console.log('Gateway URL:', paytmGatewayUrl);
+    console.log('=== CHECKSUM GENERATION COMPLETE ===');
+
+    // Return params with checksum
+    return {
+      params: {
+        ...paytmParams,
+        CHECKSUMHASH: checksum
+      },
+      gatewayUrl: paytmGatewayUrl,
+      environment: PAYTM_ENVIRONMENT
+    };
+  } catch (error) {
+    console.error('❌ Checksum generation failed:', error.message);
+    throw error;
   }
-
-  // Determine Paytm gateway URL
-  const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
-    ? 'https://securegw.paytm.in/order/process'
-    : 'https://securegw-stage.paytm.in/order/process';
-
-  console.log('--- SIGNING END ---');
-
-  return {
-    params: {
-      ...paytmParams,
-      CHECKSUMHASH: checksum
-    },
-    gatewayUrl: paytmGatewayUrl,
-    environment: PAYTM_ENVIRONMENT
-  };
 }
 
 // ============================
@@ -178,15 +186,31 @@ app.post('/api/initiate-payment', async (req, res) => {
 // ============================
 // Paytm POST callback handler
 // ============================
-app.post('/payment/callback', (req, res) => {
+app.post('/payment/callback', async (req, res) => {
   console.log('Received Paytm POST callback:', req.body);
   
   const body = req.body || {};
 
   // Verify the checksum from Paytm using official SDK
   if (body.CHECKSUMHASH && PAYTM_MERCHANT_KEY) {
-    const isValidChecksum = PaytmChecksum.verifySignature(body, PAYTM_MERCHANT_KEY, body.CHECKSUMHASH);
-    console.log('Callback checksum verification:', isValidChecksum ? 'VALID ✅' : 'INVALID ❌');
+    try {
+      // Create a copy without CHECKSUMHASH for verification
+      const paramsForVerification = { ...body };
+      delete paramsForVerification.CHECKSUMHASH;
+      
+      const isValidChecksum = await PaytmChecksum.verifySignature(
+        paramsForVerification, 
+        PAYTM_MERCHANT_KEY, 
+        body.CHECKSUMHASH
+      );
+      console.log('Callback checksum verification:', isValidChecksum ? 'VALID ✅' : 'INVALID ❌');
+      
+      if (!isValidChecksum) {
+        console.error('⚠️ CHECKSUM MISMATCH - Possible tampering or configuration issue');
+      }
+    } catch (error) {
+      console.error('Checksum verification error:', error.message);
+    }
   }
 
   const ORDERID = body.ORDERID || body.orderid || '';
