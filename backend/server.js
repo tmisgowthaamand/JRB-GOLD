@@ -5,6 +5,10 @@
 import express from 'express';
 import cors from 'cors';
 import { createRequire } from 'module';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 // Import the official Paytm checksum library (CommonJS module)
 const require = createRequire(import.meta.url);
@@ -20,8 +24,14 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'https://jrb-gold.vercel.app';
 const PAYTM_MERCHANT_ID = process.env.PAYTM_MERCHANT_ID || process.env.VITE_MERCHANT_ID || '';
 const PAYTM_MERCHANT_KEY = process.env.PAYTM_MERCHANT_KEY || process.env.VITE_MERCHANT_KEY || '';
 const PAYTM_ENVIRONMENT = process.env.PAYTM_ENVIRONMENT || process.env.VITE_PAYMENT_ENV || 'test';
-const PAYTM_WEBSITE = process.env.PAYTM_WEBSITE || process.env.VITE_PAYTM_WEBSITE || 'WEBSTAGING';
-const PAYTM_INDUSTRY_TYPE = process.env.PAYTM_INDUSTRY_TYPE || process.env.VITE_PAYTM_INDUSTRY_TYPE || 'Retail';
+
+// Smart defaults for Website and Industry based on environment
+const PAYTM_WEBSITE = process.env.PAYTM_WEBSITE || process.env.VITE_PAYTM_WEBSITE || 
+  (PAYTM_ENVIRONMENT === 'production' ? 'DEFAULT' : 'WEBSTAGING');
+
+const PAYTM_INDUSTRY_TYPE = process.env.PAYTM_INDUSTRY_TYPE || process.env.VITE_PAYTM_INDUSTRY_TYPE || 
+  (PAYTM_ENVIRONMENT === 'production' ? 'Retail' : 'Retail');
+
 const PAYTM_CHANNEL_ID = process.env.PAYTM_CHANNEL_ID || process.env.VITE_PAYTM_CHANNEL_ID || 'WEB';
 
 // ============================
@@ -67,13 +77,76 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================
-// Initiate Payment — generates checksum using official Paytm SDK
+// Core Payment Function — Robust logic for checksum generation
+// ============================
+async function createPaytmTransaction(orderId, amount, customerId, email, mobile) {
+  if (!PAYTM_MERCHANT_ID || !PAYTM_MERCHANT_KEY) {
+    throw new Error('Paytm credentials not configured');
+  }
+
+  // Callback URL — Paytm will POST to this after payment
+  const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
+  // IMPORTANT: No trailing slash unless signed exactly that way
+  const callbackUrl = `${backendUrl}/payment/callback`;
+
+  // Base parameters REQUIRED for checksum
+  const paytmParams = {
+    MID: PAYTM_MERCHANT_ID,
+    WEBSITE: PAYTM_WEBSITE,
+    INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
+    CHANNEL_ID: PAYTM_CHANNEL_ID,
+    ORDER_ID: orderId,
+    // Sanitize CUST_ID to remove spaces and special chars but keep it unique
+    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9_\-\.\@]/g, '_').substring(0, 50),
+    TXN_AMOUNT: parseFloat(amount).toFixed(2),
+    CALLBACK_URL: callbackUrl
+  };
+
+  // Optional but recommended params — MUST be in checksum if sent in form
+  if (email && email.includes('@')) {
+    paytmParams.EMAIL = email.trim();
+  }
+  if (mobile) {
+    // Basic mobile sanitization
+    paytmParams.MOBILE_NO = mobile.toString().replace(/[^0-9\+]/g, '').substring(0, 15);
+  }
+
+  console.log('Generating checksum for params:', paytmParams);
+  
+  // Generate checksum using OFFICIAL Paytm SDK
+  const checksum = await PaytmChecksum.generateSignature(paytmParams, PAYTM_MERCHANT_KEY);
+
+  // Verify it internally before returning
+  const isValid = await PaytmChecksum.verifySignature(paytmParams, PAYTM_MERCHANT_KEY, checksum);
+  
+  if (!isValid) {
+    console.error('INTERNAL CHECKSUM VERIFICATION FAILED! Target Key might be invalid.');
+    throw new Error('Checksum verification failed internally');
+  }
+
+  // Determine Paytm gateway URL
+  const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
+    ? 'https://securegw.paytm.in/order/process'
+    : 'https://securegw-stage.paytm.in/order/process';
+
+  return {
+    params: {
+      ...paytmParams,
+      CHECKSUMHASH: checksum
+    },
+    gatewayUrl: paytmGatewayUrl,
+    environment: PAYTM_ENVIRONMENT
+  };
+}
+
+// ============================
+// Initiate Payment Endpoint
 // ============================
 app.post('/api/initiate-payment', async (req, res) => {
   try {
     const { orderId, amount, customerId, email, mobile } = req.body;
 
-    console.log('Initiating payment:', { orderId, amount, customerId, email, mobile });
+    console.log(`Initiating ${PAYTM_ENVIRONMENT} payment for Order ${orderId}`);
 
     if (!orderId || !amount || !customerId) {
       return res.status(400).json({ 
@@ -82,77 +155,22 @@ app.post('/api/initiate-payment', async (req, res) => {
       });
     }
 
-    if (!PAYTM_MERCHANT_ID || !PAYTM_MERCHANT_KEY) {
-      console.error('Paytm credentials not configured!');
-      console.error('PAYTM_MERCHANT_ID:', PAYTM_MERCHANT_ID ? 'SET' : 'MISSING');
-      console.error('PAYTM_MERCHANT_KEY:', PAYTM_MERCHANT_KEY ? 'SET' : 'MISSING');
-      return res.status(500).json({ 
-        success: false, 
-        error: 'Payment gateway not configured. Please contact support.' 
-      });
-    }
+    const transaction = await createPaytmTransaction(orderId, amount, customerId, email, mobile);
 
-    // Callback URL — Paytm will POST to this after payment
-    const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
-    const callbackUrl = `${backendUrl}/payment/callback`;
-
-    // Initial required Paytm transaction parameters
-    const paytmParams = {
-      MID: PAYTM_MERCHANT_ID,
-      WEBSITE: PAYTM_WEBSITE,
-      INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
-      CHANNEL_ID: PAYTM_CHANNEL_ID,
-      ORDER_ID: orderId,
-      CUST_ID: customerId.replace(/[^a-zA-Z0-9_\-]/g, '_'),
-      TXN_AMOUNT: parseFloat(amount).toFixed(2),
-      CALLBACK_URL: callbackUrl
-    };
-
-    // Only add optional parameters if they have truthy values
-    if (email) paytmParams.EMAIL = email.trim();
-    if (mobile) paytmParams.MOBILE_NO = mobile.trim();
-
-    console.log('Paytm params for checksum:', paytmParams);
-    console.log('Using merchant key (length):', PAYTM_MERCHANT_KEY.length);
-
-    // Generate checksum using OFFICIAL Paytm SDK
-    const checksum = await PaytmChecksum.generateSignature(paytmParams, PAYTM_MERCHANT_KEY);
-
-    console.log('Checksum generated successfully (official SDK) for order:', orderId);
-    console.log('Checksum value:', checksum.substring(0, 20) + '...');
-
-    // Verify our own checksum to make sure it's valid
-    const isValidChecksum = PaytmChecksum.verifySignature(paytmParams, PAYTM_MERCHANT_KEY, checksum);
-    console.log('Self-verification of generated checksum:', isValidChecksum);
-
-    if (!isValidChecksum) {
-      console.error('Self-verification FAILED! Merchant key might be incorrect.');
-      return res.status(500).json({
-        success: false,
-        error: 'Checksum generation error. Please contact support.'
-      });
-    }
-
-    // Determine Paytm gateway URL
-    const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
-      ? 'https://securegw.paytm.in/order/process'
-      : 'https://securegw-stage.paytm.in/order/process';
+    console.log('Payment parameters generated successfully');
 
     res.json({
       success: true,
-      paytmParams: {
-        ...paytmParams,
-        CHECKSUMHASH: checksum
-      },
-      paytmGatewayUrl,
-      callbackUrl
+      paytmParams: transaction.params,
+      paytmGatewayUrl: transaction.gatewayUrl,
+      environment: transaction.environment
     });
 
   } catch (error) {
-    console.error('Error initiating payment:', error);
+    console.error('Error initiating payment:', error.message);
     res.status(500).json({ 
       success: false, 
-      error: 'Failed to initiate payment. Please try again.' 
+      error: error.message || 'Failed to initiate payment' 
     });
   }
 });
