@@ -11,7 +11,7 @@
     "VITE_FRONTEND_URL": "https://jrb-gold.vercel.app",
     "VITE_CALLBACK_URL": "https://jrb-gold.onrender.com/payment/callback",
     "VITE_PAYMENT_ENV": "production",
-    "VITE_MERCHANT_ID": "nfvifF32655861820763",
+    "VITE_MERCHANT_ID": "nfvlfF32655861820763",
     "VITE_MERCHANT_KEY": "7x3aqULKxZe&Sj7V",
     "VITE_PAYTM_WEBSITE": "DEFAULT",
     "VITE_PAYTM_INDUSTRY_TYPE": "Retail",
