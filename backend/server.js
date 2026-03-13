@@ -77,10 +77,19 @@ app.get('/', (req, res) => {
 });
 
 // ============================
-// Core Payment Function — Robust logic for checksum generation
+// Paytm Gateway Base URLs
+// ============================
+const PAYTM_BASE_URL = PAYTM_ENVIRONMENT === 'production'
+  ? 'https://securegw.paytm.in'
+  : 'https://securegw-stage.paytm.in';
+
+// In-memory store for pending payment params (short-lived, keyed by orderId)
+const pendingPayments = new Map();
+
+// ============================
+// Core Payment Function — Generates checksum for /order/process form POST
 // ============================
 async function createPaytmTransaction(orderId, amount, customerId, email, mobile) {
-  // Ensure we have a clean Merchant Key and ID
   const M_ID = PAYTM_MERCHANT_ID.trim();
   const M_KEY = PAYTM_MERCHANT_KEY.trim();
 
@@ -88,59 +97,56 @@ async function createPaytmTransaction(orderId, amount, customerId, email, mobile
     throw new Error('Paytm credentials not properly configured in environment');
   }
 
-  // Callback URL — Paytm will POST to this after payment
   const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
   const callbackUrl = `${backendUrl}/payment/callback`;
 
-  // CRITICAL: Only include parameters that Paytm uses for checksum validation
-  // Order matters for some payment gateways, so we use a consistent order
+  const ordIdStr = orderId.toString().trim();
+  const txnAmount = parseFloat(amount).toFixed(2);
+  const custId = customerId.toString().replace(/[^a-zA-Z0-9_@.]/g, '_').substring(0, 64);
+
+  // Build flat params for /order/process (old but working flow)
   const paytmParams = {
     MID: M_ID,
-    ORDER_ID: orderId.toString().trim(),
-    CUST_ID: customerId.toString().replace(/[^a-zA-Z0-9_]/g, '_').substring(0, 64),
-    TXN_AMOUNT: parseFloat(amount).toFixed(2),
+    ORDER_ID: ordIdStr,
+    CUST_ID: custId,
+    TXN_AMOUNT: txnAmount,
     CHANNEL_ID: PAYTM_CHANNEL_ID.trim(),
     WEBSITE: PAYTM_WEBSITE.trim(),
-    CALLBACK_URL: callbackUrl.trim(),
+    CALLBACK_URL: callbackUrl,
     INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE.trim()
   };
 
+  if (email) paytmParams.EMAIL = email;
+  if (mobile) paytmParams.MOBILE_NO = mobile;
+
   console.log('=== CHECKSUM GENERATION ===');
-  console.log('Order ID:', orderId);
-  console.log('Amount:', amount);
+  console.log('Order ID:', ordIdStr);
+  console.log('Amount:', txnAmount);
   console.log('Params for signing:', JSON.stringify(paytmParams, null, 2));
   console.log('Merchant Key length:', M_KEY.length);
-  console.log('Merchant Key (first 3 chars):', M_KEY.substring(0, 3));
-  console.log('Merchant Key (last 3 chars):', M_KEY.substring(M_KEY.length - 3));
-  console.log('Merchant Key has special chars:', /[^a-zA-Z0-9]/.test(M_KEY));
-  
-  try {
-    // Generate checksum using OFFICIAL Paytm SDK
-    const checksum = await PaytmChecksum.generateSignature(paytmParams, M_KEY);
-    console.log('✅ Checksum generated:', checksum.substring(0, 20) + '...');
 
-    // Verify it internally before returning
+  try {
+    // Generate checksum using OFFICIAL Paytm SDK on flat params object
+    const checksum = await PaytmChecksum.generateSignature(paytmParams, M_KEY);
+    console.log('✅ Checksum generated:', checksum.substring(0, 30) + '...');
+
+    // Self-verify
     const isValid = await PaytmChecksum.verifySignature(paytmParams, M_KEY, checksum);
     console.log('✅ Self-verification:', isValid ? 'PASSED' : 'FAILED');
-    
+
     if (!isValid) {
       throw new Error('Internal checksum verification failed');
     }
 
-    // Determine Paytm gateway URL
-    const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
-      ? 'https://securegw.paytm.in/order/process'
-      : 'https://securegw-stage.paytm.in/order/process';
+    paytmParams.CHECKSUMHASH = checksum;
+
+    const paytmGatewayUrl = `${PAYTM_BASE_URL}/order/process`;
 
     console.log('Gateway URL:', paytmGatewayUrl);
     console.log('=== CHECKSUM GENERATION COMPLETE ===');
 
-    // Return params with checksum
     return {
-      params: {
-        ...paytmParams,
-        CHECKSUMHASH: checksum
-      },
+      params: paytmParams,
       gatewayUrl: paytmGatewayUrl,
       environment: PAYTM_ENVIRONMENT
     };
@@ -152,6 +158,8 @@ async function createPaytmTransaction(orderId, amount, customerId, email, mobile
 
 // ============================
 // Initiate Payment Endpoint
+// Returns a redirect URL pointing to our own /payment/redirect/:orderId
+// which serves the auto-submitting form (eliminates frontend form corruption)
 // ============================
 app.post('/api/initiate-payment', async (req, res) => {
   try {
@@ -168,12 +176,29 @@ app.post('/api/initiate-payment', async (req, res) => {
 
     const transaction = await createPaytmTransaction(orderId, amount, customerId, email, mobile);
 
-    console.log('Payment parameters generated successfully');
+    // Store params in memory so /payment/redirect/:orderId can serve the form
+    pendingPayments.set(orderId.toString().trim(), {
+      params: transaction.params,
+      gatewayUrl: transaction.gatewayUrl,
+      createdAt: Date.now()
+    });
+
+    // Clean up old entries (older than 10 minutes)
+    for (const [key, val] of pendingPayments.entries()) {
+      if (Date.now() - val.createdAt > 10 * 60 * 1000) {
+        pendingPayments.delete(key);
+      }
+    }
+
+    const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold.onrender.com';
+    const redirectUrl = `${backendUrl}/payment/redirect/${orderId.toString().trim()}`;
+
+    console.log('Payment parameters generated, redirect URL:', redirectUrl);
 
     res.json({
       success: true,
-      paytmParams: transaction.params,
-      paytmGatewayUrl: transaction.gatewayUrl,
+      redirectUrl: redirectUrl,
+      orderId: orderId.toString().trim(),
       environment: transaction.environment
     });
 
@@ -184,6 +209,66 @@ app.post('/api/initiate-payment', async (req, res) => {
       error: error.message || 'Failed to initiate payment' 
     });
   }
+});
+
+// ============================
+// Payment Redirect — Serves auto-submitting HTML form to Paytm
+// This ensures the EXACT signed params are submitted with no frontend corruption
+// ============================
+app.get('/payment/redirect/:orderId', (req, res) => {
+  const orderId = req.params.orderId;
+  const payment = pendingPayments.get(orderId);
+
+  if (!payment) {
+    console.error('No pending payment found for order:', orderId);
+    return res.redirect(`${FRONTEND_URL}/checkout?error=payment_expired`);
+  }
+
+  // Remove from pending (one-time use)
+  pendingPayments.delete(orderId);
+
+  const { params, gatewayUrl } = payment;
+
+  console.log('Serving payment form for order:', orderId);
+  console.log('Gateway URL:', gatewayUrl);
+  console.log('Form params:', Object.keys(params).join(', '));
+
+  // Build auto-submitting HTML form
+  let formFields = '';
+  for (const key in params) {
+    // HTML-escape the value to prevent XSS and preserve special chars like & + =
+    const escapedValue = params[key].toString()
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    formFields += `    <input type="hidden" name="${key}" value="${escapedValue}">\n`;
+  }
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting to Paytm...</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f5f5f5; }
+    .container { text-align: center; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #d4a537; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner"></div>
+    <h2>Redirecting to Paytm Payment Gateway</h2>
+    <p>Please wait, do not close this window...</p>
+  </div>
+  <form id="paytmForm" method="POST" action="${gatewayUrl}">
+${formFields}  </form>
+  <script>document.getElementById('paytmForm').submit();</script>
+</body>
+</html>`;
+
+  res.send(html);
 });
 
 // ============================
@@ -280,22 +365,24 @@ app.get('/test/checksum', async (req, res) => {
       MID: PAYTM_MERCHANT_ID,
       ORDER_ID: 'TEST_' + Date.now(),
       TXN_AMOUNT: '1.00',
-      CUST_ID: 'test@example.com',
+      CUST_ID: 'test_user',
       CHANNEL_ID: PAYTM_CHANNEL_ID,
       WEBSITE: PAYTM_WEBSITE,
       INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
-      CALLBACK_URL: 'https://jrb-gold.onrender.com/payment/callback'
+      CALLBACK_URL: `${process.env.BACKEND_URL || 'https://jrb-gold.onrender.com'}/payment/callback`
     };
 
     const checksum = await PaytmChecksum.generateSignature(testParams, PAYTM_MERCHANT_KEY);
-    const isValid = PaytmChecksum.verifySignature(testParams, PAYTM_MERCHANT_KEY, checksum);
+    const isValid = await PaytmChecksum.verifySignature(testParams, PAYTM_MERCHANT_KEY, checksum);
 
     res.json({
       success: true,
       merchantId: PAYTM_MERCHANT_ID,
       merchantKeyLength: PAYTM_MERCHANT_KEY.length,
+      merchantKeyContainsAmpersand: PAYTM_MERCHANT_KEY.includes('&'),
       checksumGenerated: checksum.substring(0, 30) + '...',
       selfVerification: isValid,
+      baseUrl: PAYTM_BASE_URL,
       testParams,
       message: isValid 
         ? 'Checksum generation and verification working correctly ✅' 
@@ -311,53 +398,31 @@ app.get('/test/checksum', async (req, res) => {
   }
 });
 
-// Debug endpoint — test checksum generation bypassing frontend
+// Debug endpoint — test full payment flow (backend serves the form directly)
 app.get('/test/pay', async (req, res) => {
   try {
     const orderId = 'TEST_' + Date.now();
-    const testParams = {
-      MID: PAYTM_MERCHANT_ID,
-      ORDER_ID: orderId,
-      TXN_AMOUNT: '1.00',
-      CUST_ID: 'TEST_USER_01',
-      CHANNEL_ID: PAYTM_CHANNEL_ID,
-      WEBSITE: PAYTM_WEBSITE,
-      INDUSTRY_TYPE_ID: PAYTM_INDUSTRY_TYPE,
-      CALLBACK_URL: `${process.env.BACKEND_URL || 'https://jrb-gold.onrender.com'}/payment/callback`
-    };
+    const transaction = await createPaytmTransaction(
+      orderId,
+      1.00,
+      'TEST_USER',
+      'test@example.com',
+      '9999999999'
+    );
 
-    const checksum = await PaytmChecksum.generateSignature(testParams, PAYTM_MERCHANT_KEY);
-    
-    const paytmGatewayUrl = PAYTM_ENVIRONMENT === 'production'
-      ? 'https://securegw.paytm.in/order/process'
-      : 'https://securegw-stage.paytm.in/order/process';
+    // Store and redirect through the same /payment/redirect/:orderId flow
+    pendingPayments.set(orderId, {
+      params: transaction.params,
+      gatewayUrl: transaction.gatewayUrl,
+      createdAt: Date.now()
+    });
 
-    // Generate raw HTML form that submits exactly the signed data
-    let html = `
-      <html>
-        <head><title>Test Paytm Redirect</title></head>
-        <body>
-          <h2>Redirecting to Paytm...</h2>
-          <form method="post" action="${paytmGatewayUrl}" name="paytm">
-    `;
-    
-    for (const key in testParams) {
-      html += `<input type="hidden" name="${key}" value="${testParams[key]}">\n`;
-    }
-    html += `<input type="hidden" name="CHECKSUMHASH" value="${checksum}">\n`;
-    
-    html += `
-          </form>
-          <script type="text/javascript">
-            document.paytm.submit();
-          </script>
-        </body>
-      </html>
-    `;
-    
-    res.send(html);
+    res.redirect(`/payment/redirect/${orderId}`);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ 
+      success: false, 
+      error: error.message
+    });
   }
 });
 

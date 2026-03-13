@@ -99,12 +99,12 @@ class PaymentService {
       const data = await response.json();
       console.log('Backend response:', {
         success: data.success,
-        hasParams: !!data.paytmParams,
-        gatewayUrl: data.paytmGatewayUrl,
-        callbackUrl: data.callbackUrl
+        hasRedirectUrl: !!data.redirectUrl,
+        orderId: data.orderId,
+        environment: data.environment
       });
 
-      if (!data.success || !data.paytmParams || !data.paytmGatewayUrl) {
+      if (!data.success || !data.redirectUrl) {
         return {
           success: false,
           orderId: paymentData.orderId,
@@ -114,19 +114,17 @@ class PaymentService {
         };
       }
 
-      // Store form data in sessionStorage for the PaymentRedirect page
-      sessionStorage.setItem('paytmFormData', JSON.stringify(data.paytmParams));
-      sessionStorage.setItem('paytmUrl', data.paytmGatewayUrl);
+      console.log('Payment initiation successful, redirecting to backend form page...');
 
-      console.log('Payment initiation successful, redirecting to payment page...');
-
+      // The redirectUrl points to the backend's /payment/redirect/:orderId
+      // which serves an auto-submitting HTML form with the exact signed params
       return {
         success: true,
         orderId: paymentData.orderId,
         amount: paymentData.amount,
         status: 'pending',
         message: 'Redirecting to Paytm payment gateway...',
-        redirectUrl: '/payment/redirect'
+        redirectUrl: data.redirectUrl
       };
 
     } catch (error) {

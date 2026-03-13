@@ -21,44 +21,22 @@ export default function PaymentRedirect() {
       return;
     }
 
-    // Get production form data from sessionStorage
-    const formDataStr = sessionStorage.getItem('paytmFormData');
-    const paytmUrl = sessionStorage.getItem('paytmUrl');
+    // Get Paytm redirect URL from sessionStorage (modern txnToken-based flow)
+    const paytmRedirectUrl = sessionStorage.getItem('paytmRedirectUrl');
     
-    console.log('PaymentRedirect: Production data found:', {
-      hasFormData: !!formDataStr,
-      hasPaytmUrl: !!paytmUrl,
-      paytmUrl: paytmUrl
-    });
+    console.log('PaymentRedirect: Redirect URL found:', !!paytmRedirectUrl);
 
-    if (formDataStr && paytmUrl) {
-      const formData = JSON.parse(formDataStr);
-      console.log('PaymentRedirect: Submitting form to Paytm with data:', formData);
+    if (paytmRedirectUrl) {
+      console.log('PaymentRedirect: Redirecting to Paytm showPaymentPage:', paytmRedirectUrl);
       
-      // Create a form and submit it to Paytm
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = paytmUrl;
-      form.style.display = 'none';
-
-      // Add all form fields
-      Object.keys(formData).forEach(key => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = formData[key];
-        form.appendChild(input);
-      });
-
-      document.body.appendChild(form);
-      form.submit();
-
-      // Clean up sessionStorage
-      sessionStorage.removeItem('paytmFormData');
-      sessionStorage.removeItem('paytmUrl');
+      // Clean up sessionStorage before redirecting
+      sessionStorage.removeItem('paytmRedirectUrl');
+      
+      // Direct browser redirect to Paytm payment page (uses txnToken)
+      window.location.href = paytmRedirectUrl;
     } else {
       console.log('PaymentRedirect: No payment data found, redirecting to checkout');
-      // Redirect back to checkout if no form data
+      // Redirect back to checkout if no redirect URL
       setTimeout(() => {
         window.location.href = '/checkout';
       }, 3000); // Give user time to see the message
@@ -163,8 +141,7 @@ export default function PaymentRedirect() {
           <div>Test Mode: {isTestMode ? 'Yes' : 'No'}</div>
           <div>Payment Data: {paymentData ? 'Found' : 'Not Found'}</div>
           <div>SessionStorage mockPaymentData: {sessionStorage.getItem('mockPaymentData') ? 'Found' : 'Not Found'}</div>
-          <div>SessionStorage paytmFormData: {sessionStorage.getItem('paytmFormData') ? 'Found' : 'Not Found'}</div>
-          <div>SessionStorage paytmUrl: {sessionStorage.getItem('paytmUrl') || 'Not Found'}</div>
+          <div>SessionStorage paytmRedirectUrl: {sessionStorage.getItem('paytmRedirectUrl') ? 'Found' : 'Not Found'}</div>
         </div>
       </div>
     </div>
