@@ -9,22 +9,22 @@ services:
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
-        value: production
+        value: "production"
       - key: BACKEND_URL
-        value: https://jrb-gold-backend.onrender.com
+        value: "https://jrb-gold.onrender.com"
       - key: FRONTEND_URL
-        value: https://jrb-gold-56cs.vercel.app
+        value: "https://jrb-gold.vercel.app"
       - key: CORS_ORIGINS
-        value: https://jrb-gold-56cs.vercel.app,https://www.jrbgold.co.in,https://jrbgold.co.in,http://localhost:5173,http://localhost:8080
+        value: "https://jrb-gold.vercel.app,https://jrb-gold-56cs.vercel.app,https://www.jrbgold.co.in,https://jrbgold.co.in,http://localhost:5173,http://localhost:8080"
       - key: PAYTM_MERCHANT_ID
-        value: nfvlfF32655861820763
+        value: "nfvlfF32655861820763"
       - key: PAYTM_MERCHANT_KEY
-        value: 7x3aqULKxZe&Sj7V
+        value: "7x3aqULKxZe&Sj7V"
       - key: PAYTM_ENVIRONMENT
-        value: production
+        value: "production"
       - key: PAYTM_WEBSITE
-        value: DEFAULT
+        value: "DEFAULT"
       - key: PAYTM_INDUSTRY_TYPE
-        value: Retail
+        value: "Retail"
       - key: PAYTM_CHANNEL_ID
-        value: WEB
+        value: "WEB"

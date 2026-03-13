@@ -384,7 +384,12 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🌐 Frontend URL: ${FRONTEND_URL}`);
   console.log(`🔑 Merchant ID: ${PAYTM_MERCHANT_ID ? PAYTM_MERCHANT_ID.substring(0, 8) + '...' : 'NOT SET'}`);
   console.log(`🔐 Merchant Key: ${PAYTM_MERCHANT_KEY ? 'SET (' + PAYTM_MERCHANT_KEY.length + ' chars)' : 'NOT SET'}`);
+  console.log(`🔐 Merchant Key contains &: ${PAYTM_MERCHANT_KEY.includes('&')}`);
+  console.log(`🔐 Raw PAYTM_MERCHANT_KEY env: ${process.env.PAYTM_MERCHANT_KEY ? 'length=' + process.env.PAYTM_MERCHANT_KEY.length : 'UNDEFINED'}`);
   console.log(`🌍 Environment: ${PAYTM_ENVIRONMENT}`);
   console.log(`🌐 Website: ${PAYTM_WEBSITE}`);
+  console.log(`📋 Channel: ${PAYTM_CHANNEL_ID}`);
+  console.log(`🏭 Industry: ${PAYTM_INDUSTRY_TYPE}`);
+  console.log(`🔗 Backend URL: ${process.env.BACKEND_URL || 'https://jrb-gold.onrender.com'}`);
   console.log(`✅ Server ready to accept connections`);
 });
