@@ -110,6 +110,9 @@ async function createPaytmTransaction(orderId, amount, customerId, email, mobile
   console.log('Amount:', amount);
   console.log('Params for signing:', JSON.stringify(paytmParams, null, 2));
   console.log('Merchant Key length:', M_KEY.length);
+  console.log('Merchant Key (first 3 chars):', M_KEY.substring(0, 3));
+  console.log('Merchant Key (last 3 chars):', M_KEY.substring(M_KEY.length - 3));
+  console.log('Merchant Key has special chars:', /[^a-zA-Z0-9]/.test(M_KEY));
   
   try {
     // Generate checksum using OFFICIAL Paytm SDK
