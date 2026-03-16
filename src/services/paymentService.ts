@@ -1,5 +1,6 @@
 // Payment Gateway Service for JRB Gold - Paytm Integration
-// Checksum is now generated SERVER-SIDE via the Render backend
+// Uses Paytm v2 API (initiateTransaction) with v1 form-based fallback
+// All checksums/tokens are generated SERVER-SIDE via the Render backend
 
 export interface PaymentConfig {
   merchantId: string;
@@ -47,8 +48,7 @@ class PaymentService {
   }
 
   /**
-   * Initiate Paytm payment transaction
-   * Checksum is generated SERVER-SIDE by the Render backend
+   * Initiate Paytm payment - tries v2 API first, falls back to v1 form-based
    */
   async initiatePayment(paymentData: PaymentRequest): Promise<PaymentResponse> {
     try {
@@ -64,12 +64,122 @@ class PaymentService {
         };
       }
 
-      // =============================================
-      // Call backend to generate checksum (works for both test/staging and production)
-      // Backend decides which Paytm gateway to use based on PAYTM_ENVIRONMENT
-      // =============================================
-      console.log(`Calling backend for checksum generation (env: ${this.config.environment})...`);
+      // Try v2 API first (Transaction Token method - recommended by Paytm)
+      console.log(`Trying Paytm v2 API (initiateTransaction) for env: ${this.config.environment}...`);
+      const v2Result = await this.initiatePaymentV2(paymentData);
+      if (v2Result.success) {
+        return v2Result;
+      }
+
+      // Fallback to v1 form-based method
+      console.log('V2 API failed, falling back to v1 form-based method...');
+      return await this.initiatePaymentV1(paymentData);
+
+    } catch (error) {
+      console.error('Payment initiation failed:', error);
       
+      const isNetworkError = error instanceof TypeError && error.message.includes('fetch');
+      
+      return {
+        success: false,
+        orderId: paymentData.orderId,
+        amount: paymentData.amount,
+        status: 'failed',
+        message: isNetworkError 
+          ? 'Payment server is temporarily unavailable. Please try again in a few minutes.'
+          : 'Failed to initiate payment. Please try again.'
+      };
+    }
+  }
+
+  /**
+   * v2 API Method - Uses Paytm initiateTransaction API to get txnToken
+   * Then redirects to Paytm's showPaymentPage
+   */
+  private async initiatePaymentV2(paymentData: PaymentRequest): Promise<PaymentResponse> {
+    try {
+      const response = await fetch(`${this.config.backendUrl}/api/initiate-payment-v2`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          customerId: paymentData.customerEmail,
+          email: paymentData.customerEmail,
+          mobile: paymentData.customerPhone,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('V2 API backend error:', response.status, errorData);
+        return {
+          success: false,
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          status: 'failed',
+          message: errorData.error || 'V2 API failed'
+        };
+      }
+
+      const data = await response.json();
+      console.log('V2 API response:', {
+        success: data.success,
+        hasTxnToken: !!data.txnToken,
+        hasPaytmUrl: !!data.paytmUrl,
+        orderId: data.orderId,
+        environment: data.environment
+      });
+
+      if (!data.success || !data.txnToken) {
+        return {
+          success: false,
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          status: 'failed',
+          message: data.error || 'Failed to get transaction token from Paytm.'
+        };
+      }
+
+      // Build the Paytm showPaymentPage URL with the txnToken
+      // This opens Paytm's payment page where user can choose payment method
+      const paytmBaseUrl = this.config.environment === 'production'
+        ? 'https://securegw.paytm.in'
+        : 'https://securegw-stage.paytm.in';
+      
+      const redirectUrl = `${paytmBaseUrl}/theia/api/v1/showPaymentPage?mid=${this.config.merchantId}&orderId=${paymentData.orderId}&txnToken=${data.txnToken}`;
+
+      console.log('V2 payment initiation successful, redirecting to Paytm showPaymentPage...');
+
+      return {
+        success: true,
+        orderId: paymentData.orderId,
+        amount: paymentData.amount,
+        status: 'pending',
+        message: 'Redirecting to Paytm payment gateway...',
+        redirectUrl: redirectUrl
+      };
+
+    } catch (error) {
+      console.error('V2 API payment initiation failed:', error);
+      return {
+        success: false,
+        orderId: paymentData.orderId,
+        amount: paymentData.amount,
+        status: 'failed',
+        message: 'V2 API call failed: ' + (error instanceof Error ? error.message : 'Unknown error')
+      };
+    }
+  }
+
+  /**
+   * v1 Form-Based Method - Uses /order/process with auto-submitting form
+   * Backend serves the form that POSTs to Paytm gateway directly
+   */
+  private async initiatePaymentV1(paymentData: PaymentRequest): Promise<PaymentResponse> {
+    try {
       const response = await fetch(`${this.config.backendUrl}/api/initiate-payment`, {
         method: 'POST',
         headers: {
@@ -86,7 +196,7 @@ class PaymentService {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Backend error:', response.status, errorData);
+        console.error('V1 backend error:', response.status, errorData);
         return {
           success: false,
           orderId: paymentData.orderId,
@@ -97,7 +207,7 @@ class PaymentService {
       }
 
       const data = await response.json();
-      console.log('Backend response:', {
+      console.log('V1 backend response:', {
         success: data.success,
         hasRedirectUrl: !!data.redirectUrl,
         orderId: data.orderId,
@@ -114,10 +224,8 @@ class PaymentService {
         };
       }
 
-      console.log('Payment initiation successful, redirecting to backend form page...');
+      console.log('V1 payment initiation successful, redirecting to backend form page...');
 
-      // The redirectUrl points to the backend's /payment/redirect/:orderId
-      // which serves an auto-submitting HTML form with the exact signed params
       return {
         success: true,
         orderId: paymentData.orderId,
@@ -128,19 +236,13 @@ class PaymentService {
       };
 
     } catch (error) {
-      console.error('Payment initiation failed:', error);
-      
-      // Check if it's a network error (backend might be down)
-      const isNetworkError = error instanceof TypeError && error.message.includes('fetch');
-      
+      console.error('V1 payment initiation failed:', error);
       return {
         success: false,
         orderId: paymentData.orderId,
         amount: paymentData.amount,
         status: 'failed',
-        message: isNetworkError 
-          ? 'Payment server is temporarily unavailable. Please try again in a few minutes.'
-          : 'Failed to initiate payment. Please try again.'
+        message: 'Form-based payment failed: ' + (error instanceof Error ? error.message : 'Unknown error')
       };
     }
   }
@@ -152,7 +254,7 @@ class PaymentService {
     try {
       console.log('Verifying Paytm payment:', { transactionId, orderId, status });
       
-      // Accept known status values
+      // Accept known success status values from Paytm
       if (status === 'TXN_SUCCESS' || status === 'success') {
         return true;
       }
