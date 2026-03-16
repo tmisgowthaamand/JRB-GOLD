@@ -157,7 +157,139 @@ async function createPaytmTransaction(orderId, amount, customerId, email, mobile
 }
 
 // ============================
-// Initiate Payment Endpoint
+// NEW: Paytm Transaction Token API (v1/initiateTransaction)
+// This is the newer API-based approach instead of form POST
+// ============================
+app.post('/api/initiate-payment-v2', async (req, res) => {
+  try {
+    const { orderId, amount, customerId, email, mobile } = req.body;
+
+    console.log(`Initiating ${PAYTM_ENVIRONMENT} payment (API v2) for Order ${orderId}`);
+
+    if (!orderId || !amount || !customerId) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Missing required fields: orderId, amount, customerId' 
+      });
+    }
+
+    const M_ID = PAYTM_MERCHANT_ID.trim();
+    const M_KEY = PAYTM_MERCHANT_KEY.trim();
+    const backendUrl = process.env.BACKEND_URL || 'https://jrb-gold-4azo.onrender.com';
+    const callbackUrl = `${backendUrl}/payment/callback`;
+
+    // Build request body for Paytm API
+    const paytmParams = {
+      body: {
+        requestType: "Payment",
+        mid: M_ID,
+        websiteName: PAYTM_WEBSITE.trim(),
+        orderId: orderId.toString().trim(),
+        callbackUrl: callbackUrl,
+        txnAmount: {
+          value: parseFloat(amount).toFixed(2),
+          currency: "INR"
+        },
+        userInfo: {
+          custId: customerId.toString().replace(/[^a-zA-Z0-9_@.]/g, '_').substring(0, 64)
+        }
+      }
+    };
+
+    // Add optional fields
+    if (email) paytmParams.body.userInfo.email = email;
+    if (mobile) paytmParams.body.userInfo.mobile = mobile;
+
+    console.log('Generating signature for API request...');
+    
+    // Generate checksum for the body
+    const checksum = await PaytmChecksum.generateSignature(
+      JSON.stringify(paytmParams.body), 
+      M_KEY
+    );
+
+    paytmParams.head = {
+      signature: checksum
+    };
+
+    console.log('Calling Paytm initiateTransaction API...');
+
+    // Make HTTPS request to Paytm
+    const https = require('https');
+    const postData = JSON.stringify(paytmParams);
+    
+    const options = {
+      hostname: PAYTM_ENVIRONMENT === 'production' 
+        ? 'securegw.paytm.in' 
+        : 'securegw-stage.paytm.in',
+      port: 443,
+      path: `/theia/api/v1/initiateTransaction?mid=${M_ID}&orderId=${orderId}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': postData.length
+      }
+    };
+
+    const paytmResponse = await new Promise((resolve, reject) => {
+      let responseData = '';
+      
+      const request = https.request(options, (response) => {
+        response.on('data', (chunk) => {
+          responseData += chunk;
+        });
+        
+        response.on('end', () => {
+          try {
+            resolve(JSON.parse(responseData));
+          } catch (e) {
+            reject(new Error('Invalid JSON response from Paytm'));
+          }
+        });
+      });
+
+      request.on('error', (error) => {
+        reject(error);
+      });
+
+      request.write(postData);
+      request.end();
+    });
+
+    console.log('Paytm API Response:', paytmResponse);
+
+    if (paytmResponse.body && paytmResponse.body.resultInfo && 
+        paytmResponse.body.resultInfo.resultStatus === 'S') {
+      
+      const txnToken = paytmResponse.body.txnToken;
+      const paytmUrl = PAYTM_ENVIRONMENT === 'production'
+        ? `https://securegw.paytm.in/theia/api/v1/showPaymentPage?mid=${M_ID}&orderId=${orderId}`
+        : `https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage?mid=${M_ID}&orderId=${orderId}`;
+
+      res.json({
+        success: true,
+        txnToken: txnToken,
+        orderId: orderId,
+        amount: amount,
+        paytmUrl: paytmUrl,
+        environment: PAYTM_ENVIRONMENT,
+        message: 'Transaction token generated successfully'
+      });
+    } else {
+      throw new Error(paytmResponse.body?.resultInfo?.resultMsg || 'Failed to initiate transaction');
+    }
+
+  } catch (error) {
+    console.error('Error in API v2 payment initiation:', error.message);
+    res.status(500).json({ 
+      success: false, 
+      error: error.message || 'Failed to initiate payment' 
+    });
+  }
+});
+
+// ============================
+// Initiate Payment Endpoint (Original Form-based method)
 // Returns a redirect URL pointing to our own /payment/redirect/:orderId
 // which serves the auto-submitting form (eliminates frontend form corruption)
 // ============================
@@ -432,13 +564,20 @@ app.get('/api', (req, res) => {
     message: 'JRB Gold Payment Backend API',
     endpoints: {
       health: '/api/health',
-      initiatePayment: '/api/initiate-payment (POST)',
+      initiatePayment: '/api/initiate-payment (POST) - Form-based method',
+      initiatePaymentV2: '/api/initiate-payment-v2 (POST) - API Token method',
       callback: '/payment/callback (POST)',
       testSuccess: '/test/callback',
       testFail: '/test/callback-fail',
-      testChecksum: '/test/checksum'
+      testChecksum: '/test/checksum',
+      testPayForm: '/test/pay - Test form-based payment',
+      testPayAPI: '/test/pay-v2 - Test API-based payment'
     },
-    frontend: FRONTEND_URL
+    frontend: FRONTEND_URL,
+    methods: {
+      formBased: 'Uses /order/process endpoint (current production method)',
+      apiBased: 'Uses /theia/api/v1/initiateTransaction (newer method)'
+    }
   });
 });
 
